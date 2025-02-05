@@ -1,8 +1,0 @@
-prefix=/root/hunter2_proj/catkin_ws_sim/install
-
-Name: hunter_bringup
-Description: Description of hunter_bringup
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
