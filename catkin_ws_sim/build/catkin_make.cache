@@ -1,0 +1,2 @@
+hunter_ros/hunter_base:hunter_ros/hunter_bringup:hunter_ros/hunter_msgs:ugv_sdk
+-DCATKIN_DEVEL_PREFIX=/root/hunter2_proj/catkin_ws_sim/devel -DCMAKE_INSTALL_PREFIX=/root/hunter2_proj/catkin_ws_sim/install -G Unix Makefiles
