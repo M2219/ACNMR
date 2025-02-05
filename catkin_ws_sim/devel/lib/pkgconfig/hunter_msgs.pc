@@ -1,8 +1,0 @@
-prefix=/root/hunter2_proj/catkin_ws_sim/devel
-
-Name: hunter_msgs
-Description: Description of hunter_msgs
-Version: 0.0.0
-Cflags: -I/root/hunter2_proj/catkin_ws_sim/devel/include
-Libs: -L${prefix}/lib 
-Requires: 

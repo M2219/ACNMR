@@ -1,2 +1,0 @@
-custom_teleop
--DCATKIN_DEVEL_PREFIX=/root/hunter2_proj/catkin_ws_control/devel -DCMAKE_INSTALL_PREFIX=/root/hunter2_proj/catkin_ws_control/install -G Unix Makefiles

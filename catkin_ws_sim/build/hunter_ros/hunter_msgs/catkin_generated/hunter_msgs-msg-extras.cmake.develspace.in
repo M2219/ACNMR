@@ -1,2 +1,0 @@
-set(hunter_msgs_MESSAGE_FILES "/root/hunter2_proj/catkin_ws_sim/src/hunter_ros/hunter_msgs/msg/HunterMotorState.msg;/root/hunter2_proj/catkin_ws_sim/src/hunter_ros/hunter_msgs/msg/HunterStatus.msg;/root/hunter2_proj/catkin_ws_sim/src/hunter_ros/hunter_msgs/msg/HunterDriverState.msg;/root/hunter2_proj/catkin_ws_sim/src/hunter_ros/hunter_msgs/msg/HunterBmsStatus.msg")
-set(hunter_msgs_SERVICE_FILES "")

@@ -1,8 +1,0 @@
-prefix=/root/hunter2_proj/catkin_ws_sim/install
-
-Name: ugv_sdk
-Description: Description of ugv_sdk
-Version: 0.1.6
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -lugv_sdk
-Requires: 
