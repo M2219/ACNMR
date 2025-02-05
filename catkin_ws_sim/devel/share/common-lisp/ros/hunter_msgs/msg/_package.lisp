@@ -1,0 +1,13 @@
+(cl:defpackage hunter_msgs-msg
+  (:use )
+  (:export
+   "<HUNTERBMSSTATUS>"
+   "HUNTERBMSSTATUS"
+   "<HUNTERDRIVERSTATE>"
+   "HUNTERDRIVERSTATE"
+   "<HUNTERMOTORSTATE>"
+   "HUNTERMOTORSTATE"
+   "<HUNTERSTATUS>"
+   "HUNTERSTATUS"
+  ))
+

@@ -1,0 +1,2 @@
+/usr/bin/ar qc /root/hunter2_proj/catkin_ws_sim/devel/lib/libhunter_messenger.a  CMakeFiles/hunter_messenger.dir/src/hunter_messenger.cpp.o CMakeFiles/hunter_messenger.dir/src/bicycle_model.cpp.o
+/usr/bin/ranlib /root/hunter2_proj/catkin_ws_sim/devel/lib/libhunter_messenger.a

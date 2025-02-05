@@ -1,0 +1,8 @@
+prefix=/root/hunter2_proj/catkin_ws_sim/devel
+
+Name: hunter_base
+Description: Description of hunter_base
+Version: 0.0.0
+Cflags: -I/root/hunter2_proj/catkin_ws_sim/src/hunter_ros/hunter_base/include
+Libs: -L${prefix}/lib -lhunter_messenger
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/root/hunter2_proj/catkin_ws_control/devel
+
+Name: custom_teleop
+Description: Description of custom_teleop
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
