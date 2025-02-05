@@ -1,0 +1,8 @@
+<launch>
+    <!-- start base and load model -->
+    <include file="$(find hunter_base)/launch/hunter_base_sim.launch">
+        <arg name="simulated_robot" default="true" />
+        <arg name="control_rate" default="50" />
+        <arg name="publish_tf" default="true" />
+    </include>
+</launch>
