@@ -163,7 +163,8 @@ def get_straight_course3(dl):
         ax, ay, ds=dl)
 
     cyaw = [i - math.pi for i in cyaw]
-
+    #print("in get", cyaw)
+    #exit()
     return cx, cy, cyaw, ck
 
 
@@ -239,7 +240,7 @@ def calc_ref_trajectory(state, cx, cy, cyaw, ck, sp, dl, pind, T, NX, N_IND_SEAR
     ncourse = len(cx)
 
     ind, _ = calc_nearest_index(state, cx, cy, cyaw, pind, N_IND_SEARCH)
-
+    print("ind", ind)
     if pind >= ind:
         ind = pind
 

@@ -1,3 +1,4 @@
+
 /*
  * hunter_messenger.cpp
  *
@@ -31,18 +32,18 @@ HunterROSMessenger::HunterROSMessenger(HunterRobot *hunter, ros::NodeHandle *nh)
 
 void HunterROSMessenger::SetupSubscription() {
   // odometry publisher
-  odom_publisher_ = nh_->advertise<nav_msgs::Odometry>(odom_frame_, 50);
+  odom_publisher_ = nh_->advertise<nav_msgs::Odometry>(odom_frame_, 50); // 50Hz
   status_publisher_ =
       nh_->advertise<hunter_msgs::HunterStatus>("/hunter_status", 10);
   BMS_status_publisher_ = nh_->advertise<hunter_msgs::HunterBmsStatus>("/BMS_status", 10);
 
   // cmd subscriber
   motion_cmd_subscriber_ = nh_->subscribe<geometry_msgs::Twist>(
-      "/cmd_vel", 5, &HunterROSMessenger::TwistCmdCallback, this);
+      "/cmd_vel", 5, &HunterROSMessenger::TwistCmdCallback, this); //5
 
   integrator_reset_subscriber_ = nh_->subscribe<std_msgs::Bool>(
       "/reset_odom_integrator", 5,
-      &HunterROSMessenger::ResetOdomIntegratorCallback, this);
+      &HunterROSMessenger::ResetOdomIntegratorCallback, this); //5
 }
 
 void HunterROSMessenger::ResetOdomIntegratorCallback(
@@ -248,9 +249,11 @@ void HunterROSMessenger::PublishOdometryToROS(double linear, double angular,
   steering_angle_ = angular;
 
   // propagate model model
+  //std::cout << "-----------------" << theta_ << std::endl;
   asc::state_t state =
       model_.Propagate({position_x_, position_y_, theta_},
-                       {linear_speed_, steering_angle_}, 0, dt, dt / 100);
+                       {linear_speed_, steering_angle_}, 0, dt, dt/100); // dt / 100
+
   position_x_ = state[0];
   position_y_ = state[1];
   theta_ = state[2];

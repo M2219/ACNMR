@@ -57,8 +57,8 @@ class HunterROSMessenger {
   std::string odom_frame_;
   std::string base_frame_;
 
-  bool simulated_robot_ = false;
-  int sim_control_rate_ = 50;
+  bool simulated_robot_ = true;
+  int sim_control_rate_ = 50; // 50Hz
   bool publish_tf_ = true;
   int version = 2;
 

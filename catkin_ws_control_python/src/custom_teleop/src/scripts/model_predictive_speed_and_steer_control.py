@@ -2,10 +2,11 @@ import time
 import cvxpy
 import math
 import numpy as np
+np.set_printoptions(precision=5)
 import sys
 import pathlib
 sys.path.append(str(pathlib.Path(__file__).parent.parent.parent))
-class State:
+class StateMPC:
     """
     vehicle state class
     """
@@ -16,9 +17,8 @@ class State:
         self.v = v
         self.predelta = None
 
-
 class MPC:
-    def __init__(self, DT, N_IND_SEARCH, T, NX, WB):
+    def __init__(self, DT, N_IND_SEARCH, T, NX, WB, MAX_STEER, MAX_DSTEER, MAX_SPEED, MIN_SPEED, MAX_ACCEL):
 
         self.NX = NX  # x = x, y, v, yaw
         self.NU = 2  # a = [accel, steer]
@@ -26,12 +26,12 @@ class MPC:
 
         # mpc parameters
         self.R = np.diag([0.01, 0.01])  # input cost matrix
-        self.Rd = np.diag([0.01, 1.0])  # input difference cost matrix
+        self.Rd = np.diag([0.01, 1.0]) # input difference cost matrix
         self.Q = np.diag([1.0, 1.0, 0.5, 0.5])  # state cost matrix
         self.Qf = self.Q  # state final matrix
 
         # iterative paramter
-        self.MAX_ITER = 3  # Max iteration
+        self.MAX_ITER = 1  # Max iteration
         self.DU_TH = 0.1  # iteration finish param
 
         self.N_IND_SEARCH = N_IND_SEARCH  # Search index number
@@ -41,11 +41,11 @@ class MPC:
         # Vehicle parameters
         self.WB = WB  # [m]
 
-        self.MAX_STEER = 0.58  # maximum steering angle [rad]
-        self.MAX_DSTEER = np.deg2rad(30.0)  # maximum steering speed [rad/s]
-        self.MAX_SPEED = 1.5  # maximum speed [m/s]
-        self.MIN_SPEED = -1.5  # minimum speed [m/s]
-        self.MAX_ACCEL = 1.0  # maximum accel [m/ss]
+        self.MAX_STEER = MAX_STEER #0.58  # maximum steering angle [rad]
+        self.MAX_DSTEER = MAX_DSTEER #np.deg2rad(30.0)  # maximum steering speed [rad/s]
+        self.MAX_SPEED = MAX_SPEED #1.5  # maximum speed [m/s]
+        self.MIN_SPEED = MIN_SPEED #-1.5  # minimum speed [m/s]
+        self.MAX_ACCEL = MAX_ACCEL #1.0  # maximum accel [m/ss]
 
     def get_linear_model_matrix(self, v, phi, delta):
 
@@ -71,7 +71,7 @@ class MPC:
 
         return A, B, C
 
-    def update_state(self, state, a, delta):
+    def update_state(self, stateMPC, a, delta):
 
         # input check
         if delta >= self.MAX_STEER:
@@ -79,17 +79,17 @@ class MPC:
         elif delta <= -self.MAX_STEER:
             delta = -self.MAX_STEER
 
-        state.x = state.x + state.v * math.cos(state.yaw) * self.DT
-        state.y = state.y + state.v * math.sin(state.yaw) * self.DT
-        state.yaw = state.yaw + state.v / self.WB * math.tan(delta) * self.DT
-        state.v = state.v + a * self.DT
+        stateMPC.x = stateMPC.x + stateMPC.v * math.cos(stateMPC.yaw) * self.DT
+        stateMPC.y = stateMPC.y + stateMPC.v * math.sin(stateMPC.yaw) * self.DT
+        stateMPC.yaw = stateMPC.yaw + stateMPC.v / self.WB * math.tan(delta) * self.DT
+        stateMPC.v = stateMPC.v + a * self.DT
 
-        if state.v > self.MAX_SPEED:
-            state.v = self.MAX_SPEED
-        elif state.v < self.MIN_SPEED:
-            state.v = self.MIN_SPEED
+        if stateMPC.v > self.MAX_SPEED:
+            stateMPC.v = self.MAX_SPEED
+        elif stateMPC.v < self.MIN_SPEED:
+            stateMPC.v = self.MIN_SPEED
 
-        return state
+        return stateMPC
 
 
     def get_nparray_from_matrix(self, x):
@@ -100,13 +100,13 @@ class MPC:
         for i, _ in enumerate(x0):
             xbar[i, 0] = x0[i]
 
-        state = State(x=x0[0], y=x0[1], yaw=x0[3], v=x0[2])
+        stateMPC = StateMPC(x=x0[0], y=x0[1], yaw=x0[3], v=x0[2])
         for (ai, di, i) in zip(oa, od, range(1, self.T + 1)):
-            state = self.update_state(state, ai, di)
-            xbar[0, i] = state.x
-            xbar[1, i] = state.y
-            xbar[2, i] = state.v
-            xbar[3, i] = state.yaw
+            stateMPC = self.update_state(stateMPC, ai, di)
+            xbar[0, i] = stateMPC.x
+            xbar[1, i] = stateMPC.y
+            xbar[2, i] = stateMPC.v
+            xbar[3, i] = stateMPC.yaw
 
         return xbar
 
@@ -115,10 +115,6 @@ class MPC:
         MPC control with updating operational point iteratively
         """
         ox, oy, oyaw, ov = None, None, None, None
-
-        if oa is None or od is None:
-            oa = [0.0] * self.T
-            od = [0.0] * self.T
 
         for i in range(self.MAX_ITER):
             xbar = self.predict_motion(x0, oa, od, xref)
@@ -154,8 +150,8 @@ class MPC:
             if t != 0:
                 cost += cvxpy.quad_form(xref[:, t] - x[:, t], self.Q)
 
-            A, B, C = self.get_linear_model_matrix(
-                xbar[2, t], xbar[3, t], dref[0, t])
+            A, B, C = self.get_linear_model_matrix(xbar[2, t], xbar[3, t], dref[0, t])
+
             constraints += [x[:, t + 1] == A @ x[:, t] + B @ u[:, t] + C]
 
             if t < (self.T - 1):
@@ -188,7 +184,7 @@ class MPC:
 
         return oa, odelta, ox, oy, oyaw, ov
 
-    def control_signals(self, xref, dref, oa, odelta, state):
+    def control_signals(self, xref, dref, oa, odelta, x0):
         """
         Simulation
 
@@ -200,15 +196,9 @@ class MPC:
         dl: course tick [m]
 
         """
-        x0 = [state.x, state.y, state.v, state.yaw]  # current state
-
         oa, odelta, ox, oy, oyaw, ov = self.iterative_linear_mpc_control(xref, x0, dref, oa, odelta)
 
-        di, ai = 0.0, 0.0
-        if odelta is not None:
-            di, ai = odelta[0], oa[0]
-
-        return ox, oy, xref, di, ai
+        return oa, odelta
 
 if __name__ == '__main__':
 
@@ -228,8 +218,17 @@ if __name__ == '__main__':
             self.predelta = None
 
     show_animation = True
-    dl = 1.0  # course tick
+    dl = 0.1  # course tick
     cx, cy, cyaw, ck = get_straight_course3(dl)
+
+    plt.figure()
+    plt.plot(cyaw, "-r", label="speed")
+    plt.grid(True)
+    plt.xlabel("Time [s]")
+    plt.ylabel("Speed [kmh]")
+
+    plt.show()
+
     TARGET_SPEED = 1.0  # [m/s] target speed
     sp = calc_speed_profile(cx, cy, cyaw, TARGET_SPEED)
     state = State(x=0, y=0, yaw=0.0, v=0.0)
@@ -256,21 +255,50 @@ if __name__ == '__main__':
     odelta, oa = None, None
     cyaw = smooth_yaw(cyaw)
 
-    DT = 0.2
+    plt.figure()
+    plt.plot(cyaw, "-r", label="speed")
+    plt.grid(True)
+    plt.xlabel("Time [s]")
+    plt.ylabel("Speed [kmh]")
+
+    plt.show()
+    exit()
+    DT = 0.02
     T = 5
     NX = 4 # number of states
     WB = 0.650
-    mpc_controller = MPC(DT, N_IND_SEARCH, T, NX, WB)
-    MAX_TIME = 500.0  # max simulation time
+    MAX_STEER = 0.5 #self.max_steer_angle # maximum steering angle [rad]
+    MAX_DSTEER = np.deg2rad(40.0)  # maximum steering speed [rad/s]
+    MAX_SPEED = 1.5 #self.max_linear_speed # maximum speed [m/s]
+    MIN_SPEED = -1.5 #self.max_linear_speed # minimum speed [m/s]
+    MAX_ACCEL = 1.0  # maximum accel [m/ss]
+
+    mpc_controller = MPC(DT, N_IND_SEARCH, T, NX, WB, MAX_STEER, MAX_DSTEER, MAX_SPEED, MIN_SPEED, MAX_ACCEL)
+
+    MAX_TIME = 2000  # max simulation time
     GOAL_DIS = 1.5  # goal distance
     STOP_SPEED = 0.125 # stop speed
 
+    oa = [0.0] * T
+    odelta = [0.0] * T
+
+
     ai = 0
     di = 0
-    while MAX_TIME >= time:
-
+    ct = 0
+    while ct <= MAX_TIME:
         xref, target_ind, dref = calc_ref_trajectory(state, cx, cy, cyaw, ck, sp, dl, target_ind, T, NX, N_IND_SEARCH, DT)
-        ox, oy, xref, di, ai = mpc_controller.control_signals(xref, dref, oa, odelta, state)
+        x0 = [state.x, state.y, state.v, state.yaw]  # current state
+        print(xref)
+        print(target_ind)
+        print(ct)
+        ct += 1
+
+        oa, odelta = mpc_controller.control_signals(xref, dref, oa, odelta, x0)
+
+        ai = oa[0]
+        di = odelta[0]
+
         state = mpc_controller.update_state(state, ai, di) #  this is actual model
 
         time = time + DT
@@ -292,8 +320,8 @@ if __name__ == '__main__':
             # for stopping simulation with the esc key.
             plt.gcf().canvas.mpl_connect('key_release_event',
                     lambda event: [exit(0) if event.key == 'escape' else None])
-            if ox is not None:
-                plt.plot(ox, oy, "xr", label="MPC")
+            #if ox is not None:
+            #    plt.plot(ox, oy, "xr", label="MPC")
             plt.plot(cx, cy, "-r", label="course")
             plt.plot(x, y, "ob", label="trajectory")
             plt.plot(xref[0, :], xref[1, :], "xk", label="xref")

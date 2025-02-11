@@ -1,5 +1,7 @@
-catkin_ws_control/devel/
-catkin_ws_control/build/
+catkin_ws_control_python/devel/
+catkin_ws_control_python/build/
+catkin_ws_control_cpp/devel/
+catkin_ws_control_cpp/build/
 catkin_ws_robot/devel/
 catkin_ws_robot/build/
 catkin_ws_sim/devel/

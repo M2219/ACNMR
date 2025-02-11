@@ -83,6 +83,7 @@ def stanley_control(L, cx, cy, cyaw, last_target_idx, k_stanley, theta_odo, v_od
 
     # theta_e corrects the heading error
     theta_e = normalize_angle(cyaw[current_target_idx] - theta_odo)
+    #theta_e = cyaw[current_target_idx] - theta_odo
 
     # theta_d corrects the cross track error
     #k_dynamic = k_stanley + 1.0 / (1.0 + v_odo)  # Adjust adaptively
