@@ -45,6 +45,7 @@ class BicycleKinematics {
   BicycleKinematics(control_t u);
 
   // x1 = x, x2 = y, x3 = theta
+  //x3 = -6.283185307179586
   void operator()(const asc::state_t &x, asc::state_t &xd, const double);
 
  private:

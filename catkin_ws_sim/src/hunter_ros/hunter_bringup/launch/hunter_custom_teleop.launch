@@ -1,7 +1,0 @@
-<launch>
-    <arg name="repeat_rate" value="50.0"/>
-    <node name="custom_teleop" pkg="custom_teleop" type="teleop.py"
-          output="screen" launch-prefix="python3">
-        <param name="repeat_rate" value="$(arg repeat_rate)"/>
-    </node>
-</launch>

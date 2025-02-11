@@ -1,0 +1,5 @@
+<launch>
+    <node name="sync_teleop" pkg="custom_teleop" type="synnc.py"
+          output="screen" launch-prefix="python3">
+    </node>
+</launch>
