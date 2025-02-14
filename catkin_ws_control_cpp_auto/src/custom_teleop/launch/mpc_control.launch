@@ -1,0 +1,9 @@
+<launch>
+    <!-- Start the MPC Control Node -->
+    <arg name="repeat_rate" default="100.0"/>
+    <node name="mpc_control_node" pkg="custom_teleop" type="mpc_control_node"
+          output="screen">
+        <param name="repeat_rate" value="$(arg repeat_rate)"/>
+    </node>
+
+</launch>

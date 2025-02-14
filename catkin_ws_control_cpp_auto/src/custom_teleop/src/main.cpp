@@ -1,6 +1,9 @@
 #include <iostream>
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <nav_msgs/Path.h>
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/Float64.h>
 #include <tf/tf.h>
@@ -17,73 +20,52 @@
 
 #include "OsqpEigen/OsqpEigen.h"
 #include "mpc_controller.hpp"
-#include "cubic_planner.hpp"
 #include "mpc_utils.hpp"
 
 class MPCNode {
 public:
     MPCNode() {
-        // Initialize ROS NodeHandle
-        ros::NodeHandle nh;
         odom_updated = false;
-        target_ind = 0;
+        path_updated = false;
+        path_initialized = false;
+        // set the preview window
+        mpcWindow = 20;
+
         // Publishers
         cmd_vel_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
         target_x_pub = nh.advertise<std_msgs::Float64>("/target_x", 1);
         target_y_pub = nh.advertise<std_msgs::Float64>("/target_y", 1);
         target_yaw_pub = nh.advertise<std_msgs::Float64>("/target_yaw", 1);
         target_time_pub = nh.advertise<std_msgs::Float64>("/target_time", 1);
+        error_pub = nh.advertise<std_msgs::Float64>("/target_error", 1);
 
         // Subscribers
         odom_sub = nh.subscribe("/odom", 1, &MPCNode::odomCallback, this);
-
         std::cout << "Starting MPC Simulation..." << std::endl;
 
         // allocate the initial and the reference state space
         x0 << 0, 0, 0, 0;
+
+        global_path_sub = nh.subscribe("/run_hybrid_astar/searched_path", 10, &MPCNode::pathCallback, this);
+        sendInitialPose(nh, x0(0), x0(1), x0(3), 0.5);
+        goal_x = 50.0;
+        goal_y = 0.0;
+        goal_yaw = 0.0;
+        sendGoalPose(nh, goal_x, goal_y, goal_yaw);
+
         ctr << 0, 0;
-        dl = 0.01;  // Course tick
-
-        //getStraightCourse(dl, cx, cy, cyaw, ck);
-        //getStraightCourse2(dl, cx, cy, cyaw, ck);
-        getStraightCourse3(dl, cx, cy, cyaw, ck);
-        //getForwardCourse(dl, cx, cy, cyaw, ck);
-        //getSwitchBackCourse(dl, cx, cy, cyaw, ck);
-        //x0 << 2, 0, 0, 0; // start and start is the same
-
-        sp = calcSpeedProfile(cx, cy, cyaw, TARGET_SPEED);
-
-        // set the preview window
-        mpcWindow = 5;
-
-        // set the initial and the desired states
-        auto [target_ind, mind] = calcNearestIndex(x0, cx, cy, cyaw, 0, N_IND_SEARCH);
-
-        yaw_comp = 0;
-        if (x0(3) - cyaw[0] >= M_PI) {
-           x0(3) -= 2 * M_PI;
-           yaw_comp = -M_PI * 2.0;
-        } else if (x0(3) - cyaw[0] <= -M_PI) {
-           x0(3) += 2 * M_PI;
-           yaw_comp = M_PI * 2.0;
-        } else {
-           yaw_comp = 0;
-        }
-
-        double goal_x = cx.back(), goal_y = cy.back();
-
-        smoothYaw(cyaw);
-        //smoothYawMovingAverage(cyaw);
-        //smoothYawKalman(cyaw);
-        //smoothYawSavitzkyGolay(cyaw);
 
         Eigen::MatrixXd xRef(4, mpcWindow + 1);
-        for (int t = 0; t <= mpcWindow; t++) {
-            xRef(0, t) = cx[t];
-            xRef(1, t) = cy[t];
-            xRef(2, t) = sp[t];
-            xRef(3, t) = cyaw[t];
+        for (int t = 0; t <= mpcWindow; t++) { //check for inside the while
+            xRef(0, t) = x0(0);
+            xRef(1, t) = x0(1);
+            xRef(2, t) = x0(2);
+            xRef(3, t) = x0(3);
         }
+
+        yaw_comp = 0; // check to if necceary
+        dl = 0.05;
+
         // set MPC problem quantities for direct linearized model
         //double v = x0(2);
         //double phi = x0(3);
@@ -126,8 +108,9 @@ public:
     }
 
 private:
-    ros::Publisher cmd_vel_pub, target_x_pub, target_y_pub, target_yaw_pub, target_time_pub;
-    ros::Subscriber odom_sub;
+    ros::NodeHandle nh;
+    ros::Publisher cmd_vel_pub, target_x_pub, target_y_pub, target_yaw_pub, target_time_pub, error_pub;
+    ros::Subscriber odom_sub, global_path_sub;
     std::thread control_thread;
     std::mutex odom_mutex;
 
@@ -149,10 +132,15 @@ private:
     Eigen::VectorXd QPSolution;
 
     bool odom_updated;
+    bool path_updated;
+    bool path_initialized;
 
     // Reference Trajectory
-    std::vector<double> cx, cy, cyaw, ck, sp;
+    std::vector<double> ccx, ccy, ccyaw, ccdir, sp;
     double dl;
+    double goal_x;
+    double goal_y;
+    double goal_yaw;
     int target_ind;
     int mpcWindow;
     double yaw_comp;
@@ -160,6 +148,56 @@ private:
     double y_odo;
     double v_odo;
     double roll_odo, pitch_odo, yaw_odo;
+
+    void sendInitialPose(ros::NodeHandle &nh, double x, double y, double yaw, double variance) {
+        ros::Publisher init_pose_pub = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("/initialpose", 1);
+
+        ros::Duration(1.0).sleep();
+        geometry_msgs::PoseWithCovarianceStamped init_pose_msg;
+
+        init_pose_msg.header.stamp = ros::Time::now();
+        init_pose_msg.header.frame_id = "map";
+
+        init_pose_msg.pose.pose.position.x = x;
+        init_pose_msg.pose.pose.position.y = y;
+        init_pose_msg.pose.pose.position.z = 0.0;
+
+        init_pose_msg.pose.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
+
+        // Set covariance (optional, mainly for localization uncertainty)
+        for (int i = 0; i < 36; i++) {
+            init_pose_msg.pose.covariance[i] = 0.0;
+        }
+        init_pose_msg.pose.covariance[0] = variance;
+        init_pose_msg.pose.covariance[7] = variance;
+        init_pose_msg.pose.covariance[35] = (M_PI / 12.0) * (M_PI / 12.0);
+        ROS_INFO("Sending Initial Pose: x=%.2f, y=%.2f, yaw=%.2f (variance=%.2f)", x, y, yaw, variance);
+        init_pose_pub.publish(init_pose_msg);
+
+        ros::Duration(1.0).sleep();
+    }
+
+    void sendGoalPose(ros::NodeHandle &nh, double x, double y, double yaw) {
+        ros::Publisher goal_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 1);
+
+        ros::Duration(1.0).sleep();
+
+        geometry_msgs::PoseStamped goal_msg;
+
+        goal_msg.header.stamp = ros::Time::now();
+        goal_msg.header.frame_id = "map";
+
+        goal_msg.pose.position.x = x;
+        goal_msg.pose.position.y = y;
+        goal_msg.pose.position.z = 0.0;
+
+        goal_msg.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
+
+        ROS_INFO("Sending Goal Pose: x=%.2f, y=%.2f, yaw=%.2f", x, y, yaw);
+        goal_pose_pub.publish(goal_msg);
+
+        ros::Duration(1.0).sleep();
+    }
 
     void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
 
@@ -180,21 +218,74 @@ private:
         odom_updated = true;
     }
 
-    void publishTrajectory(double x, double y, double yaw, double ttime) {
-        std_msgs::Float64 msg_x, msg_y, msg_yaw, msg_time;
+    // Callback function to store path data
+    void pathCallback(const nav_msgs::Path::ConstPtr& msg) {
+
+    if (msg->poses.empty()) {
+        ROS_WARN("Received an empty path.");
+        return;
+    }
+        ROS_INFO("Received Path with %lu waypoints", msg->poses.size());
+
+        ccx.clear();
+        ccy.clear();
+        ccyaw.clear();
+        ccdir.clear();
+
+        for (size_t i = 0; i < msg->poses.size(); i++) {
+            const auto& pose = msg->poses[i].pose;
+            double theta = tf::getYaw(pose.orientation);
+
+            ccx.push_back(pose.position.x);
+            ccy.push_back(pose.position.y);
+            ccyaw.push_back(theta);
+
+            if (i == 0) {
+                ccdir.push_back(1);
+            } else {
+                double dx = ccx[i] - ccx[i - 1];
+                double dy = ccy[i] - ccy[i - 1];
+                double motion_angle = atan2(dy, dx);
+
+                double angle_diff = ccyaw[i] - motion_angle;
+
+                while (angle_diff > M_PI) angle_diff -= 2 * M_PI;
+                while (angle_diff < -M_PI) angle_diff += 2 * M_PI;
+
+                ccdir.push_back((std::abs(angle_diff) > M_PI / 2) ? -1 : 1);
+            }
+
+        }
+
+        ROS_INFO("Stored Path:");
+        for (size_t i = 0; i < ccx.size(); i++) {
+            ROS_INFO("Waypoint %lu: x=%f, y=%f, yaw=%f, dir=%f", i, ccx[i], ccy[i], ccyaw[i], ccdir[i]);
+        }
+
+        ROS_INFO("Path stored successfully! Total waypoints: %lu", ccx.size());
+
+        path_updated = true;
+        global_path_sub.shutdown();  //recieve once for static environment
+    }
+
+    void publishTrajectory(double x, double y, double yaw, double ttime, double error_traj) {
+        std_msgs::Float64 msg_x, msg_y, msg_yaw, msg_time, msg_error;
         msg_x.data = x;
         msg_y.data = y;
         msg_yaw.data = yaw;
         msg_time.data = ttime;
+        msg_error.data = error_traj;
 
         target_x_pub.publish(msg_x);
         target_y_pub.publish(msg_y);
         target_yaw_pub.publish(msg_yaw);
         target_time_pub.publish(msg_time);
+        error_pub.publish(msg_error);
     }
 
     void controlLoop() {
-        ros::Rate rate(50);  // 50 Hz
+        ros::Rate rate(100);  // 50 Hz
+
         double ttime = 0;
         while (ros::ok()) {
 
@@ -206,6 +297,25 @@ private:
                 continue;
             }
 
+            if (!path_updated) {
+                ROS_WARN_THROTTLE(1, "Waiting for global path ...");
+                rate.sleep();
+                continue;
+            }
+
+            if (!path_initialized) {
+
+                target_ind = 0;
+                sp = calcSpeedProfile(ccx, ccy, ccyaw, TARGET_SPEED);
+                auto [target_ind, mind] = calcNearestIndex(x0, ccx, ccy, ccyaw, 0, N_IND_SEARCH);
+                //smoothYaw(cyaw);
+                //smoothYawMovingAverage(cyaw);
+                //smoothYawKalman(cyaw);
+                //smoothYawSavitzkyGolay(cyaw);
+                path_initialized = true;
+
+            }
+
             // Get reference trajectory for MPC
             // direct linearization
             //setDynamicsMatrices(a, b, c, v, phi, delta);
@@ -213,7 +323,7 @@ private:
             //RK4
             setDynamicsMatrices(a, b, c, x0, ctr, DT);
 
-            auto [xRef, target_ind_new, dref] = calcRefTrajectory(x0, cx, cy, cyaw, ck, sp, dl, target_ind, mpcWindow, NX, N_IND_SEARCH, DT);
+            auto [xRef, target_ind_new, dref] = calcRefTrajectory(x0, ccx, ccy, ccyaw, sp, dl, target_ind, mpcWindow, NX, N_IND_SEARCH, DT);
             target_ind = target_ind_new;
 
             castMPCToQPGradient(Q, xRef, mpcWindow, gradient);
@@ -237,7 +347,6 @@ private:
             // propagate the model
             double speed = x0(2) + ctr(0) * DT;
 
-            ROS_INFO("Control loop using odometry: x=%f, y=%f, yaw=%f, v=%f", x_odo, y_odo, yaw_odo, v_odo);
 
             x0(0) = x_odo;
             x0(1) = y_odo;
@@ -259,10 +368,10 @@ private:
             //delta = ctr(1);
 
             // break command
-            //if (std::hypot(x0(0) - goal_x, x0(1) - goal_y) <= GOAL_DIS && std::abs(x0(2)) < STOP_SPEED) {
-            //    std::cout << "Goal reached!" << std::endl;
-            //    break;
-            //}
+            if (std::hypot(x0(0) - goal_x, x0(1) - goal_y) <= GOAL_DIS && std::abs(x0(2)) < STOP_SPEED) {
+                std::cout << "Goal reached!" << std::endl;
+                break;
+            }
 
 
             // Limit velocity and steering angle
@@ -276,12 +385,15 @@ private:
             // Publish control command
             geometry_msgs::Twist cmd_msg;
             cmd_msg.linear.x = speed;
-            cmd_msg.angular.z = steering;
+            cmd_msg.angular.z = steering; // -steering for the real mobile
             cmd_vel_pub.publish(cmd_msg);
 
             // Publish trajectory point
             ttime = ttime + DT;
-            publishTrajectory(cx[target_ind], cy[target_ind], steering, ttime);
+            double error_traj = sqrt((x0(0) - ccx[target_ind])*(x0(0) - ccx[target_ind]) + (x0(1) - ccy[target_ind]) * (x0(1) - ccy[target_ind]));
+            //ROS_INFO("Control loop using odometry: x=%f, y=%f, yaw=%f, v=%f, e=%f", x_odo, y_odo, yaw_odo, v_odo, error_traj);
+
+            publishTrajectory(ccx[target_ind], ccy[target_ind], steering, ttime, error_traj);
 
             rate.sleep();
         }
