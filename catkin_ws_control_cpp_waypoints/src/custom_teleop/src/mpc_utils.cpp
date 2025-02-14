@@ -196,7 +196,7 @@ void getStraightCourse3(double dl, std::vector<double>& cx, std::vector<double>&
                         std::vector<double>& cyaw, std::vector<double>& ck) {
 
     std::vector<double> xx = {0.0, -10.0, -20.0, -40.0, -50.0, -60.0, -70.0};
-    std::vector<double> yy = {0.0, -1.0, 1.0, 0.0, -1.0, 1.0, 0.0};
+    std::vector<double> yy = {0.0, -10.0,  10,   -10.0,  10.0, -10.0, 10.0};
     std::vector<double> s_values;
     std::tie(cx, cy, cyaw, ck, s_values) = calcSplineCourse(xx, yy, dl);
     for (double& yaw : cyaw) {

@@ -1,7 +1,11 @@
 catkin_ws_control_python/devel/
 catkin_ws_control_python/build/
-catkin_ws_control_cpp/devel/
-catkin_ws_control_cpp/build/
+catkin_ws_control_cpp_auto/devel/
+catkin_ws_control_cpp_auto/build/
+catkin_ws_control_cpp_waypoints/devel/
+catkin_ws_control_cpp_waypoints/build/
+hybrid_a_star_ws/devel/
+hybrid_a_star_ws/build/
 catkin_ws_robot/devel/
 catkin_ws_robot/build/
 catkin_ws_sim/devel/
