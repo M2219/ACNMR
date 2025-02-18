@@ -4,6 +4,8 @@ catkin_ws_control_cpp_auto/devel/
 catkin_ws_control_cpp_auto/build/
 catkin_ws_control_cpp_waypoints/devel/
 catkin_ws_control_cpp_waypoints/build/
+catkin_ws_teb_local_planner/devel/
+catkin_ws_teb_local_planner/build/
 hybrid_a_star_ws/devel/
 hybrid_a_star_ws/build/
 catkin_ws_robot/devel/
