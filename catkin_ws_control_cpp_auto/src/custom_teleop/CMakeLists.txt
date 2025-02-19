@@ -36,6 +36,7 @@ add_executable(mpc_control_node
   src/main.cpp
   src/mpc_controller.cpp
   src/mpc_utils.cpp
+  src/cubic_planner.cpp
 )
 
 ## Link libraries

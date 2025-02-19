@@ -36,6 +36,7 @@ public:
         target_x_pub = nh.advertise<std_msgs::Float64>("/target_x", 1);
         target_y_pub = nh.advertise<std_msgs::Float64>("/target_y", 1);
         target_yaw_pub = nh.advertise<std_msgs::Float64>("/target_yaw", 1);
+        steering_pub = nh.advertise<std_msgs::Float64>("/steering", 1);
         target_time_pub = nh.advertise<std_msgs::Float64>("/target_time", 1);
         error_pub = nh.advertise<std_msgs::Float64>("/target_error", 1);
 
@@ -64,7 +65,7 @@ public:
         }
 
         yaw_comp = 0; // check to if necceary
-        dl = 0.05;
+        dl = 0.05; // path ticks
 
         // set MPC problem quantities for direct linearized model
         //double v = x0(2);
@@ -109,7 +110,7 @@ public:
 
 private:
     ros::NodeHandle nh;
-    ros::Publisher cmd_vel_pub, target_x_pub, target_y_pub, target_yaw_pub, target_time_pub, error_pub;
+    ros::Publisher cmd_vel_pub, target_x_pub, target_y_pub, target_yaw_pub, target_time_pub, error_pub, steering_pub;
     ros::Subscriber odom_sub, global_path_sub;
     std::thread control_thread;
     std::mutex odom_mutex;
@@ -136,7 +137,7 @@ private:
     bool path_initialized;
 
     // Reference Trajectory
-    std::vector<double> ccx, ccy, ccyaw, ccdir, sp;
+    std::vector<double> ccx, ccy, ccyaw, ccx_s, ccy_s, ccyaw_s, ccdir, sp, ck;
     double dl;
     double goal_x;
     double goal_y;
@@ -268,23 +269,25 @@ private:
         global_path_sub.shutdown();  //recieve once for static environment
     }
 
-    void publishTrajectory(double x, double y, double yaw, double ttime, double error_traj) {
-        std_msgs::Float64 msg_x, msg_y, msg_yaw, msg_time, msg_error;
+    void publishTrajectory(double x, double y, double steering, double yaw, double ttime, double error_traj) {
+        std_msgs::Float64 msg_x, msg_y, msg_yaw, msg_time, msg_error, msg_steering;
         msg_x.data = x;
         msg_y.data = y;
         msg_yaw.data = yaw;
+        msg_steering.data = steering;
         msg_time.data = ttime;
         msg_error.data = error_traj;
 
         target_x_pub.publish(msg_x);
         target_y_pub.publish(msg_y);
         target_yaw_pub.publish(msg_yaw);
+        steering_pub.publish(msg_steering);
         target_time_pub.publish(msg_time);
         error_pub.publish(msg_error);
     }
 
     void controlLoop() {
-        ros::Rate rate(100);  // 50 Hz
+        ros::Rate rate(50);  // 100 Hz for sim
 
         double ttime = 0;
         while (ros::ok()) {
@@ -306,9 +309,10 @@ private:
             if (!path_initialized) {
 
                 target_ind = 0;
-                sp = calcSpeedProfile(ccx, ccy, ccyaw, TARGET_SPEED);
-                auto [target_ind, mind] = calcNearestIndex(x0, ccx, ccy, ccyaw, 0, N_IND_SEARCH);
-                //smoothYaw(cyaw);
+                getStraightCourse(dl, ccx_s, ccy_s, ccyaw_s, ck, ccx, ccy);
+                sp = calcSpeedProfile(ccx_s, ccy_s, ccyaw_s, TARGET_SPEED);
+                auto [target_ind, mind] = calcNearestIndex(x0, ccx_s, ccy_s, ccyaw_s, 0, N_IND_SEARCH);
+                //smoothYaw(ccyaw);
                 //smoothYawMovingAverage(cyaw);
                 //smoothYawKalman(cyaw);
                 //smoothYawSavitzkyGolay(cyaw);
@@ -323,7 +327,7 @@ private:
             //RK4
             setDynamicsMatrices(a, b, c, x0, ctr, DT);
 
-            auto [xRef, target_ind_new, dref] = calcRefTrajectory(x0, ccx, ccy, ccyaw, sp, dl, target_ind, mpcWindow, NX, N_IND_SEARCH, DT);
+            auto [xRef, target_ind_new, dref] = calcRefTrajectory(x0, ccx_s, ccy_s, ccyaw_s, sp, dl, target_ind, mpcWindow, NX, N_IND_SEARCH, DT);
             target_ind = target_ind_new;
 
             castMPCToQPGradient(Q, xRef, mpcWindow, gradient);
@@ -390,10 +394,10 @@ private:
 
             // Publish trajectory point
             ttime = ttime + DT;
-            double error_traj = sqrt((x0(0) - ccx[target_ind])*(x0(0) - ccx[target_ind]) + (x0(1) - ccy[target_ind]) * (x0(1) - ccy[target_ind]));
+            double error_traj = sqrt((x0(0) - ccx_s[target_ind])*(x0(0) - ccx_s[target_ind]) + (x0(1) - ccy_s[target_ind]) * (x0(1) - ccy_s[target_ind]));
             //ROS_INFO("Control loop using odometry: x=%f, y=%f, yaw=%f, v=%f, e=%f", x_odo, y_odo, yaw_odo, v_odo, error_traj);
 
-            publishTrajectory(ccx[target_ind], ccy[target_ind], steering, ttime, error_traj);
+            publishTrajectory(ccx_s[target_ind], ccy_s[target_ind], steering, ccyaw_s[target_ind], ttime, error_traj);
 
             rate.sleep();
         }

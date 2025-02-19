@@ -7,6 +7,43 @@
 
 #include "mpc_utils.hpp"
 #include "mpc_controller.hpp"
+#include "cubic_planner.hpp"
+
+void getStraightCourse(double dl, std::vector<double>& cx, std::vector<double>& cy,
+                       std::vector<double>& cyaw, std::vector<double>& ck, std::vector<double> xx, std::vector<double> yy) {
+
+    std::vector<double> s_values;
+    std::tie(cx, cy, cyaw, ck, s_values) = calcSplineCourse(xx, yy, dl);
+
+}
+
+std::tuple<std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>>
+calcSplineCourse(const std::vector<double>& x, const std::vector<double>& y, double ds) {
+    CubicSpline2D sp(x, y);
+
+    double s_max = sp.s.back();
+
+    std::vector<double> s_values;
+    for (double s = 0.0; s <= s_max; s += ds) {
+        s_values.push_back(s);
+    }
+
+    std::vector<double> rx, ry, ryaw, rk;
+
+
+    for (double s : s_values) {
+        auto [ix, iy] = sp.calcPosition(s);
+        double yaw = sp.calcYaw(s);
+        double curvature = sp.calcCurvature(s);
+
+        rx.push_back(ix);
+        ry.push_back(iy);
+        ryaw.push_back(yaw);
+        rk.push_back(curvature);
+    }
+
+    return {rx, ry, ryaw, rk, s_values};
+}
 
 double angleMod(double x, bool zero_2_2pi, bool degree) {
     degree = 0;
