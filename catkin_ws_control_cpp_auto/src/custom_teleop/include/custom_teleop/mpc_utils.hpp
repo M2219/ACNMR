@@ -5,7 +5,11 @@
 #include <vector>
 #include <cmath>
 
+void getStraightCourse(double dl, std::vector<double>& cx, std::vector<double>& cy,
+                       std::vector<double>& cyaw, std::vector<double>& ck, std::vector<double> xx, std::vector<double> yy);
 
+std::tuple<std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>>
+calcSplineCourse(const std::vector<double>& x, const std::vector<double>& y, double ds);
 // Angle normalization functions
 double angleMod(double x, bool zero_2_2pi = false, bool degree = false);
 double pi2pi(double angle);
