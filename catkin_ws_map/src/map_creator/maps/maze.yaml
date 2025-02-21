@@ -2,5 +2,5 @@ image: maze.png
 resolution: 0.05
 origin: [-1.0, -1.0, 0.0]
 negate: 0
-occupied_thresh: 0.65
-free_thresh: 0.196
+occupied_thresh: 0.85 #Pixels darker than 85% intensity (0 - 165 in grayscale) are treated as occupied (obstacles).
+free_thresh: 0.20 # Pixels lighter than 20% intensity (200 - 255 in grayscale) are treated as free space.

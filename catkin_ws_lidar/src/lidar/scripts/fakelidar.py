@@ -11,7 +11,7 @@ class FakeLidar:
         rospy.init_node("fake_lidar")
 
         # LiDAR parameters
-        self.lidar_range = 5.0  # Max scan range in meters
+        self.lidar_range = 20.0  # Max scan range in meters
         self.angle_min = -1.57  # -90 degrees
         self.angle_max = 1.57   # 90 degrees
         self.angle_increment = 0.01  # Resolution (radians per step)
