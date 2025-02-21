@@ -12,3 +12,11 @@ catkin_ws_robot/devel/
 catkin_ws_robot/build/
 catkin_ws_sim/devel/
 catkin_ws_sim/build/
+catkin_ws_map/devel/
+catkin_ws_map/build/
+catkin_ws_slam/devel/
+catkin_ws_slam/build/
+catkin_ws_lidar/build/
+catkin_ws_lidar/devel/
+catkin_ws_teb_local_planner/
+catkin_ws_teb_local_planner_b/
