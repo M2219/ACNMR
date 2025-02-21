@@ -1,14 +1,14 @@
-use_map_topic: true  # ✅ Uses map updates from /map
+use_map_topic: true #Uses map updates from /map
 
 odom_frame_id: "odom"
 base_frame_id: "base_link"
 global_frame_id: "map"
 
 ## LiDAR Configuration
-laser_scan_topic: "/scan"  # ✅ Ensures AMCL listens to Fake LiDAR
-laser_model_type: "likelihood_field"  # "likelihood_field" is better for grid maps
+laser_scan_topic: "/scan" # Ensures AMCL listens to Fake LiDAR
+laser_model_type: "likelihood_field" #likelihood_field is better for grid maps
 laser_max_beams: 60
-laser_max_range: 5.0  # ✅ Matches Fake LiDAR's max range
+laser_max_range: 5.0  #Matches Fake LiDAR's max range
 
 ## Particle Filter Configuration
 min_particles: 500
@@ -33,12 +33,12 @@ laser_sigma_hit: 0.2  # Standard deviation for sensor noise
 laser_lambda_short: 0.1  # Exponential decay for short readings
 
 ## Motion Update Thresholds (Lower = Faster Updates)
-update_min_d: 0.15  # ✅ Trigger update after 15cm movement
-update_min_a: 0.1  # ✅ Trigger update after 0.1 rad rotation
+update_min_d: 0.15  # Trigger update after 15cm movement
+update_min_a: 0.1  #Trigger update after 0.1 rad rotation
 resample_interval: 1
 
 ## Transform & Recovery Parameters
-transform_tolerance: 1.5  # ✅ Avoid TF errors by increasing tolerance
+transform_tolerance: 1.5  # Avoid TF errors by increasing tolerance
 recovery_alpha_slow: 0.001
 recovery_alpha_fast: 0.1
 

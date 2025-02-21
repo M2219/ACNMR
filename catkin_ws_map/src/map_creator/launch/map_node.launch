@@ -23,7 +23,7 @@
     </node>
 
     <!-- ****** Maps ***** -->
-    <node name="map_server" pkg="map_server" type="map_server" args="$(find map_creator)/maps/maze.yaml" output="screen">
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find map_creator)/maps/map_slalom.yaml" output="screen">
         <param name="frame_id" value="map"/>
     </node>
 
