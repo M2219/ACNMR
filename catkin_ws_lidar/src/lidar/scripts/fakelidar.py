@@ -92,6 +92,7 @@ class FakeLidar:
         scan_msg.range_min = 0.1
         scan_msg.range_max = self.lidar_range
         scan_msg.ranges = self.simulate_lidar_scan()
+        scan_msg.intensities = [1.0 - (r / self.lidar_range) if r < self.lidar_range else 0.0 for r in scan_msg.ranges]
 
         self.scan_pub.publish(scan_msg)
 
