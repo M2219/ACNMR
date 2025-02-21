@@ -53,26 +53,20 @@ Visualization Manager:
     - Class: rviz/FocusCamera
     - Class: rviz/Measure
     - Class: rviz/SetInitialPose
-  Views:
-    Current:
-      Class: rviz/Orbit
-      Distance: 13.7274
-      Enable Stereo Rendering:
-        Stereo Eye Separation: 0.06
-        Stereo Focal Distance: 1
-        Swap Stereo Eyes: false
-        Value: false
-      Focal Point:
-        X: 5.37527
-        Y: 5.04606
-        Z: -1.40133
-      Name: Current View
-      Near Clip Distance: 0.01
-      Pitch: 1.5648
-      Target Frame: map
-      Value: Orbit (rviz)
-      Yaw: 4.71043
-    Saved: ~
+Views:
+  Current:
+    Class: rviz/Orbit
+    Distance: 8.0  # Move the camera closer to the robot
+    Focal Point:
+      X: 0.0  #the camera on the robot
+      Y: 0.0
+      Z: 0.0
+    Name: Simple View
+    Near Clip Distance: 0.01
+    Pitch: 1.57  # Keep the camera level
+    Target Frame: map
+    Value: Orbit (rviz)
+    Yaw: 0.0
 Window Geometry:
   Displays:
     collapsed: false
