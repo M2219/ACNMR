@@ -1,0 +1,33 @@
+<!--
+  Simulate a carlike robot with the teb_local_planner in stage:
+  #- stage
+  - map_server
+  - static map
+  - rviz view
+-->
+
+<launch>
+
+    <param name="/use_sim_time" value="false"/>
+    <!-- ************** Stage Simulator *************** -->
+    <!-- ************** Cost Maps *************** -->
+    <!-- Load common costmap parameters first -->
+    <rosparam file="$(find map_creator)/cfg/costmap_common_params.yaml" command="load"/>
+
+    <node name="global_costmap" pkg="costmap_2d" type="costmap_2d_node" output="screen" ns="global_costmap">
+        <rosparam file="$(find map_creator)/cfg/global_costmap_params.yaml" command="load"/>
+    </node>
+
+    <node name="local_costmap" pkg="costmap_2d" type="costmap_2d_node" output="screen" ns="local_costmap">
+        <rosparam file="$(find map_creator)/cfg/local_costmap_params.yaml" command="load"/>
+    </node>
+
+    <!-- ****** Maps ***** -->
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find map_creator)/maps/maze.yaml" output="screen">
+        <param name="frame_id" value="map"/>
+    </node>
+
+    <!-- **************** Visualisation **************** -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find map_creator)/cfg/rviz_navigation.rviz"/>
+
+</launch>

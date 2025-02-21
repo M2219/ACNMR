@@ -1,0 +1,25 @@
+<package format="2">
+  <name>map_creator</name>
+  <version>0.0.1</version>
+  <description>Map Creator for Simulated Navigation</description>
+
+  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <license>BSD</license>
+
+  <!-- Dependencies -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf</depend>
+  <depend>costmap_2d</depend>
+  <depend>map_server</depend>
+  <!--<depend>stage_ros</depend>-->
+
+
+  <!-- Additional dependencies for runtime -->
+  <exec_depend>rviz</exec_depend>
+</package>
