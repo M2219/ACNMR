@@ -239,6 +239,8 @@ void HunterROSMessenger::ResetOdometry() {
 
 void HunterROSMessenger::PublishOdometryToROS(double linear, double angular,
                                               double dt) {
+
+  current_time_ = ros::Time::now();
   // perform numerical integration to get an estimation of pose
   linear_speed_ = linear;
   steering_angle_ = angular;

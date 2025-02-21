@@ -244,6 +244,13 @@ void HunterROSMessenger::ResetOdometry() {
 
 void HunterROSMessenger::PublishOdometryToROS(double linear, double angular,
                                               double dt) {
+
+   while (ros::Time::now().toSec() == 0) {
+       ROS_WARN("Waiting for valid /clock time...");
+       ros::Duration(0.1).sleep();
+//  }
+  current_time_ = ros::Time::now();
+
   // perform numerical integration to get an estimation of pose
   linear_speed_ = linear;
   steering_angle_ = angular;
