@@ -98,7 +98,7 @@ class FakeLidar:
 
     def run(self):
         """ Main loop to publish LiDAR scans """
-        rate = rospy.Rate(10)  # 10 Hz
+        rate = rospy.Rate(30)  # 10 Hz
         while not rospy.is_shutdown():
             self.publish_scan()
             rate.sleep()

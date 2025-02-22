@@ -50,7 +50,7 @@ public:
     ~HybridAStar();
 
     void Init(double x_lower, double x_upper, double y_lower, double y_upper,
-              double state_grid_resolution, double map_grid_resolution = 0.1);
+              double state_grid_resolution, double map_grid_resolution = 0.5);
 
     bool Search(const Vec3d &start_state, const Vec3d &goal_state);
 

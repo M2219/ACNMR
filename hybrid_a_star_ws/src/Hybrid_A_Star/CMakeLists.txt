@@ -42,6 +42,7 @@ find_package(
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
+    /root/hunter2_proj/catkin_ws_control_cpp_auto/src/custom_teleop/include/custom_teleop
 )
 
 catkin_package(
