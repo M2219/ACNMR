@@ -2,5 +2,4 @@
     <arg name="fixed_frame" default="world"/>
     <!-- Hybrid A* Node (Missing Closing Tag Fixed) -->
     <node pkg="hybrid_a_star" type="run_hybrid_astar" name="run_hybrid_astar" output="screen"/>
-
 </launch>
