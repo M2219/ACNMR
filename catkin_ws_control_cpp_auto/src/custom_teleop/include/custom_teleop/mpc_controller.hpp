@@ -5,24 +5,6 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <iostream>
-#include "hunter_params.hpp"
-
-using namespace westonrobot;
-
-static constexpr int NX = 4; // states
-static constexpr int NU = 2; // input
-
-static constexpr int N_IND_SEARCH = 10;
-static constexpr double DT = 0.02; // 0.01 for sim // s reduce when speeds is lower than 0.5
-static constexpr double  WB = HunterV2Params::wheelbase;
-static constexpr double  MAX_STEER = HunterV2Params::max_steer_angle;
-static constexpr double  MAX_DSTEER = 0.52; // max ddelta rad/s -  30 deg / s
-static constexpr double  MAX_SPEED = HunterV2Params::max_linear_speed;
-static constexpr double  MIN_SPEED = 0; //-HunterV2Params::max_linear_speed;
-static constexpr double  MAX_ACCEL = 1; // m/ss max accelration
-static constexpr double GOAL_DIS = 1.5;  // goal distance m
-static constexpr double STOP_SPEED = 0.125; // stop speed m/s
-static constexpr double TARGET_SPEED = 0.5; // m/s
 
 // Function Declarations
 

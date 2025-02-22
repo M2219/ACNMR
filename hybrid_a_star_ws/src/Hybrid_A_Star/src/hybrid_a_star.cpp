@@ -29,6 +29,7 @@
 #include "hybrid_a_star/display_tools.h"
 #include "hybrid_a_star/timer.h"
 #include "hybrid_a_star/trajectory_optimizer.h"
+#include "all_config.hpp"
 
 #include <iostream>
 
@@ -65,7 +66,7 @@ HybridAStar::~HybridAStar() {
 
 void HybridAStar::Init(double x_lower, double x_upper, double y_lower, double y_upper,
                        double state_grid_resolution, double map_grid_resolution) {
-    SetVehicleShape(0.745, 0.980, 0.370); //hunter v2
+    SetVehicleShape(V_LENGTH, V_WIDTH, REAR_AXLE_DISTANCE); //hunter v2
 
     map_x_lower_ = x_lower;
     map_x_upper_ = x_upper;

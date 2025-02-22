@@ -4,6 +4,8 @@
 #include "mpc_controller.hpp"
 #include "OsqpEigen/OsqpEigen.h"
 
+#include "all_config.hpp"
+
 void dynamics_function_(const Eigen::Matrix<double, 4, 1>& x,
                         Eigen::Matrix<double, 4, 1>& x_dot,
                         const Eigen::Matrix<double, 2, 1>& u) {

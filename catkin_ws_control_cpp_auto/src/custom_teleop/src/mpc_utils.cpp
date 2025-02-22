@@ -6,7 +6,7 @@
 #include <Eigen/Dense>
 
 #include "mpc_utils.hpp"
-#include "mpc_controller.hpp"
+#include "all_config.hpp"
 #include "cubic_planner.hpp"
 
 void getStraightCourse(double dl, std::vector<double>& cx, std::vector<double>& cy,

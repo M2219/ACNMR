@@ -21,6 +21,7 @@
 #include "OsqpEigen/OsqpEigen.h"
 #include "mpc_controller.hpp"
 #include "mpc_utils.hpp"
+#include "all_config.hpp"
 
 class MPCNode {
 public:
@@ -49,9 +50,9 @@ public:
 
         global_path_sub = nh.subscribe("/run_hybrid_astar/searched_path", 10, &MPCNode::pathCallback, this);
         sendInitialPose(nh, x0(0), x0(1), x0(3), 0.5);
-        goal_x = 50.0;
-        goal_y = 0.0;
-        goal_yaw = 0.0;
+        goal_x = GOAL_X;
+        goal_y = GOAL_Y;
+        goal_yaw = GOAL_Z;
         sendGoalPose(nh, goal_x, goal_y, goal_yaw);
 
         ctr << 0, 0;
@@ -287,7 +288,7 @@ private:
     }
 
     void controlLoop() {
-        ros::Rate rate(50);  // 100 Hz for sim
+        ros::Rate rate(50);  // 100 Hz for sim 50 for real
 
         double ttime = 0;
         while (ros::ok()) {

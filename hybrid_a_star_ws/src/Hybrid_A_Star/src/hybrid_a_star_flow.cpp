@@ -26,7 +26,7 @@
  ******************************************************************************/
 
 #include "hybrid_a_star/hybrid_a_star_flow.h"
-
+#include "all_config.hpp"
 #include <nav_msgs/Path.h>
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
@@ -46,22 +46,17 @@ __attribute__((unused)) double Mod2Pi(const double &x) {
 }
 
 HybridAStarFlow::HybridAStarFlow(ros::NodeHandle &nh) {
-    double steering_angle = nh.param("planner/steering_angle", 10);
-    int steering_angle_discrete_num = nh.param("planner/steering_angle_discrete_num", 1);
-    double wheel_base = nh.param("planner/wheel_base", 1.0);
-    double segment_length = nh.param("planner/segment_length", 1.6);
-    int segment_length_discrete_num = nh.param("planner/segment_length_discrete_num", 8);
-    double steering_penalty = nh.param("planner/steering_penalty", 1.05);
-    double steering_change_penalty = nh.param("planner/steering_change_penalty", 1.5);
-    double reversing_penalty = nh.param("planner/reversing_penalty", 2.0);
-    double shot_distance = nh.param("planner/shot_distance", 5.0);
+    double steering_angle = MAX_STEER * 180 / M_PI;
+    double wheel_base = WB;
 
     kinodynamic_astar_searcher_ptr_ = std::make_shared<HybridAStar>(
             steering_angle, steering_angle_discrete_num, segment_length, segment_length_discrete_num, wheel_base,
             steering_penalty, reversing_penalty, steering_change_penalty, shot_distance
     );
     costmap_sub_ptr_ = std::make_shared<CostMapSubscriber>(nh, "/map", 1);
+
     init_pose_sub_ptr_ = std::make_shared<InitPoseSubscriber2D>(nh, "/initialpose", 1);
+
     goal_pose_sub_ptr_ = std::make_shared<GoalPoseSubscriber2D>(nh, "/move_base_simple/goal", 1);
 
     path_pub_ = nh.advertise<nav_msgs::Path>("searched_path", 1);
@@ -175,6 +170,7 @@ void HybridAStarFlow::ReadData() {
     costmap_sub_ptr_->ParseData(costmap_deque_);
     init_pose_sub_ptr_->ParseData(init_pose_deque_);
     goal_pose_sub_ptr_->ParseData(goal_pose_deque_);
+
 }
 
 void HybridAStarFlow::InitPoseData() {
