@@ -90,18 +90,14 @@ catkin_make
 
 After building the packages:
 
+```sh
 terminal 1: 
-
-```sh
 roscore
-```
+
 terminal 2:
-```sh
 ./launch_all.sh
-```
 
 terminal 3:
-```sh
 cd catkin_ws_control_cpp_auto
 source devel/setup.bash
 roslaunch custom_teleop mpc_control.launch
