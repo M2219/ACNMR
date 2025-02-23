@@ -20,3 +20,5 @@ catkin_ws_lidar/build/
 catkin_ws_lidar/devel/
 catkin_ws_teb_local_planner/
 catkin_ws_teb_local_planner_b/
+catkin_ws_control_cpp_waypoints/
+catkin_ws_control_python/
