@@ -1,9 +1,9 @@
-# Autonomous Control and Navigation for Hunter V2 (ACN)
+# Autonomous Control and Navigation for Mobile Robots (ACM)
 Author: **[Mahmoud Tahmasebi]**
 
 <!-- TOC -->
 
-- [ACN](#ACN)
+- [ACM](#ACM)
   - [Robot](#Robot)
   - [Packages](#Packages)
     - [catkin_ws_robot](#catkin_ws_robot)
@@ -14,3 +14,19 @@ Author: **[Mahmoud Tahmasebi]**
     - [catkin_ws_map](#catkin_ws_map)
     - [catkin_ws_lidar](#catkin_ws_lidar)
   - [Usage](#usage)
+
+
+<!-- /TOC -->
+
+**ACM** is a ROS-based repository that provides essential packages for controlling and navigating autonomous mobile robots.
+
+This repository includes:
+* Motion Planning (Hybrid A*, TEB, MPC)
+* Localization & Mapping (AMCL, Costmaps, SLAM)
+* Sensor Integration (LiDAR, Cameras, IMU, GPS)
+* Path Following & Obstacle Avoidance
+
+Designed for Hunter V2 and adaptable to other robotic platforms, ACM enables precise and efficient navigation in real-world environments.
+
+--- 
+## Robot
