@@ -120,6 +120,9 @@ If everything goes well, the following result will be shown in RViz.
 
 Note: The robot footprint moves based on AMCL localization (has inaccuracy), while the red arrow follows the odometry published by the simulation (exact odometry).
 
+![Hunter V2](./imgs/diagram.png)
+
+
 ---
 ## Todo
 
