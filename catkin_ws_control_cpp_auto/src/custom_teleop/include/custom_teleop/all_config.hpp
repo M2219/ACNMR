@@ -2,8 +2,8 @@
 #define ALL_CONFIG_HPP
 // Vehicle Geometry
 static constexpr double  WB = 0.650; // m
-static constexpr double  V_LENGTH = 0.980; // m
-static constexpr double  V_WIDTH = 0.745; // m
+static constexpr double  V_LENGTH = 0.980 + 0.2; // m since hybrid A* currently does not support local costmap added 0.3
+static constexpr double  V_WIDTH = 0.745 + 0.2; // m since hybrid A* currently does not support local costmap added 0.3
 static constexpr double  REAR_AXLE_DISTANCE = 0.165; // m
 
 
