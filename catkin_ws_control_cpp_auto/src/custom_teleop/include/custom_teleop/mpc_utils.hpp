@@ -49,4 +49,5 @@ calcRefTrajectory(const Eigen::Matrix<double, 4, 1>& x0,
                   int N_IND_SEARCH,
                   double DT);
 
+
 #endif  // MPC_UTILS_H

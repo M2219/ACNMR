@@ -3,6 +3,8 @@
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/PolygonStamped.h>
+#include <geometry_msgs/Point32.h>
 #include <nav_msgs/Path.h>
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/Float64.h>
@@ -40,6 +42,11 @@ public:
         steering_pub = nh.advertise<std_msgs::Float64>("/steering", 1);
         target_time_pub = nh.advertise<std_msgs::Float64>("/target_time", 1);
         error_pub = nh.advertise<std_msgs::Float64>("/target_error", 1);
+        footprint_pub = nh.advertise<geometry_msgs::PolygonStamped>("/robot_footprint", 1);
+        path_pub = nh.advertise<nav_msgs::Path>("/smoothed_path", 1);
+        custom_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/custom_pose", 1);
+        custom_pose_msg.header.stamp = ros::Time::now();
+        custom_pose_msg.header.frame_id = "map";
 
         // Subscribers
         odom_sub = nh.subscribe("/odom", 1, &MPCNode::odomCallback, this);
@@ -112,9 +119,16 @@ public:
 private:
     ros::NodeHandle nh;
     ros::Publisher cmd_vel_pub, target_x_pub, target_y_pub, target_yaw_pub, target_time_pub, error_pub, steering_pub;
+    ros::Publisher footprint_pub;
+    ros::Publisher path_pub;
+    ros::Publisher custom_pose_pub;
+
     ros::Subscriber odom_sub, global_path_sub;
     std::thread control_thread;
     std::mutex odom_mutex;
+    nav_msgs::Path path_msg;
+
+    geometry_msgs::PoseStamped custom_pose_msg;
 
     // State Variables
     Eigen::Matrix<double, 4, 1> x0;
@@ -199,6 +213,17 @@ private:
         goal_pose_pub.publish(goal_msg);
 
         ros::Duration(1.0).sleep();
+    }
+
+    void sendCustomPoint(double x, double y, double yaw) {
+
+        custom_pose_msg.pose.position.x = x;
+        custom_pose_msg.pose.position.y = y;
+        custom_pose_msg.pose.position.z = 0.0;
+
+        custom_pose_msg.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
+
+        custom_pose_pub.publish(custom_pose_msg);
     }
 
     void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
@@ -287,6 +312,51 @@ private:
         error_pub.publish(msg_error);
     }
 
+    void publishFootprint() {
+        geometry_msgs::PolygonStamped footprint_msg;
+        footprint_msg.header.stamp = ros::Time::now();
+        footprint_msg.header.frame_id = "base_link";
+
+        // Define the footprint points
+        std::vector<std::vector<float>> footprint = {
+            {-0.49, -0.3725}, {-0.49, 0.3725}, {0.49, 0.3725}, {0.49, -0.3725}
+        };
+
+        for (const auto& point : footprint) {
+            geometry_msgs::Point32 p;
+            p.x = point[0];
+            p.y = point[1];
+            p.z = 0;
+            footprint_msg.polygon.points.push_back(p);
+        }
+
+        footprint_pub.publish(footprint_msg);
+    }
+
+   void publishPath(const std::vector<double>& ccx_s, const std::vector<double>& ccy_s, nav_msgs::Path& path_msg) {
+        if (ccx_s.size() != ccy_s.size() || ccx_s.empty()) {
+            ROS_WARN("Path vectors are empty or not the same size.");
+            return;
+        }
+
+        path_msg.header.stamp = ros::Time::now();
+        path_msg.header.frame_id = "map";  // Set reference frame
+
+        for (size_t i = 0; i < ccx_s.size(); ++i) {
+            geometry_msgs::PoseStamped pose;
+            pose.header.stamp = ros::Time::now();
+            pose.header.frame_id = "map";
+
+            pose.pose.position.x = ccx_s[i];
+            pose.pose.position.y = ccy_s[i];
+            pose.pose.position.z = 0.0;
+
+            path_msg.poses.push_back(pose);
+        }
+
+    }
+
+
     void controlLoop() {
         ros::Rate rate(50);  // 100 Hz for sim 50 for real
 
@@ -311,6 +381,9 @@ private:
 
                 target_ind = 0;
                 getStraightCourse(dl, ccx_s, ccy_s, ccyaw_s, ck, ccx, ccy);
+                publishPath(ccx_s, ccy_s, path_msg);
+                path_pub.publish(path_msg);
+
                 sp = calcSpeedProfile(ccx_s, ccy_s, ccyaw_s, TARGET_SPEED);
                 auto [target_ind, mind] = calcNearestIndex(x0, ccx_s, ccy_s, ccyaw_s, 0, N_IND_SEARCH);
                 //smoothYaw(ccyaw);
@@ -396,10 +469,10 @@ private:
             // Publish trajectory point
             ttime = ttime + DT;
             double error_traj = sqrt((x0(0) - ccx_s[target_ind])*(x0(0) - ccx_s[target_ind]) + (x0(1) - ccy_s[target_ind]) * (x0(1) - ccy_s[target_ind]));
-            //ROS_INFO("Control loop using odometry: x=%f, y=%f, yaw=%f, v=%f, e=%f", x_odo, y_odo, yaw_odo, v_odo, error_traj);
-
+            //ROS_INFO("Control loop using odometry:  e=%f", error_traj);
+            sendCustomPoint(x0(0), x0(1), x0(3));
             publishTrajectory(ccx_s[target_ind], ccy_s[target_ind], steering, ccyaw_s[target_ind], ttime, error_traj);
-
+            publishFootprint();
             rate.sleep();
         }
     }

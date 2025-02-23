@@ -9,6 +9,7 @@
 #include "all_config.hpp"
 #include "cubic_planner.hpp"
 
+
 void getStraightCourse(double dl, std::vector<double>& cx, std::vector<double>& cy,
                        std::vector<double>& cyaw, std::vector<double>& ck, std::vector<double> xx, std::vector<double> yy) {
 
