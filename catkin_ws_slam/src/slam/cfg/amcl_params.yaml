@@ -8,7 +8,7 @@ global_frame_id: "map"
 laser_scan_topic: "/scan" # Ensures AMCL listens to Fake LiDAR
 laser_model_type: "likelihood_field" #likelihood_field is better for grid maps
 laser_max_beams: 60
-laser_max_range: 5.0  #Matches Fake LiDAR's max range
+laser_max_range: 20.0  #Matches Fake LiDAR's max range
 
 ## Particle Filter Configuration
 min_particles: 500
@@ -43,4 +43,4 @@ recovery_alpha_slow: 0.001
 recovery_alpha_fast: 0.1
 
 ## Publish rate for best estimate scan
-gui_publish_rate: 10.0
+gui_publish_rate: 50.0
