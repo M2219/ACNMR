@@ -26,7 +26,7 @@ This repository includes:
 * Sensor Integration (LiDAR, Cameras, IMU, GPS)
 * Path Following & Obstacle Avoidance
 
-Designed for Hunter V2 and adaptable to other robotic platforms, ACM enables precise and efficient navigation in real-world environments.
+Designed for Hunter V2 and adaptable to other robotic platforms, ACM's goal is enabling precise and efficient navigation in real-world environments.
 
 --- 
 ## Robot
