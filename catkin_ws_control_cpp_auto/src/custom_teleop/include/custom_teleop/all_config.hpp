@@ -2,8 +2,8 @@
 #define ALL_CONFIG_HPP
 // Vehicle Geometry
 static constexpr double  WB = 0.650; // m
-static constexpr double  V_LENGTH = 0.980 + 0.2; // m since hybrid A* currently does not support local costmap added 0.3
-static constexpr double  V_WIDTH = 0.745 + 0.2; // m since hybrid A* currently does not support local costmap added 0.3
+static constexpr double  V_LENGTH = 0.980 + 0.2; // m since hybrid A* currently does not support local costmap added 0.2
+static constexpr double  V_WIDTH = 0.745 + 0.2; // m since hybrid A* currently does not support local costmap added 0.2
 static constexpr double  REAR_AXLE_DISTANCE = 0.165; // m
 
 
@@ -15,7 +15,7 @@ static constexpr int GOAL_Z = 0.0; // goalz
 static constexpr int NX = 4; // states
 static constexpr int NU = 2; // input
 static constexpr int N_IND_SEARCH = 20; // ahead index for splice planner
-static constexpr double DT = 0.02; // 0.01 for sim // 0.02 for real robot //s reduce when speeds is lower than 0.5
+static constexpr double DT = 0.02; // simulation time
 static constexpr double  MAX_STEER = 33 * M_PI / 180; // rad
 static constexpr double  MAX_DSTEER = 0.52; // max ddelta rad/s -  30 deg / s
 static constexpr double  MAX_SPEED = 1.0; // the real robot is 5.4; 1.0 for safety // m / s

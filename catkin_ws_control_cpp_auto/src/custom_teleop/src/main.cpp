@@ -340,7 +340,7 @@ private:
         }
 
         path_msg.header.stamp = ros::Time::now();
-        path_msg.header.frame_id = "map";  // Set reference frame
+        path_msg.header.frame_id = "map";
 
         for (size_t i = 0; i < ccx_s.size(); ++i) {
             geometry_msgs::PoseStamped pose;
@@ -358,7 +358,7 @@ private:
 
 
     void controlLoop() {
-        ros::Rate rate(50);  // 100 Hz for sim 50 for real
+        ros::Rate rate(50);
 
         double ttime = 0;
         while (ros::ok()) {
@@ -463,7 +463,7 @@ private:
             // Publish control command
             geometry_msgs::Twist cmd_msg;
             cmd_msg.linear.x = speed;
-            cmd_msg.angular.z = steering; // -steering for the real mobile
+            cmd_msg.angular.z = steering;
             cmd_vel_pub.publish(cmd_msg);
 
             // Publish trajectory point
