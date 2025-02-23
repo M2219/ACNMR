@@ -102,8 +102,7 @@ terminal 2:
 
 terminal 3:
 ```sh
-cd 
-catkin_ws_control_cpp_auto
+cd catkin_ws_control_cpp_auto
 source devel/setup.bash
 roslaunch custom_teleop mpc_control.launch
 ```
@@ -127,8 +126,22 @@ Note: The robot footprint moves based on AMCL localization (has inaccuracy), whi
 ---
 ## Practical Usage
 
-For testing on real robot replace "cd catkin_ws_sim" with "cd catkin_ws_robot" in launch_all.sh.
+For testing on real robot replace "cd catkin_ws_sim" with "cd catkin_ws_robot" in launch_all.sh, and run the following commands.
 
+```sh
+
+terminal 1:
+sudo modprobe gs_usb
+sudo ip link set can0 up type can bitrate 500000
+
+terminal 2:
+./launch_all.sh
+
+terminal 3:
+cd catkin_ws_control_cpp_auto
+source devel/setup.bash
+roslaunch custom_teleop mpc_control.launch
+```
 ---
 ## Practical Result
 
