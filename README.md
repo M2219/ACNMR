@@ -55,13 +55,18 @@ For more information and dependencies visit:
 * https://github.com/M2219/MPC_BicycleModel
 * https://github.com/robotology/osqp-eigen
 
+## hybrid_a_star_ws
+This package features a slightly modified Hybrid A global planner*, adapted from this  (repo [link](https://github.com/zm0612/Hybrid_A_Star/tree/main)). It subscribes to start, goal, and map topics to generate a global, collision-free path with efficient and safe navigation in complex environments.
 
+## catkin_ws_slam
+This package serves as the host for SLAM algorithms and currently supports AMCL (Adaptive Monte Carlo Localization) for precise robot localization within a known map. Future updates may incorporate additional SLAM methods for enhanced mapping and navigation.
 
+## catkin_ws_map
+This package is responsible for handling the map and generating both local and global costmaps for the local and global planners.
 
+Currently, it takes a static map from the map server and processes it to generate costmaps, which are used for path planning and obstacle avoidance.
 
-
-
-
-
+## catkin_ws_lidar
+This package serves as the host for LiDAR data processing. Currently, it includes a fake LiDAR implementation for simulation purposes, enabling sensor-based testing and development without requiring real hardware. The parameters can be set based on the real LiDAR.
 
 
