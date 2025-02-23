@@ -68,6 +68,7 @@ Currently, it takes a static map from the map server and processes it to generat
 
 ## catkin_ws_lidar
 This package serves as the host for LiDAR data processing. Currently, it includes a fake LiDAR implementation for simulation purposes, enabling sensor-based testing and development without requiring real hardware. The parameters can be set based on the real LiDAR.
+
 ---
 
 ## Usage
