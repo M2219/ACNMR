@@ -105,8 +105,15 @@ source devel/setup.bash
 roslaunch custom_teleop mpc_control.launch
 ```
 
+Note: the initial conditions and parameters can be set in catkin_ws_control_cpp_auto/src/custom_teleop/include/custom_teleop/all_config.hpp.
+* If changed the catkin_ws_control_cpp_auto and hybrid_a_star_ws must be rebuilt
+* The dynamic reconfiguration will be added soon
+
 ---
 ## Result
+If everything goes well, the following result will be shown in RViz.
 
-
+<p align="center" style="margin:0">
+<img src="./imgs/vid1_highres.gif" alt="Path Following" width="600" border="0" /> 
+</p>
 
