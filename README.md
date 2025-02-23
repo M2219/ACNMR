@@ -15,6 +15,7 @@ Author: **[Mahmoud Tahmasebi]**
     - [catkin_ws_lidar](#catkin_ws_lidar)
   - [Usage](#usage)
   - [Result](#result)
+  - [Todo](#Todo)
 
 
 <!-- /TOC -->
@@ -117,3 +118,14 @@ If everything goes well, the following result will be shown in RViz.
 <img src="./imgs/vid1_highres.gif" alt="Path Following" width="600" border="0" /> 
 </p>
 
+Note: The robot footprint moves based on AMCL localization (has inaccuracy), while the red arrow follows the odometry published by the simulation (exact odometry).
+
+---
+## Todo
+
+* Develop the global planner to generate a path based on the global costmap.
+* Incorporate stereo matching for obstacle detection.
+* Integrate a local planner for real-time trajectory adjustment.
+* Implement SLAM for mapping and localization.
+* Handling of dynamic obstacles.
+* ...
