@@ -127,7 +127,7 @@ Note: The robot footprint moves based on AMCL localization (has inaccuracy), whi
 ---
 ## Practical Usage
 
-For testing on real robot chanage replace "cd catkin_ws_sim" with "cd catkin_ws_robot".
+For testing on real robot replace "cd catkin_ws_sim" with "cd catkin_ws_robot" in launch_all.sh.
 
 ---
 ## Practical Result
