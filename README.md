@@ -68,5 +68,24 @@ Currently, it takes a static map from the map server and processes it to generat
 
 ## catkin_ws_lidar
 This package serves as the host for LiDAR data processing. Currently, it includes a fake LiDAR implementation for simulation purposes, enabling sensor-based testing and development without requiring real hardware. The parameters can be set based on the real LiDAR.
+---
 
+## Usage
+
+Clone the repository and catkin_make the packages.
+
+```sh
+git clone git@github.com:M2219/ACM.git
+
+cd ACM
+
+cd [catkin workspaces]
+catkin_make
+```
+
+After building the packages, open a terminal and 
+
+```sh
+./launch_all.sh
+```
 
