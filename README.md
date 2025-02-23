@@ -14,7 +14,9 @@ Author: **[Mahmoud Tahmasebi]**
     - [catkin_ws_map](#catkin_ws_map)
     - [catkin_ws_lidar](#catkin_ws_lidar)
   - [Usage](#usage)
-  - [Result](#result)
+  - [Simulation Result](#simulation result)
+  - [Practical Usage](#Practical Usage)
+  - [Practical Result](#Practical Result)
   - [Todo](#Todo)
 
 
@@ -122,6 +124,13 @@ Note: The robot footprint moves based on AMCL localization (has inaccuracy), whi
 
 ![Hunter V2](./imgs/diagram.png)
 
+---
+## Practical Usage
+
+For testing on real robot chanage replace "cd catkin_ws_sim" with "cd catkin_ws_robot".
+
+---
+## Practical Result
 
 ---
 ## Todo
