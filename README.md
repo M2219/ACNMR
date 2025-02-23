@@ -111,7 +111,7 @@ Note: the initial conditions and parameters can be set in catkin_ws_control_cpp_
 * The dynamic reconfiguration will be added soon
 
 ---
-## Result
+## Simulation Result
 If everything goes well, the following result will be shown in RViz.
 
 <p align="center" style="margin:0">
