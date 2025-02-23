@@ -30,6 +30,6 @@ Designed for Hunter V2 and adaptable to other robotic platforms, ACM's goal is e
 
 --- 
 ## Robot
-Hunter V2 is specifically developed to excel in low-speed autonomous driving scenarios. It is equipped with front-wheel Ackerman steering and rocker suspension, enabling it to effectively navigate obstacles encountered on its path.
+The system is testing on Hunter V2 which is specifically developed to excel in low-speed autonomous driving scenarios. It is equipped with front-wheel Ackerman steering and rocker suspension, enabling it to effectively navigate obstacles encountered on its path.
 * User manual (check this direct [link](https://global.agilex.ai/pages/download-manual))
 ![Hunter V2](./imgs/robot.png)
