@@ -68,6 +68,7 @@ Visualization Manager:
           Topic: /robot_footprint
           Unreliable: false
           Value: true
+
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -96,6 +97,7 @@ Visualization Manager:
           Use Fixed Frame: true
           Use rainbow: true
           Value: true
+
         - Alpha: 1
           Arrow Length: 0.10000000149011612
           Axes Length: 0.30000001192092896

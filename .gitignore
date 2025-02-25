@@ -22,3 +22,5 @@ catkin_ws_teb_local_planner/
 catkin_ws_teb_local_planner_b/
 catkin_ws_control_cpp_waypoints/
 catkin_ws_control_python/
+record_camera/
+catkin_ws_lidar_real/

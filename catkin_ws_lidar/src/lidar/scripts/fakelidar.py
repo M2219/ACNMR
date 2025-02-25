@@ -11,10 +11,10 @@ class FakeLidar:
         rospy.init_node("fake_lidar")
 
         # LiDAR parameters
-        self.lidar_range = 20.0  # Max scan range in meters
-        self.angle_min = -1.57  # -90 degrees
-        self.angle_max = 1.57   # 90 degrees
-        self.angle_increment = 0.01  # Resolution (radians per step)
+        self.lidar_range = 50.0  # Max scan range in meters
+        self.angle_min = -1.57  # -15 degrees
+        self.angle_max = 1.57   # 15 degrees
+        self.angle_increment = 0.01  # Resolution (radians per step) =  0.36 deg
 
         # Robot position
         self.robot_x = None
@@ -64,7 +64,7 @@ class FakeLidar:
             ray_x, ray_y = self.robot_x, self.robot_y
 
             # Step along the ray to check for obstacles
-            for i in range(int(self.lidar_range * 20)):  # 20 steps per meter
+            for i in range(int(self.lidar_range * 10)):  # 20 steps per meter
                 ray_x += np.cos(self.robot_yaw + angle) * 0.05  # Step size
                 ray_y += np.sin(self.robot_yaw + angle) * 0.05
 
@@ -98,7 +98,7 @@ class FakeLidar:
 
     def run(self):
         """ Main loop to publish LiDAR scans """
-        rate = rospy.Rate(30)  # 10 Hz
+        rate = rospy.Rate(20)  # 10 Hz
         while not rospy.is_shutdown():
             self.publish_scan()
             rate.sleep()
