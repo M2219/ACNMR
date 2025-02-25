@@ -2,5 +2,5 @@ image: map_slalom.png
 resolution: 0.5 # Each pixel represents 0.5 meters (50 cm) in the real world.
 origin: [ 0.0, 0.0, 0.0 ]
 negate: 0
-occupied_thresh: 0.75 # Pixels darker than 85% intensity (0 - 165 in grayscale) are treated as occupied (obstacles).
-free_thresh: 0.20 # Pixels lighter than 20% intensity (200 - 255 in grayscale) are treated as free space.
+occupied_thresh: 0.1 # Pixels darker than 85% intensity (0 - 165 in grayscale) are treated as occupied (obstacles).
+free_thresh: 0.05 # Pixels lighter than 20% intensity (200 - 255 in grayscale) are treated as free space.

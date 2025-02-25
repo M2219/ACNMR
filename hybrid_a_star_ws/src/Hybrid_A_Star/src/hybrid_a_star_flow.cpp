@@ -46,7 +46,7 @@ __attribute__((unused)) double Mod2Pi(const double &x) {
 }
 
 HybridAStarFlow::HybridAStarFlow(ros::NodeHandle &nh) {
-    double steering_angle = MAX_STEER * 180 / M_PI;
+    double steering_angle = 15; //MAX_STEER * 180 / M_PI;
     double wheel_base = WB;
 
     kinodynamic_astar_searcher_ptr_ = std::make_shared<HybridAStar>(

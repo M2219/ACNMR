@@ -32,7 +32,7 @@ public:
         path_updated = false;
         path_initialized = false;
         // set the preview window
-        mpcWindow = 20;
+        mpcWindow = 30;
 
         // Publishers
         cmd_vel_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
@@ -53,10 +53,11 @@ public:
         std::cout << "Starting MPC Simulation..." << std::endl;
 
         // allocate the initial and the reference state space
-        x0 << 0, 0, 0, 0;
+        x0 << 0.0, 0.0, 0.0, 0.0;
 
         global_path_sub = nh.subscribe("/run_hybrid_astar/searched_path", 10, &MPCNode::pathCallback, this);
         sendInitialPose(nh, x0(0), x0(1), x0(3), 0.5);
+        //sendInitialPose(nh, 1.0, 2.5, x0(3), 0.5);
         goal_x = GOAL_X;
         goal_y = GOAL_Y;
         goal_yaw = GOAL_Z;
@@ -73,7 +74,7 @@ public:
         }
 
         yaw_comp = 0; // check to if necceary
-        dl = 0.05; // path ticks
+        dl = 0.02; // path ticks
 
         // set MPC problem quantities for direct linearized model
         //double v = x0(2);
@@ -166,7 +167,7 @@ private:
     double roll_odo, pitch_odo, yaw_odo;
 
     void sendInitialPose(ros::NodeHandle &nh, double x, double y, double yaw, double variance) {
-        ros::Publisher init_pose_pub = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("/initialpose", 1);
+        ros::Publisher init_pose_pub = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("/initialpose", 10);
 
         ros::Duration(1.0).sleep();
         geometry_msgs::PoseWithCovarianceStamped init_pose_msg;
@@ -194,7 +195,7 @@ private:
     }
 
     void sendGoalPose(ros::NodeHandle &nh, double x, double y, double yaw) {
-        ros::Publisher goal_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 1);
+        ros::Publisher goal_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 10);
 
         ros::Duration(1.0).sleep();
 

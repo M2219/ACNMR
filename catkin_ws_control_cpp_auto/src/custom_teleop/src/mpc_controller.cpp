@@ -151,8 +151,8 @@ void setInequalityConstraints(Eigen::Matrix<double, 4, 1>& xMax,
 
 void setWeightMatrices(Eigen::DiagonalMatrix<double, 4>& Q, Eigen::DiagonalMatrix<double, 2>& R)
 {
-    Q.diagonal() << 1.0, 1.0, 0.5, 0.5;
-    R.diagonal() << 0.01, 0.01;
+    Q.diagonal() << 1.0, 1.0, 0.5, 0.7; //1.0, 1.0, 0.5, 0.7;
+    R.diagonal() << 0.02, 0.04; //0.02, 0.04;
 }
 
 void castMPCToQPHessian(const Eigen::DiagonalMatrix<double, 4>& Q,
