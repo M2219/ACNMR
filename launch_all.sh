@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Source each workspace and launch in the background
-cd catkin_ws_robot
+cd catkin_ws_sim
 source devel/setup.bash && roslaunch hunter_bringup hunter_robot_base.launch &
 cd ..
 cd catkin_ws_lidar

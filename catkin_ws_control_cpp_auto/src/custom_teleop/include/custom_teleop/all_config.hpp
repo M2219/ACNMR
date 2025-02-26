@@ -1,30 +1,15 @@
 #ifndef ALL_CONFIG_HPP
 #define ALL_CONFIG_HPP
 // Vehicle Geometry
-
-/*
-   SetVehicleShape(4.7, 2.0, 1.3);
-    <node pkg="hybrid_a_star" type="run_hybrid_astar" name="run_hybrid_astar" output="screen">
-        <param name="planner/steering_angle" value="15.0"/>
-        <param name="planner/steering_angle_discrete_num" value="1"/>
-        <param name="planner/wheel_base" value="2.0"/>
-        <param name="planner/segment_length" value="1.6"/>
-        <param name="planner/segment_length_discrete_num" value="8"/>
-        <param name="planner/steering_penalty" value="1.5"/>
-        <param name="planner/reversing_penalty" value="3.0"/>
-        <param name="planner/steering_change_penalty" value="2.0"/>
-        <param name="planner/shot_distance" value="5.0"/>#
-
-*/
 static constexpr double  WB = 0.650; // m
 static constexpr double  V_LENGTH = 0.980 + 0.2; // m since hybrid A* currently does not support local costmap added 0.2
 static constexpr double  V_WIDTH = 0.745 + 0.2; // m since hybrid A* currently does not support local costmap added 0.2
 static constexpr double  REAR_AXLE_DISTANCE = 0.165+0.0; // m
 
 // Controller
-static constexpr int GOAL_X = 48.0; //44 goalx
-static constexpr int GOAL_Y = 2.5; // goaly
-static constexpr int GOAL_Z = 0.0; // goalz
+static constexpr int GOAL_X = 48;
+static constexpr int GOAL_Y = 2.5;
+static constexpr int GOAL_Z = 0.0;
 
 static constexpr int NX = 4; // states
 static constexpr int NU = 2; // input
