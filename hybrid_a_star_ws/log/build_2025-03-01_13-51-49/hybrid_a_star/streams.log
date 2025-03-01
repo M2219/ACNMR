@@ -1,0 +1,108 @@
+[0.007s] Invoking command in '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /root/ACNMR/hybrid_a_star_ws/src/Hybrid_A_Star -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star
+[0.057s] -- The C compiler identification is GNU 11.4.0
+[0.119s] -- The CXX compiler identification is GNU 11.4.0
+[0.127s] -- Detecting C compiler ABI info
+[0.210s] -- Detecting C compiler ABI info - done
+[0.214s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.214s] -- Detecting C compile features
+[0.214s] -- Detecting C compile features - done
+[0.216s] -- Detecting CXX compiler ABI info
+[0.284s] -- Detecting CXX compiler ABI info - done
+[0.289s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.289s] -- Detecting CXX compile features
+[0.289s] -- Detecting CXX compile features - done
+[0.289s] -- Hybrid A* Planner
+[0.292s] -- Author: Zhang Zhimeng
+[0.293s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.414s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.463s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.475s] -- Found rclcpp: 16.0.11 (/opt/ros/humble/share/rclcpp/cmake)
+[0.498s] -- Found rosidl_generator_c: 3.1.6 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.500s] -- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.504s] -- Found rosidl_generator_cpp: 3.1.6 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.510s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.518s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.539s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.541s] -- Found rmw_fastrtps_cpp: 6.2.7 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.618s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.649s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.686s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.689s] -- Looking for pthread.h
+[0.759s] -- Looking for pthread.h - found
+[0.759s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[0.850s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[0.852s] -- Found Threads: TRUE  
+[0.885s] -- Found nav_msgs: 4.2.4 (/opt/ros/humble/share/nav_msgs/cmake)
+[0.902s] -- Found visualization_msgs: 4.2.4 (/opt/ros/humble/share/visualization_msgs/cmake)
+[0.922s] -- Found tf2: 0.25.12 (/opt/ros/humble/share/tf2/cmake)
+[0.929s] -- Found tf2_ros: 0.25.12 (/opt/ros/humble/share/tf2_ros/cmake)
+[0.980s] -- Found tf2_geometry_msgs: 0.25.12 (/opt/ros/humble/share/tf2_geometry_msgs/cmake)
+[0.984s] -- Found eigen3_cmake_module: 0.1.1 (/opt/ros/humble/share/eigen3_cmake_module/cmake)
+[0.985s] -- Found Eigen3: TRUE (found version "3.4.0") 
+[0.985s] -- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+[0.986s] -- Found Glog: /usr/include  
+[0.986s] -- Found glog    (include: /usr/include, library: /usr/lib/x86_64-linux-gnu/libglog.so)
+[0.987s] -- Found Eigen: /usr/include/eigen3 (found version "3.4.0") 
+[1.026s] -- Configuring done
+[1.036s] -- Generating done
+[1.040s] -- Build files have been written to: /root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star
+[1.047s] Invoked command in '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /root/ACNMR/hybrid_a_star_ws/src/Hybrid_A_Star -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star
+[1.047s] Invoking command in '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star -- -j12 -l12
+[1.102s] [ 22%] [32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/hybrid_a_star.cpp.o[0m
+[1.103s] [ 22%] [32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/goal_pose_subscriber.cpp.o[0m
+[1.104s] [ 33%] [32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/costmap_subscriber.cpp.o[0m
+[1.104s] [ 44%] [32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/init_pose_subscriber.cpp.o[0m
+[1.104s] [ 55%] [32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/rs_path.cpp.o[0m
+[1.104s] [ 66%] [32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/hybrid_a_star_flow.cpp.o[0m
+[10.043s] [ 77%] [32m[1mLinking CXX shared library libhybrid_a_star_lib.so[0m
+[10.198s] [ 77%] Built target hybrid_a_star_lib
+[10.215s] [ 88%] [32mBuilding CXX object CMakeFiles/hybrid_astar_launch.dir/app/run_hybrid_astar.cpp.o[0m
+[12.951s] [100%] [32m[1mLinking CXX executable hybrid_astar_launch[0m
+[13.049s] [100%] Built target hybrid_astar_launch
+[13.059s] Invoked command in '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star -- -j12 -l12
+[13.071s] Invoking command in '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star
+[13.081s] -- Install configuration: ""
+[13.082s] -- Execute custom install script
+[13.082s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib/libhybrid_a_star_lib.so
+[13.091s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib/hybrid_a_star/hybrid_astar_launch
+[13.100s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/20220630.pgm
+[13.110s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/20220630.yaml
+[13.117s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map.yaml
+[13.126s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_basic.png
+[13.134s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_dead_end.png
+[13.143s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_demo.png
+[13.149s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_empty.png
+[13.155s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_large.png
+[13.164s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_maze.png
+[13.175s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_parking.png
+[13.187s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_parking_lot.png
+[13.200s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_slalom.png
+[13.213s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/launch/hybrid_a_star_launch_file.launch.xml
+[13.226s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/3rd/backward.hpp
+[13.236s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/costmap_subscriber.h
+[13.247s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/display_tools.h
+[13.258s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/goal_pose_subscriber.h
+[13.267s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/hybrid_a_star.h
+[13.274s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/hybrid_a_star_flow.h
+[13.283s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/init_pose_subscriber.h
+[13.289s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/rs_path.h
+[13.298s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/state_node.h
+[13.306s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/timer.h
+[13.315s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/trajectory_optimizer.h
+[13.322s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/type.h
+[13.327s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/ament_index/resource_index/package_run_dependencies/hybrid_a_star
+[13.336s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/ament_index/resource_index/parent_prefix_path/hybrid_a_star
+[13.349s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/environment/ament_prefix_path.sh
+[13.360s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/environment/ament_prefix_path.dsv
+[13.369s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/environment/path.sh
+[13.380s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/environment/path.dsv
+[13.392s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/local_setup.bash
+[13.404s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/local_setup.sh
+[13.415s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/local_setup.zsh
+[13.426s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/local_setup.dsv
+[13.437s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/package.dsv
+[13.447s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/ament_index/resource_index/packages/hybrid_a_star
+[13.457s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/cmake/hybrid_a_starConfig.cmake
+[13.467s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/cmake/hybrid_a_starConfig-version.cmake
+[13.475s] -- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/package.xml
+[13.490s] Invoked command in '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star

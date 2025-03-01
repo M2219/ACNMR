@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>custom_teleop</name>
+  <version>1.0.0</version>
+  <description>Generic teleop for twist robots.</description>
+
+  <maintainer email="mahmoud.tahmasebi@research.atu.ie">Mahmoud Tahmasebi</maintainer>
+  <author>Mahmoud Tahmasebi</author>
+  <license>BSD</license>
+
+  <url type="website">https://github.com</url>
+
+  <!-- Build and Runtime Dependencies -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- ROS 2 Core Dependencies -->
+  <depend>rclcpp</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+
+  <!-- Additional Dependencies for Compatibility -->
+  <exec_depend>message_runtime</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

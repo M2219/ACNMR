@@ -1,17 +1,27 @@
 <?xml version="1.0"?>
-<package format="2">
+<package format="3">
     <name>hybrid_a_star</name>
     <version>0.0.0</version>
     <description>The hybrid_a_star package</description>
     <maintainer email="849742405@qq.com">Zhang Zhimeng</maintainer>
     <license>BSD</license>
-    <buildtool_depend>catkin</buildtool_depend>
-    <build_depend>roscpp</build_depend>
-    <build_depend>std_msgs</build_depend>
-    <build_export_depend>roscpp</build_export_depend>
-    <build_export_depend>std_msgs</build_export_depend>
-    <exec_depend>roscpp</exec_depend>
-    <exec_depend>std_msgs</exec_depend>
+
+    <!-- Build tool -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+
+    <!-- Build dependencies -->
+    <depend>rclcpp</depend>
+    <depend>nav_msgs</depend>
+    <depend>geometry_msgs</depend>
+    <depend>visualization_msgs</depend>
+    <depend>tf2</depend>
+    <depend>tf2_ros</depend>
+    <depend>nav2_map_server</depend>
+    <depend>rviz2</depend>
+    <depend>Eigen3</depend>
+
+    <!-- Export -->
     <export>
+        <build_type>ament_cmake</build_type>
     </export>
 </package>

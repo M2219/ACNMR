@@ -1,53 +1,26 @@
-/*******************************************************************************
- * Software License Agreement (BSD License)
- *
- * Copyright (c) 2022 Zhang Zhimeng
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
- * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
-
 #ifndef HYBRID_A_STAR_GOAL_POSE_SUBSCRIBER_H
 #define HYBRID_A_STAR_GOAL_POSE_SUBSCRIBER_H
 
-#include <ros/ros.h>
-#include <geometry_msgs/PoseStamped.h>
-
+#include <rclcpp/rclcpp.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <deque>
 #include <mutex>
 
 class GoalPoseSubscriber2D {
 public:
-    GoalPoseSubscriber2D(ros::NodeHandle &nh, const std::string &topic_name, size_t buff_size);
+    // Constructor must match the implementation file
+    explicit GoalPoseSubscriber2D(const std::shared_ptr<rclcpp::Node> &node, const std::string &topic_name, size_t buff_size);
 
-    void ParseData(std::deque<geometry_msgs::PoseStampedPtr> &pose_data_buff);
-
-private:
-    void MessageCallBack(const geometry_msgs::PoseStampedPtr &goal_pose_ptr);
+    void ParseData(std::deque<std::shared_ptr<geometry_msgs::msg::PoseStamped>> &pose_data_buff);
 
 private:
-    ros::Subscriber subscriber_;
-    std::deque<geometry_msgs::PoseStampedPtr> goal_poses_;
+    void MessageCallBack(const std::shared_ptr<geometry_msgs::msg::PoseStamped> goal_pose_ptr);
 
+    std::shared_ptr<rclcpp::Node> node_;  // Reference to existing node
+    rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr subscriber_;
+
+    std::deque<std::shared_ptr<geometry_msgs::msg::PoseStamped>> goal_poses_;
     std::mutex buff_mutex_;
 };
 
-#endif //HYBRID_A_STAR_GOAL_POSE_SUBSCRIBER_H
+#endif // HYBRID_A_STAR_GOAL_POSE_SUBSCRIBER_H

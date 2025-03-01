@@ -1,0 +1,25 @@
+                                                  
+<launch>
+    <!-- Declare arguments -->
+    <arg name="fixed_frame" default="world"/>
+
+    <!-- Hybrid A* Node -->
+    <node pkg="hybrid_a_star" exec="hybrid_astar_launch" name="hybrid_astar_launch" output="screen"/>
+
+    <!-- Static Transform Publisher -->
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="link1_broadcaster"
+          args="0 0 0 0 0 0 world map"/>
+
+    <!-- Nav2 Map Server -->
+    <node pkg="nav2_map_server" exec="map_server" name="map_server">
+        <param name="yaml_filename" value="$(find-pkg-share hybrid_a_star)/maps/map.yaml"/>
+    </node>
+
+    <!-- Lifecycle Manager to auto-activate map_server -->
+    <node pkg="nav2_lifecycle_manager" exec="lifecycle_manager" name="lifecycle_manager_map_server">
+        <param name="autostart" value="true"/>
+        <param name="node_names" value="['map_server']"/>
+    </node>
+
+</launch>
+

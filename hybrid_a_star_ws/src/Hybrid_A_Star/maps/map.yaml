@@ -1,6 +1,7 @@
 image: map_slalom.png
 resolution: 0.5
-origin: [ 0.0, 0.0, 0.0 ]
-occupied_thresh: 0.1
-free_thresh: 0.05
+origin: [0.0, 0.0, 0.0]
+occupied_thresh: 0.1  # Set within valid range
+free_thresh: 0.05     # Set within valid range
 negate: 0
+mode: scale  # Ensure this is included in ROS 2

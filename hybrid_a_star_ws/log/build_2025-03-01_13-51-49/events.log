@@ -1,0 +1,250 @@
+[0.000000] (-) TimerEvent: {}
+[0.000183] (hybrid_a_star) JobQueued: {'identifier': 'hybrid_a_star', 'dependencies': OrderedDict()}
+[0.000251] (hybrid_a_star) JobStarted: {'identifier': 'hybrid_a_star'}
+[0.005119] (hybrid_a_star) JobProgress: {'identifier': 'hybrid_a_star', 'progress': 'cmake'}
+[0.005410] (hybrid_a_star) Command: {'cmd': ['/usr/bin/cmake', '/root/ACNMR/hybrid_a_star_ws/src/Hybrid_A_Star', '-DAMENT_CMAKE_SYMLINK_INSTALL=1', '-DCMAKE_INSTALL_PREFIX=/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star'], 'cwd': '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'mahmoud'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/local/osqp-eigen/lib:/usr/local/osqp/lib'), ('HOME', '/root'), ('OLDPWD', '/root/ACNMR/hybrid_a_star_ws/src'), ('ROS_PYTHON_VERSION', '3'), ('LC_CTYPE', 'C.UTF-8'), ('COLCON_PREFIX_PATH', '/root/ACNMR/hybrid_a_star_ws/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('XAUTHORITY', '/home/stereo/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star:/opt/ros/humble'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('OsqpEigen_DIR', '/usr/local/osqp-eigen'), ('PWD', '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star:/opt/ros/humble')]), 'shell': False}
+[0.057496] (hybrid_a_star) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.099514] (-) TimerEvent: {}
+[0.118834] (hybrid_a_star) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.126621] (hybrid_a_star) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[0.199664] (-) TimerEvent: {}
+[0.210191] (hybrid_a_star) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[0.214227] (hybrid_a_star) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[0.214386] (hybrid_a_star) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[0.214531] (hybrid_a_star) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[0.216262] (hybrid_a_star) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[0.284483] (hybrid_a_star) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[0.288736] (hybrid_a_star) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[0.288880] (hybrid_a_star) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[0.289036] (hybrid_a_star) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[0.289378] (hybrid_a_star) StdoutLine: {'line': b'-- Hybrid A* Planner\n'}
+[0.292019] (hybrid_a_star) StdoutLine: {'line': b'-- Author: Zhang Zhimeng\n'}
+[0.292985] (hybrid_a_star) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[0.299832] (-) TimerEvent: {}
+[0.400191] (-) TimerEvent: {}
+[0.414116] (hybrid_a_star) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter \n'}
+[0.462758] (hybrid_a_star) StdoutLine: {'line': b'-- Override CMake install command with custom implementation using symlinks instead of copying resources\n'}
+[0.475486] (hybrid_a_star) StdoutLine: {'line': b'-- Found rclcpp: 16.0.11 (/opt/ros/humble/share/rclcpp/cmake)\n'}
+[0.498082] (hybrid_a_star) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.6 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[0.500211] (hybrid_a_star) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[0.500347] (-) TimerEvent: {}
+[0.504242] (hybrid_a_star) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.6 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[0.510090] (hybrid_a_star) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.518117] (hybrid_a_star) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.539390] (hybrid_a_star) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[0.540795] (hybrid_a_star) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 6.2.7 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)\n'}
+[0.600475] (-) TimerEvent: {}
+[0.617760] (hybrid_a_star) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  \n'}
+[0.648984] (hybrid_a_star) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/humble/include  \n'}
+[0.685836] (hybrid_a_star) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.689645] (hybrid_a_star) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[0.700651] (-) TimerEvent: {}
+[0.759270] (hybrid_a_star) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[0.759582] (hybrid_a_star) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[0.800767] (-) TimerEvent: {}
+[0.850449] (hybrid_a_star) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[0.852021] (hybrid_a_star) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[0.884997] (hybrid_a_star) StdoutLine: {'line': b'-- Found nav_msgs: 4.2.4 (/opt/ros/humble/share/nav_msgs/cmake)\n'}
+[0.900986] (-) TimerEvent: {}
+[0.901981] (hybrid_a_star) StdoutLine: {'line': b'-- Found visualization_msgs: 4.2.4 (/opt/ros/humble/share/visualization_msgs/cmake)\n'}
+[0.922649] (hybrid_a_star) StdoutLine: {'line': b'-- Found tf2: 0.25.12 (/opt/ros/humble/share/tf2/cmake)\n'}
+[0.929607] (hybrid_a_star) StdoutLine: {'line': b'-- Found tf2_ros: 0.25.12 (/opt/ros/humble/share/tf2_ros/cmake)\n'}
+[0.980543] (hybrid_a_star) StdoutLine: {'line': b'-- Found tf2_geometry_msgs: 0.25.12 (/opt/ros/humble/share/tf2_geometry_msgs/cmake)\n'}
+[0.984026] (hybrid_a_star) StdoutLine: {'line': b'-- Found eigen3_cmake_module: 0.1.1 (/opt/ros/humble/share/eigen3_cmake_module/cmake)\n'}
+[0.984933] (hybrid_a_star) StdoutLine: {'line': b'-- Found Eigen3: TRUE (found version "3.4.0") \n'}
+[0.985014] (hybrid_a_star) StdoutLine: {'line': b'-- Ensuring Eigen3 include directory is part of orocos-kdl CMake target\n'}
+[0.986490] (hybrid_a_star) StdoutLine: {'line': b'-- Found Glog: /usr/include  \n'}
+[0.986561] (hybrid_a_star) StdoutLine: {'line': b'-- Found glog    (include: /usr/include, library: /usr/lib/x86_64-linux-gnu/libglog.so)\n'}
+[0.987336] (hybrid_a_star) StdoutLine: {'line': b'-- Found Eigen: /usr/include/eigen3 (found version "3.4.0") \n'}
+[1.001151] (-) TimerEvent: {}
+[1.026092] (hybrid_a_star) StdoutLine: {'line': b'-- Configuring done\n'}
+[1.036484] (hybrid_a_star) StdoutLine: {'line': b'-- Generating done\n'}
+[1.039997] (hybrid_a_star) StdoutLine: {'line': b'-- Build files have been written to: /root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star\n'}
+[1.047302] (hybrid_a_star) CommandEnded: {'returncode': 0}
+[1.047664] (hybrid_a_star) JobProgress: {'identifier': 'hybrid_a_star', 'progress': 'build'}
+[1.047679] (hybrid_a_star) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star', '--', '-j12', '-l12'], 'cwd': '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'mahmoud'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/local/osqp-eigen/lib:/usr/local/osqp/lib'), ('HOME', '/root'), ('OLDPWD', '/root/ACNMR/hybrid_a_star_ws/src'), ('ROS_PYTHON_VERSION', '3'), ('LC_CTYPE', 'C.UTF-8'), ('COLCON_PREFIX_PATH', '/root/ACNMR/hybrid_a_star_ws/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('XAUTHORITY', '/home/stereo/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star:/opt/ros/humble'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('OsqpEigen_DIR', '/usr/local/osqp-eigen'), ('PWD', '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star:/opt/ros/humble')]), 'shell': False}
+[1.101357] (-) TimerEvent: {}
+[1.102541] (hybrid_a_star) StdoutLine: {'line': b'[ 22%] \x1b[32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/hybrid_a_star.cpp.o\x1b[0m\n'}
+[1.102724] (hybrid_a_star) StdoutLine: {'line': b'[ 22%] \x1b[32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/goal_pose_subscriber.cpp.o\x1b[0m\n'}
+[1.103824] (hybrid_a_star) StdoutLine: {'line': b'[ 33%] \x1b[32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/costmap_subscriber.cpp.o\x1b[0m\n'}
+[1.104137] (hybrid_a_star) StdoutLine: {'line': b'[ 44%] \x1b[32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/init_pose_subscriber.cpp.o\x1b[0m\n'}
+[1.104303] (hybrid_a_star) StdoutLine: {'line': b'[ 55%] \x1b[32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/rs_path.cpp.o\x1b[0m\n'}
+[1.104602] (hybrid_a_star) StdoutLine: {'line': b'[ 66%] \x1b[32mBuilding CXX object CMakeFiles/hybrid_a_star_lib.dir/src/hybrid_a_star_flow.cpp.o\x1b[0m\n'}
+[1.201473] (-) TimerEvent: {}
+[1.301781] (-) TimerEvent: {}
+[1.402093] (-) TimerEvent: {}
+[1.502423] (-) TimerEvent: {}
+[1.602776] (-) TimerEvent: {}
+[1.703107] (-) TimerEvent: {}
+[1.803415] (-) TimerEvent: {}
+[1.903761] (-) TimerEvent: {}
+[2.004096] (-) TimerEvent: {}
+[2.104445] (-) TimerEvent: {}
+[2.204807] (-) TimerEvent: {}
+[2.305146] (-) TimerEvent: {}
+[2.405475] (-) TimerEvent: {}
+[2.505803] (-) TimerEvent: {}
+[2.606138] (-) TimerEvent: {}
+[2.706463] (-) TimerEvent: {}
+[2.806800] (-) TimerEvent: {}
+[2.907146] (-) TimerEvent: {}
+[3.007475] (-) TimerEvent: {}
+[3.107798] (-) TimerEvent: {}
+[3.208147] (-) TimerEvent: {}
+[3.308477] (-) TimerEvent: {}
+[3.408811] (-) TimerEvent: {}
+[3.509149] (-) TimerEvent: {}
+[3.609486] (-) TimerEvent: {}
+[3.709831] (-) TimerEvent: {}
+[3.810184] (-) TimerEvent: {}
+[3.910518] (-) TimerEvent: {}
+[4.010859] (-) TimerEvent: {}
+[4.111194] (-) TimerEvent: {}
+[4.211532] (-) TimerEvent: {}
+[4.311884] (-) TimerEvent: {}
+[4.412224] (-) TimerEvent: {}
+[4.512568] (-) TimerEvent: {}
+[4.612936] (-) TimerEvent: {}
+[4.713319] (-) TimerEvent: {}
+[4.813651] (-) TimerEvent: {}
+[4.913977] (-) TimerEvent: {}
+[5.014312] (-) TimerEvent: {}
+[5.114630] (-) TimerEvent: {}
+[5.214951] (-) TimerEvent: {}
+[5.315273] (-) TimerEvent: {}
+[5.415605] (-) TimerEvent: {}
+[5.515929] (-) TimerEvent: {}
+[5.616241] (-) TimerEvent: {}
+[5.716545] (-) TimerEvent: {}
+[5.816863] (-) TimerEvent: {}
+[5.917136] (-) TimerEvent: {}
+[6.017423] (-) TimerEvent: {}
+[6.117698] (-) TimerEvent: {}
+[6.217991] (-) TimerEvent: {}
+[6.318211] (-) TimerEvent: {}
+[6.418480] (-) TimerEvent: {}
+[6.518782] (-) TimerEvent: {}
+[6.619085] (-) TimerEvent: {}
+[6.719355] (-) TimerEvent: {}
+[6.819658] (-) TimerEvent: {}
+[6.919961] (-) TimerEvent: {}
+[7.020245] (-) TimerEvent: {}
+[7.120541] (-) TimerEvent: {}
+[7.220835] (-) TimerEvent: {}
+[7.321144] (-) TimerEvent: {}
+[7.421450] (-) TimerEvent: {}
+[7.521759] (-) TimerEvent: {}
+[7.622082] (-) TimerEvent: {}
+[7.722411] (-) TimerEvent: {}
+[7.822731] (-) TimerEvent: {}
+[7.923109] (-) TimerEvent: {}
+[8.023372] (-) TimerEvent: {}
+[8.123741] (-) TimerEvent: {}
+[8.224112] (-) TimerEvent: {}
+[8.324502] (-) TimerEvent: {}
+[8.424880] (-) TimerEvent: {}
+[8.525252] (-) TimerEvent: {}
+[8.625611] (-) TimerEvent: {}
+[8.725984] (-) TimerEvent: {}
+[8.826357] (-) TimerEvent: {}
+[8.926717] (-) TimerEvent: {}
+[9.027086] (-) TimerEvent: {}
+[9.127455] (-) TimerEvent: {}
+[9.227827] (-) TimerEvent: {}
+[9.328203] (-) TimerEvent: {}
+[9.428584] (-) TimerEvent: {}
+[9.528984] (-) TimerEvent: {}
+[9.629396] (-) TimerEvent: {}
+[9.729672] (-) TimerEvent: {}
+[9.830041] (-) TimerEvent: {}
+[9.930429] (-) TimerEvent: {}
+[10.030817] (-) TimerEvent: {}
+[10.043461] (hybrid_a_star) StdoutLine: {'line': b'[ 77%] \x1b[32m\x1b[1mLinking CXX shared library libhybrid_a_star_lib.so\x1b[0m\n'}
+[10.131050] (-) TimerEvent: {}
+[10.198177] (hybrid_a_star) StdoutLine: {'line': b'[ 77%] Built target hybrid_a_star_lib\n'}
+[10.215325] (hybrid_a_star) StdoutLine: {'line': b'[ 88%] \x1b[32mBuilding CXX object CMakeFiles/hybrid_astar_launch.dir/app/run_hybrid_astar.cpp.o\x1b[0m\n'}
+[10.231272] (-) TimerEvent: {}
+[10.331590] (-) TimerEvent: {}
+[10.431966] (-) TimerEvent: {}
+[10.532351] (-) TimerEvent: {}
+[10.632731] (-) TimerEvent: {}
+[10.733119] (-) TimerEvent: {}
+[10.833528] (-) TimerEvent: {}
+[10.933925] (-) TimerEvent: {}
+[11.034346] (-) TimerEvent: {}
+[11.134735] (-) TimerEvent: {}
+[11.235118] (-) TimerEvent: {}
+[11.335519] (-) TimerEvent: {}
+[11.435903] (-) TimerEvent: {}
+[11.536299] (-) TimerEvent: {}
+[11.636697] (-) TimerEvent: {}
+[11.737103] (-) TimerEvent: {}
+[11.837500] (-) TimerEvent: {}
+[11.937945] (-) TimerEvent: {}
+[12.038331] (-) TimerEvent: {}
+[12.138711] (-) TimerEvent: {}
+[12.239102] (-) TimerEvent: {}
+[12.339489] (-) TimerEvent: {}
+[12.439884] (-) TimerEvent: {}
+[12.540264] (-) TimerEvent: {}
+[12.640531] (-) TimerEvent: {}
+[12.740908] (-) TimerEvent: {}
+[12.841284] (-) TimerEvent: {}
+[12.941540] (-) TimerEvent: {}
+[12.951445] (hybrid_a_star) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable hybrid_astar_launch\x1b[0m\n'}
+[13.041667] (-) TimerEvent: {}
+[13.048922] (hybrid_a_star) StdoutLine: {'line': b'[100%] Built target hybrid_astar_launch\n'}
+[13.058859] (hybrid_a_star) CommandEnded: {'returncode': 0}
+[13.060047] (hybrid_a_star) JobProgress: {'identifier': 'hybrid_a_star', 'progress': 'install'}
+[13.070959] (hybrid_a_star) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star'], 'cwd': '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'mahmoud'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/local/osqp-eigen/lib:/usr/local/osqp/lib'), ('HOME', '/root'), ('OLDPWD', '/root/ACNMR/hybrid_a_star_ws/src'), ('ROS_PYTHON_VERSION', '3'), ('LC_CTYPE', 'C.UTF-8'), ('COLCON_PREFIX_PATH', '/root/ACNMR/hybrid_a_star_ws/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('XAUTHORITY', '/home/stereo/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star:/opt/ros/humble'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('OsqpEigen_DIR', '/usr/local/osqp-eigen'), ('PWD', '/root/ACNMR/hybrid_a_star_ws/build/hybrid_a_star'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star:/opt/ros/humble')]), 'shell': False}
+[13.081263] (hybrid_a_star) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[13.081729] (hybrid_a_star) StdoutLine: {'line': b'-- Execute custom install script\n'}
+[13.082140] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib/libhybrid_a_star_lib.so\n'}
+[13.091060] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib/hybrid_a_star/hybrid_astar_launch\n'}
+[13.100430] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/20220630.pgm\n'}
+[13.110506] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/20220630.yaml\n'}
+[13.117281] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map.yaml\n'}
+[13.125714] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_basic.png\n'}
+[13.133670] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_dead_end.png\n'}
+[13.141891] (-) TimerEvent: {}
+[13.142739] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_demo.png\n'}
+[13.148654] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_empty.png\n'}
+[13.155185] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_large.png\n'}
+[13.163742] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_maze.png\n'}
+[13.175211] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_parking.png\n'}
+[13.187149] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_parking_lot.png\n'}
+[13.200171] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/maps/map_slalom.png\n'}
+[13.213087] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/launch/hybrid_a_star_launch_file.launch.xml\n'}
+[13.225963] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/3rd/backward.hpp\n'}
+[13.236570] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/costmap_subscriber.h\n'}
+[13.242027] (-) TimerEvent: {}
+[13.247251] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/display_tools.h\n'}
+[13.258110] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/goal_pose_subscriber.h\n'}
+[13.266657] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/hybrid_a_star.h\n'}
+[13.274490] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/hybrid_a_star_flow.h\n'}
+[13.283485] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/init_pose_subscriber.h\n'}
+[13.289452] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/rs_path.h\n'}
+[13.298103] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/state_node.h\n'}
+[13.305975] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/timer.h\n'}
+[13.315073] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/trajectory_optimizer.h\n'}
+[13.321992] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/include/hybrid_a_star/type.h\n'}
+[13.327332] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/ament_index/resource_index/package_run_dependencies/hybrid_a_star\n'}
+[13.336597] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/ament_index/resource_index/parent_prefix_path/hybrid_a_star\n'}
+[13.342226] (-) TimerEvent: {}
+[13.349500] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/environment/ament_prefix_path.sh\n'}
+[13.360420] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/environment/ament_prefix_path.dsv\n'}
+[13.369467] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/environment/path.sh\n'}
+[13.379955] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/environment/path.dsv\n'}
+[13.392030] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/local_setup.bash\n'}
+[13.403955] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/local_setup.sh\n'}
+[13.415030] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/local_setup.zsh\n'}
+[13.426179] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/local_setup.dsv\n'}
+[13.437037] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/package.dsv\n'}
+[13.442313] (-) TimerEvent: {}
+[13.447583] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/ament_index/resource_index/packages/hybrid_a_star\n'}
+[13.457573] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/cmake/hybrid_a_starConfig.cmake\n'}
+[13.466793] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/cmake/hybrid_a_starConfig-version.cmake\n'}
+[13.475143] (hybrid_a_star) StdoutLine: {'line': b'-- Symlinking: /root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/share/hybrid_a_star/package.xml\n'}
+[13.489874] (hybrid_a_star) CommandEnded: {'returncode': 0}
+[13.507414] (hybrid_a_star) JobEnded: {'identifier': 'hybrid_a_star', 'rc': 0}
+[13.507859] (-) EventReactorShutdown: {}

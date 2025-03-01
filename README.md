@@ -46,7 +46,7 @@ The provided packages have been tested and verified on ROS Noetic running on Ubu
 This package includes the CAN communication interface for the real robot. Please refer to the following repos:
 
 * https://github.com/agilexrobotics/ugv_sdk.git
-* https://github.com/agilexrobotics/hunter_ros.git
+* https://github.com/agilexrobotics/hunter_ros2.git
 
 ## catkin_ws_sim
 This package includes a simulated robot, allowing for development and testing in a virtual environment before deployment on the real robot.

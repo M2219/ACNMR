@@ -26,7 +26,7 @@
  ******************************************************************************/
 
 #include "hybrid_a_star/hybrid_a_star.h"
-#include "hybrid_a_star/display_tools.h"
+//#include "hybrid_a_star/display_tools.h"
 #include "hybrid_a_star/timer.h"
 #include "hybrid_a_star/trajectory_optimizer.h"
 #include "all_config.hpp"
@@ -549,8 +549,8 @@ bool HybridAStar::Search(const Vec3d &start_state, const Vec3d &goal_state) {
                 std::cout << "average time of check collision(ms): "
                           << check_collision_use_time / num_check_collision
                           << std::endl;
-                ROS_INFO("\033[1;32m --> Time in Hybrid A star is %f ms, path length: %f  \033[0m\n",
-                         search_used_time.End(), path_length_);
+                //ROS_INFO("\033[1;32m --> Time in Hybrid A star is %f ms, path length: %f  \033[0m\n",
+                //         search_used_time.End(), path_length_);
 
                 check_collision_use_time = 0.0;
                 num_check_collision = 0.0;
@@ -606,7 +606,7 @@ bool HybridAStar::Search(const Vec3d &start_state, const Vec3d &goal_state) {
 
         count++;
         if (count > 50000) {
-            ROS_WARN("Exceeded the number of iterations, the search failed");
+            //ROS_WARN("Exceeded the number of iterations, the search failed");
             return false;
         }
     }
