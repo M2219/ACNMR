@@ -26,15 +26,20 @@ HybridAStarFlow::HybridAStarFlow() : Node("hybrid_a_star_flow") {
 
 void HybridAStarFlow::Run() {
     ReadData();
-    /*
     if (goal_pose_deque_.empty())
             RCLCPP_ERROR(this->get_logger(), "goal empty.");
+    else
+            RCLCPP_ERROR(this->get_logger(), "goal recived.");
+
 
     if (init_pose_deque_.empty())
             RCLCPP_ERROR(this->get_logger(), "start empty.");
-    */
+    else
+            RCLCPP_ERROR(this->get_logger(), "start recived.");
+
     if (!has_map_) {
         if (costmap_deque_.empty()) {
+            //RCLCPP_ERROR(this->get_logger(), "map not recived.");
             return;
         }
 
@@ -203,7 +208,7 @@ void HybridAStarFlow::PublishVehiclePath(const VectorVec3d &path, double width,
 }
 
 void HybridAStarFlow::initializeSubscribers() {
-    costmap_sub_ptr_ = std::make_shared<CostMapSubscriber>(shared_from_this(), "/map", 1);
-    init_pose_sub_ptr_ = std::make_shared<InitPoseSubscriber2D>(shared_from_this(), "/initialpose", 1);
-    goal_pose_sub_ptr_ = std::make_shared<GoalPoseSubscriber2D>(shared_from_this(), "/goal", 1);
+    costmap_sub_ptr_ = std::make_shared<CostMapSubscriber>(shared_from_this(), "/map", 10);
+    init_pose_sub_ptr_ = std::make_shared<InitPoseSubscriber2D>(shared_from_this(), "/initialpose", 10);
+    goal_pose_sub_ptr_ = std::make_shared<GoalPoseSubscriber2D>(shared_from_this(), "/goal", 10);
 }

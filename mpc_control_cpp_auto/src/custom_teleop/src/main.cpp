@@ -50,6 +50,8 @@ public:
         path_pub = this->create_publisher<nav_msgs::msg::Path>("/smoothed_path", 10);
         custom_pose_pub = this->create_publisher<geometry_msgs::msg::PoseStamped>("/custom_pose", 10);
 
+        goal_pub = this->create_publisher<geometry_msgs::msg::PoseStamped>("/goal", 10);
+
         custom_pose_msg.header.stamp = this->get_clock()->now();
         custom_pose_msg.header.frame_id = "map";
 
@@ -65,6 +67,7 @@ public:
         goal_x = GOAL_X;
         goal_y = GOAL_Y;
         goal_yaw = GOAL_Z;
+
         sendGoalPose(goal_x, goal_y, goal_yaw);
 
         ctr << 0.0, 0.0;
@@ -127,7 +130,7 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr target_time_pub, error_pub, steering_pub;
     rclcpp::Publisher<geometry_msgs::msg::PolygonStamped>::SharedPtr footprint_pub;
     rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub;
-    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr custom_pose_pub;
+    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr custom_pose_pub, goal_pub;
 
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub;
     rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr global_path_sub;
@@ -190,7 +193,6 @@ private:
     }
 
     void sendGoalPose(double x, double y, double yaw) {
-        auto pub = this->create_publisher<geometry_msgs::msg::PoseStamped>("/goal", 10);
         rclcpp::sleep_for(std::chrono::seconds(1));
 
         geometry_msgs::msg::PoseStamped msg;
@@ -202,7 +204,7 @@ private:
         q.setRPY(0.0, 0.0, yaw);
         msg.pose.orientation = tf2::toMsg(q);
 
-        pub->publish(msg);
+        goal_pub->publish(msg);
         rclcpp::sleep_for(std::chrono::seconds(1));
     }
 
@@ -359,6 +361,7 @@ private:
             }
 
             if (!path_updated) {
+
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for global path...");
                 //rate.sleep();
                 continue;

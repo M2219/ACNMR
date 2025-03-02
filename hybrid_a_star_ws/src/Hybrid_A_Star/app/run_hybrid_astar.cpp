@@ -11,17 +11,10 @@ backward::SignalHandling sh;
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv);
 
-    std::cout << "before creation" << std::endl;
 
     auto node = std::make_shared<HybridAStarFlow>(); // Create node using std::make_shared
 
-    std::cout << "after creation" << std::endl;
-
     node->initializeSubscribers();
-
-    std::cout << "initialized" << std::endl;
-
-    std::cout << "Spinning node with Run() loop..." << std::endl;
 
     // Continuous loop for calling Run() alongside rclcpp::spin
     rclcpp::Rate loop_rate(10);  // Adjust loop frequency as needed (10 Hz)
@@ -30,6 +23,11 @@ int main(int argc, char **argv) {
         rclcpp::spin_some(node); // Allow ROS to process callbacks
         loop_rate.sleep();
     }
+
+//rclcpp::executors::SingleThreadedExecutor executor;
+//executor.add_node(node);
+//executor.spin();  // Fully manages callbacks and subscriptions
+
 
     std::cout << "Node stopped spinning!" << std::endl;
 
