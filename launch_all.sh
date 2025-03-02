@@ -2,21 +2,20 @@
 
 # Source each workspace and launch in the background
 cd catkin_ws_robot
-source devel/setup.bash && roslaunch hunter_bringup hunter_robot_base.launch &
+source install/setup.bash && ros2 launch hunter_base hunter_base.launch.py &
 cd ..
 cd catkin_ws_lidar
-source devel/setup.bash && roslaunch fakelidar lidar_node.launch &
+source install/setup.bash && ros2 launch fakelidar lidar_node.launch.py &
 cd ..
 cd catkin_ws_slam
-source devel/setup.bash && roslaunch slam slam_node.launch &
+source install/setup.bash && ros2 launch slam slam_node.launch.py &
 cd ..
 cd catkin_ws_map
-source devel/setup.bash && roslaunch map_creator map_node.launch &
+source install/setup.bash && ros2 launch map_creator map_node.launch.py &
 cd ..
 cd hybrid_a_star_ws
-source devel/setup.bash && roslaunch hybrid_a_star run_hybrid_a_star.launch &
+source install/setup.bash && ros2 launch hybrid_a_star hybrid_a_star_launch_file.launch.xml &
 cd ..
-rosrun rqt_multiplot rqt_multiplot &
-
+ros2 run rqt_plot rqt_plot &
 # Keep script running
 wait

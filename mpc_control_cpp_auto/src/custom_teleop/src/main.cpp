@@ -55,9 +55,9 @@ public:
 
         // Subscribers
         odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
-            "/odom", 10, std::bind(&MPCNode::odomCallback, this, std::placeholders::_1));
+            "/odom", 1, std::bind(&MPCNode::odomCallback, this, std::placeholders::_1));
         global_path_sub = this->create_subscription<nav_msgs::msg::Path>(
-            "/run_hybrid_astar/searched_path", 10, std::bind(&MPCNode::pathCallback, this, std::placeholders::_1));
+            "/searched_path", 1, std::bind(&MPCNode::pathCallback, this, std::placeholders::_1));
 
         x0.setZero();
         sendInitialPose(x0(0), x0(1), x0(3), 0.5);
@@ -190,7 +190,7 @@ private:
     }
 
     void sendGoalPose(double x, double y, double yaw) {
-        auto pub = this->create_publisher<geometry_msgs::msg::PoseStamped>("/move_base_simple/goal", 10);
+        auto pub = this->create_publisher<geometry_msgs::msg::PoseStamped>("/goal", 10);
         rclcpp::sleep_for(std::chrono::seconds(1));
 
         geometry_msgs::msg::PoseStamped msg;
@@ -225,7 +225,7 @@ private:
         x0(0) = msg->pose.pose.position.x;
         x0(1) = msg->pose.pose.position.y;
         x0(2) = msg->twist.twist.linear.x;
-
+        //std::cout << "odome" << x0 << std::endl;
         tf2::Quaternion q(
             msg->pose.pose.orientation.x,
             msg->pose.pose.orientation.y,
@@ -354,13 +354,13 @@ private:
 
             if (!odom_updated) {
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for odometry data...");
-                rate.sleep();
+                //rate.sleep();
                 continue;
             }
 
             if (!path_updated) {
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for global path...");
-                rate.sleep();
+                //rate.sleep();
                 continue;
             }
 
@@ -452,7 +452,7 @@ private:
 int main(int argc, char** argv) {
     rclcpp::init(argc, argv);
     auto node = std::make_shared<MPCNode>();
-    rclcpp::executors::SingleThreadedExecutor executor;
+    rclcpp::executors::MultiThreadedExecutor executor;
     executor.add_node(node);
     executor.spin();
     rclcpp::shutdown();

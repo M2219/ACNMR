@@ -1,0 +1,22 @@
+ros__parameters:
+  transform_tolerance: 0.5
+
+  # Define plugins explicitly
+  plugins:
+    - {name: static_layer, type: "nav2_costmap_2d::StaticLayer"}
+    - {name: inflation_layer, type: "nav2_costmap_2d::InflationLayer"}
+
+  # Static Layer Configuration
+  static_layer:
+    enabled: true
+    map_topic: "/map"
+    first_map_only: true
+
+  # Inflation Layer Configuration
+  inflation_layer:
+    enabled: true
+    cost_scaling_factor: 10.0
+    inflation_radius: 0.5
+
+  # Robot footprint
+  footprint: [ [-0.49, -0.3725], [-0.49, 0.3725], [0.49, 0.3725], [0.49, -0.3725] ]

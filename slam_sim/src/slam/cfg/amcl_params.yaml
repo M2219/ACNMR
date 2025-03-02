@@ -1,0 +1,48 @@
+amcl:
+  ros__parameters:
+    use_map_topic: true  # Uses map updates from /map
+
+    odom_frame_id: "odom"
+    base_frame_id: "base_link"
+    global_frame_id: "map"
+
+    ## LiDAR Configuration
+    laser_scan_topic: "/scan"  # Ensures AMCL listens to Fake LiDAR
+    laser_model_type: "likelihood_field"  # likelihood_field is better for grid maps
+    laser_max_beams: 60
+    laser_max_range: 20.0  # Matches Fake LiDAR's max range
+
+    ## Particle Filter Configuration
+    min_particles: 500
+    max_particles: 2000
+    kld_err: 0.05
+    kld_z: 0.99
+
+    ## Odometry Model (Assumes Differential Drive)
+    odom_model_type: "diff"
+    odom_alpha1: 0.2  # Rotational noise due to rotational velocity
+    odom_alpha2: 0.2  # Rotational noise due to translational velocity
+    odom_alpha3: 0.2  # Translational noise due to translational velocity
+    odom_alpha4: 0.2  # Translational noise due to rotational velocity
+    odom_alpha5: 0.1  # Noise parameter for drift
+
+    ## Laser Scan Noise Model
+    laser_z_hit: 0.9   # Probability of correct hit
+    laser_z_short: 0.05  # Probability of short reading
+    laser_z_max: 0.05  # Probability of max-range reading
+    laser_z_rand: 0.5  # Probability of random noise
+    laser_sigma_hit: 0.2  # Standard deviation for sensor noise
+    laser_lambda_short: 0.1  # Exponential decay for short readings
+
+    ## Motion Update Thresholds (Lower = Faster Updates)
+    update_min_d: 0.15  # Trigger update after 15cm movement
+    update_min_a: 0.1  # Trigger update after 0.1 rad rotation
+    resample_interval: 1
+
+    ## Transform & Recovery Parameters
+    transform_tolerance: 1.5  # Avoid TF errors by increasing tolerance
+    recovery_alpha_slow: 0.001
+    recovery_alpha_fast: 0.1
+
+    ## Publish rate for best estimate scan
+    gui_publish_rate: 50.0

@@ -1,8 +1,0 @@
-<launch>
-    <node pkg="fakelidar" type="fakelidar.py" name="fake_lidar" output="screen">
-        <param name="lidar_range" value="5.0"/>
-        <param name="angle_min" value="-1.57"/>
-        <param name="angle_max" value="1.57"/>
-        <param name="angle_increment" value="0.01"/>
-    </node>
-</launch>

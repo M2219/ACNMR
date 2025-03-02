@@ -1,0 +1,22 @@
+local_costmap:
+  ros__parameters:
+    global_frame: "odom"
+    robot_base_frame: "base_link"
+
+    update_frequency: 25.0
+    publish_frequency: 25.0
+    transform_tolerance: 0.5
+
+    rolling_window: false  # No dynamic obstacle tracking
+    width: 5.0  # Local costmap size
+    height: 5.0
+    resolution: 0.05
+
+    static_map: true  # Load obstacles from the static map
+
+    # Costmap layers for ROS 2
+    plugins:
+      - {name: static_layer, type: "nav2_costmap_2d::StaticLayer"}
+      - {name: inflation_layer, type: "nav2_costmap_2d::InflationLayer"}
+      # - {name: obstacle_layer, type: "nav2_costmap_2d::ObstacleLayer"}  # Uncomment if needed
+
