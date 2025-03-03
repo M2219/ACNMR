@@ -57,8 +57,8 @@ Visualization Manager:
       Enabled: true
       Name: Map
       Topic: /map
-      Unreliable: true
-      Use Timestamp: false
+      Unreliable: false
+      Use Timestamp: true
       Value: true
 
     - Class: rviz_common/Group

@@ -22,10 +22,7 @@ std::shared_ptr<HunterBaseRos> robot;
 
 void DetachRobot(int signal) {
   (void)signal;
-  if (robot) {
-    robot->Stop();
-  }
-  rclcpp::shutdown();
+  robot->Stop();
 }
 
 int main(int argc, char **argv) {

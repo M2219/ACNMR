@@ -41,6 +41,10 @@ ProtocolVersion HunterRobot::GetParserProtocolVersion() {
 
 void HunterRobot::SetMotionCommand(double linear_vel, double angular_vel) {
   auto hunter = dynamic_cast<HunterInterface*>(robot_);
+    if (!hunter) {
+        std::cerr << "ERROR: Failed to cast robot_ to HunterInterface!" << std::endl;
+        return;
+    }
   hunter->SetMotionCommand(linear_vel, angular_vel);
 }
 

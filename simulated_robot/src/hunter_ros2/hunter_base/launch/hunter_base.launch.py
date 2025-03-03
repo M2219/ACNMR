@@ -22,7 +22,7 @@ def generate_launch_description():
     odom_topic_arg = DeclareLaunchArgument('odom_topic_name', default_value='odom',
                                            description='Odometry topic name')
 
-    simulated_robot_arg = DeclareLaunchArgument('simulated_robot', default_value='false',
+    simulated_robot_arg = DeclareLaunchArgument('simulated_robot', default_value='true',
                                                    description='Whether running with simulator')
     sim_control_rate_arg = DeclareLaunchArgument('control_rate', default_value='50',
                                                  description='Simulation control loop update rate')

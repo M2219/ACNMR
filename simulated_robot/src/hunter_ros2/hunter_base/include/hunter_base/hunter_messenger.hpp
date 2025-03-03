@@ -81,10 +81,8 @@ class HunterMessenger {
   void SetupSubscription() {
     // odometry publisher
     tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(node_);
-    odom_pub_ =
-        node_->create_publisher<nav_msgs::msg::Odometry>(odom_topic_name_, 50);
-    status_pub_ = node_->create_publisher<hunter_msgs::msg::HunterStatus>(
-        "/hunter_status", 10);
+    odom_pub_ = node_->create_publisher<nav_msgs::msg::Odometry>(odom_topic_name_, 50);
+    status_pub_ = node_->create_publisher<hunter_msgs::msg::HunterStatus>("/hunter_status", 10);
 
     // cmd subscriber
     motion_cmd_sub_ = node_->create_subscription<geometry_msgs::msg::Twist>(
@@ -92,10 +90,16 @@ class HunterMessenger {
         std::bind(&HunterMessenger::TwistCmdCallback, this,
                   std::placeholders::_1));
 
-    
   }
 
-  void PublishStateToROS() {
+  void GetCurrentMotionCmdForSim(double &linear, double &angular) {
+    std::lock_guard<std::mutex> guard(twist_mutex_);
+    linear = current_twist_.linear.x;
+    angular = current_twist_.angular.z;
+  }
+
+
+  void PublishStateToROS(double linear, double angular) {
     current_time_ = node_->get_clock()->now();
 
     static bool init_run = true;
@@ -113,9 +117,8 @@ class HunterMessenger {
 
     status_msg.header.stamp = current_time_;
 
-    status_msg.linear_velocity = state.motion_state.linear_velocity;
-    double phi =ConvertInnerAngleToCentral(state.motion_state.steering_angle);
-    status_msg.steering_angle = phi;
+    status_msg.linear_velocity = linear; //state.motion_state.linear_velocity;
+    status_msg.steering_angle = angular;
     // status_msg.angular_velocity = state.motion_state.steering_angle;
 
     status_msg.vehicle_state = state.system_state.vehicle_state;
@@ -152,7 +155,7 @@ class HunterMessenger {
     status_pub_->publish(status_msg);
 
     // publish odometry and tf
-    PublishOdometryToROS(state.motion_state, dt);
+    PublishOdometryToROS(status_msg, dt);
 
     // record time for next integration
     last_time_ = current_time_;
@@ -161,7 +164,6 @@ class HunterMessenger {
  private:
   std::shared_ptr<HunterType> hunter_;
   rclcpp::Node *node_;
-  
 
   std::string odom_frame_;
   std::string base_frame_;
@@ -179,7 +181,6 @@ class HunterMessenger {
   rclcpp::Publisher<hunter_msgs::msg::HunterStatus>::SharedPtr status_pub_;
 
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr motion_cmd_sub_;
-  
 
   std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
@@ -198,28 +199,27 @@ class HunterMessenger {
   rclcpp::Time current_time_;
 
   void TwistCmdCallback(const geometry_msgs::msg::Twist::SharedPtr msg) {
-    
+
     if (!simulated_robot_) {
       SetHunterMotionCommand(msg);
     } else {
       std::lock_guard<std::mutex> guard(twist_mutex_);
       current_twist_ = *msg.get();
     }
-    // ROS_INFO("Cmd received:%f, %f", msg->linear.x, msg->angular.z);
+    std::cout << "v: " << msg->linear.x << " --------- " << "steering: " << msg->angular.z << std::endl;
   }
 
   // template <typename T,std::enable_if_t<!std::is_base_of<HunterRobot, T>::value,bool> = true>
   void SetHunterMotionCommand(const geometry_msgs::msg::Twist::SharedPtr &msg) {
 
-    std::shared_ptr<HunterRobot> base;
+    //std::shared_ptr<HunterRobot> base;
 
     double radian = 0;
-    double phi_i = AngelVelocity2Angel(*msg,radian);
+    double phi_i = AngelVelocity2Angel(*msg, radian);
 
-    std::cout << "set steering angle: " << phi_i << std::endl;
+    //std::cout << "steering: " << phi_i << "--- velocity: " << msg->linear.x << std::endl;
     hunter_->SetMotionCommand(msg->linear.x, phi_i);
     // hunter_
- 
   }
 
   double ConvertCentralAngleToInner(double angle)
@@ -263,7 +263,7 @@ class HunterMessenger {
     return tf2::toMsg(q);
   }
 
-  void PublishOdometryToROS(const MotionStateMessage &msg, double dt) {
+  void PublishOdometryToROS(const hunter_msgs::msg::HunterStatus &msg, double dt) {
     // perform numerical integration to get an estimation of pose
     double linear_speed_ = msg.linear_velocity;
     // double angular_speed = msg.angular_velocity;
@@ -276,7 +276,6 @@ class HunterMessenger {
     position_x_ = state[0];
     position_y_ = state[1];
     theta_ = state[2];
-
 
     geometry_msgs::msg::Quaternion odom_quat =
         createQuaternionMsgFromYaw(theta_);

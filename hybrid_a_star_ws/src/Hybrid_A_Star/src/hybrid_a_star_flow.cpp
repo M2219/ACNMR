@@ -26,6 +26,7 @@ HybridAStarFlow::HybridAStarFlow() : Node("hybrid_a_star_flow") {
 
 void HybridAStarFlow::Run() {
     ReadData();
+    /*
     if (goal_pose_deque_.empty())
             RCLCPP_ERROR(this->get_logger(), "goal empty.");
     else
@@ -36,6 +37,7 @@ void HybridAStarFlow::Run() {
             RCLCPP_ERROR(this->get_logger(), "start empty.");
     else
             RCLCPP_ERROR(this->get_logger(), "start recived.");
+    */
 
     if (!has_map_) {
         if (costmap_deque_.empty()) {

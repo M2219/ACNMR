@@ -50,7 +50,7 @@ set(DEPENDENCIES
 )
 
 
-add_executable(hunter_base_node 
+add_executable(hunter_base_node
     src/hunter_base_ros.cpp
     src/hunter_base_node.cpp
     src/bicycle_model.cpp)
@@ -63,6 +63,11 @@ install(TARGETS hunter_base_node
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}/)
 
+install(
+  DIRECTORY scripts/
+  DESTINATION lib/${PROJECT_NAME}
+  USE_SOURCE_PERMISSIONS
+)
 # install(DIRECTORY ascent
 #   DESTINATION share/${PROJECT_NAME})
 

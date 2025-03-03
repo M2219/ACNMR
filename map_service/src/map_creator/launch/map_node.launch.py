@@ -49,13 +49,4 @@ def generate_launch_description():
                 parameters=[{"autostart": True, "node_names": ["map_server"]}]
             )]
         ),
-
-        # RViz2
-        Node(
-            package="rviz2",
-            executable="rviz2",
-            name="rviz",
-            arguments=["-d", os.path.join(package_dir, "cfg", "rviz_navigation.rviz")],
-            output="screen"
-        )
     ])

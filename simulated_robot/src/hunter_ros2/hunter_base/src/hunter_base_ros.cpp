@@ -32,7 +32,6 @@ HunterBaseRos::HunterBaseRos(std::string node_name)
 
 void HunterBaseRos::LoadParameters() {
   this->get_parameter_or<std::string>("port_name", port_name_, "can0");//获取参数
-
   this->get_parameter_or<std::string>("odom_frame", odom_frame_, "odom");
   this->get_parameter_or<std::string>("base_frame", base_frame_, "base_link");
   this->get_parameter_or<std::string>("odom_topic_name", odom_topic_name_,
@@ -40,7 +39,7 @@ void HunterBaseRos::LoadParameters() {
 
 
 
-  this->get_parameter_or<bool>("simulated_robot", simulated_robot_, false);
+  this->get_parameter_or<bool>("simulated_robot", simulated_robot_, true);
   this->get_parameter_or<int>("control_rate", sim_control_rate_, 50);
 
   std::cout << "Loading parameters: " << std::endl;
@@ -60,6 +59,7 @@ bool HunterBaseRos::Initialize() {
   robot_ = std::unique_ptr<HunterRobot>(new HunterRobot(ProtocolVersion::AGX_V2));
   return true;
   }
+
 void HunterBaseRos::Stop() { keep_running_ = false; }
 
 void HunterBaseRos::Run() {
@@ -96,10 +96,10 @@ void HunterBaseRos::Run() {
     messenger->SetupSubscription();
     rclcpp::Rate rate(50);
     keep_running_ = true;
-
+    double linear, angular;
     while (keep_running_) {
-      messenger->PublishStateToROS();
-      //robot_->EnableCommandedMode();
+      messenger->GetCurrentMotionCmdForSim(linear, angular);
+      messenger->PublishStateToROS(linear, angular);
       rclcpp::spin_some(this->get_node_base_interface());
       rate.sleep();
     // }

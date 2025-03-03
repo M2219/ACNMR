@@ -401,17 +401,19 @@ private:
             ctr = QPSolution.block(4 * (mpcWindow + 1), 0, 2, 1);
 
             double speed = x0(2) + ctr(0) * DT;
-            x0(0) = x_odo;
-            x0(1) = y_odo;
-            x0(2) = v_odo;
-            x0(3) = yaw_odo;
+            //x0(0) = x_odo;
+            //x0(1) = y_odo;
+            //x0(2) = v_odo;
+            //x0(3) = yaw_odo;
+
+            std::cout << "--> " << x0 << std::endl;
 
             double steering = ctr(1);
 
-            //x0(3) += (speed / WB) * tan(ctr(1)) * DT;
-            //x0(0) += speed * cos(x0(3)) * DT;
-            //x0(1) += speed * sin(x0(3)) * DT;
-            //x0(2) = speed;
+            x0(3) += (speed / WB) * tan(ctr(1)) * DT;
+            x0(0) += speed * cos(x0(3)) * DT;
+            x0(1) += speed * sin(x0(3)) * DT;
+            x0(2) = speed;
 
             //x0 = a * x0 + b * ctr + c; linearized model
 
@@ -434,6 +436,7 @@ private:
             //if (steering > max_steer_angle) steering = max_steer_angle;
             //if (steering < -max_steer_angle) steering = -max_steer_angle;
 
+            std::cout << speed << " ---  " << steering << std::endl;
             geometry_msgs::msg::Twist cmd_msg;
             cmd_msg.linear.x = speed;
             cmd_msg.angular.z = steering;
