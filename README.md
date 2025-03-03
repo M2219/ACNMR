@@ -14,9 +14,9 @@ Author: **[Mahmoud Tahmasebi]**
     - [catkin_ws_map](#catkin_ws_map)
     - [catkin_ws_lidar](#catkin_ws_lidar)
   - [Usage](#usage)
-  - [Simulation Result](#simulation result)
-  - [Practical Usage](#Practical Usage)
-  - [Practical Result](#Practical Result)
+  - [Simulation_Result](#simulation_result)
+  - [Practical_Usage](#Practical_Usage)
+  - [Practical_Result](#Practical_Result)
   - [Todo](#Todo)
 
 
@@ -108,7 +108,7 @@ Note: the initial conditions and parameters can be set in catkin_ws_control_cpp_
 * The dynamic reconfiguration will be added soon
 
 ---
-## Simulation Result
+## Simulation_Result
 If everything goes well, the following result will be shown in RViz.
 
 <p align="center" style="margin:0">
@@ -120,7 +120,7 @@ Note: The robot footprint moves based on AMCL localization (has inaccuracy), whi
 ![Hunter V2](./imgs/diagram.png)
 
 ---
-## Practical Usage
+## Practical_Usage
 
 For testing on real robot replace "cd catkin_ws_sim" with "cd catkin_ws_robot" in launch_all.sh, and run the following commands.
 
@@ -142,7 +142,7 @@ source devel/setup.bash
 roslaunch custom_teleop mpc_control.launch
 ```
 ---
-## Practical Result
+## Practical_Result
 
 ---
 ## Todo
