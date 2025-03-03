@@ -206,7 +206,7 @@ class HunterMessenger {
       std::lock_guard<std::mutex> guard(twist_mutex_);
       current_twist_ = *msg.get();
     }
-    std::cout << "v: " << msg->linear.x << " --------- " << "steering: " << msg->angular.z << std::endl;
+    //std::cout << "v: " << msg->linear.x << " --------- " << "steering: " << msg->angular.z << std::endl;
   }
 
   // template <typename T,std::enable_if_t<!std::is_base_of<HunterRobot, T>::value,bool> = true>
@@ -217,7 +217,7 @@ class HunterMessenger {
     double radian = 0;
     double phi_i = AngelVelocity2Angel(*msg, radian);
 
-    //std::cout << "steering: " << phi_i << "--- velocity: " << msg->linear.x << std::endl;
+    std::cout << "steering: " << phi_i << "--- velocity: " << msg->linear.x << std::endl;
     hunter_->SetMotionCommand(msg->linear.x, phi_i);
     // hunter_
   }
@@ -270,12 +270,16 @@ class HunterMessenger {
     double steering_angle_ = ConvertInnerAngleToCentral(msg.steering_angle);
     // double lateral_speed = 0;
 
+    //std::cout << "v: " << linear_speed_ << " --------- " << "steering: " << msg.steering_angle  << std::endl;
+
     asc::state_t state =
       model_.Propagate({position_x_, position_y_, theta_},
                        {linear_speed_, steering_angle_}, 0, dt, dt / 100);
     position_x_ = state[0];
     position_y_ = state[1];
     theta_ = state[2];
+
+    //std::cout << "x: " << position_x_ << " --------- " << "y " << position_y_  << std::endl;
 
     geometry_msgs::msg::Quaternion odom_quat =
         createQuaternionMsgFromYaw(theta_);

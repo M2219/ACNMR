@@ -12,6 +12,7 @@
 
 #include "std_msgs/msg/float64.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "geometry_msgs/msg/point.hpp"
 
 #include "tf2/LinearMath/Quaternion.hpp"
 #include "tf2/LinearMath/Matrix3x3.hpp"
@@ -40,12 +41,11 @@ public:
 
         // Publishers
         cmd_vel_pub = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
-        target_x_pub = this->create_publisher<std_msgs::msg::Float64>("/target_x", 10);
-        target_y_pub = this->create_publisher<std_msgs::msg::Float64>("/target_y", 10);
-        target_yaw_pub = this->create_publisher<std_msgs::msg::Float64>("/target_yaw", 10);
-        steering_pub = this->create_publisher<std_msgs::msg::Float64>("/steering", 10);
+        target_xy_pub = this->create_publisher<geometry_msgs::msg::Point>("/target_xy", 10);
+        target_yaw_pub = this->create_publisher<geometry_msgs::msg::Point>("/target_yaw", 10);
+        steering_pub = this->create_publisher<geometry_msgs::msg::Point>("/steering", 10);
         target_time_pub = this->create_publisher<std_msgs::msg::Float64>("/target_time", 10);
-        error_pub = this->create_publisher<std_msgs::msg::Float64>("/target_error", 10);
+        error_pub = this->create_publisher<geometry_msgs::msg::Point>("/target_error", 10);
         footprint_pub = this->create_publisher<geometry_msgs::msg::PolygonStamped>("/robot_footprint", 10);
         path_pub = this->create_publisher<nav_msgs::msg::Path>("/smoothed_path", 10);
         custom_pose_pub = this->create_publisher<geometry_msgs::msg::PoseStamped>("/custom_pose", 10);
@@ -56,19 +56,25 @@ public:
         custom_pose_msg.header.frame_id = "map";
 
         // Subscribers
+
         odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
             "/odom", 1, std::bind(&MPCNode::odomCallback, this, std::placeholders::_1));
+
+
         global_path_sub = this->create_subscription<nav_msgs::msg::Path>(
             "/searched_path", 1, std::bind(&MPCNode::pathCallback, this, std::placeholders::_1));
 
         x0.setZero();
-        sendInitialPose(x0(0), x0(1), x0(3), 0.5);
 
         goal_x = GOAL_X;
         goal_y = GOAL_Y;
         goal_yaw = GOAL_Z;
 
+        sendInitialPose(x0(0), x0(1), x0(3), 0.5);
+        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Pose sent");
         sendGoalPose(goal_x, goal_y, goal_yaw);
+        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Goal sent");
+
 
         ctr << 0.0, 0.0;
 
@@ -126,8 +132,8 @@ public:
 
 private:
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub;
-    rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr target_x_pub, target_y_pub, target_yaw_pub;
-    rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr target_time_pub, error_pub, steering_pub;
+    rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr target_xy_pub, error_pub, steering_pub, target_yaw_pub;
+    rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr target_time_pub;
     rclcpp::Publisher<geometry_msgs::msg::PolygonStamped>::SharedPtr footprint_pub;
     rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub;
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr custom_pose_pub, goal_pub;
@@ -223,11 +229,11 @@ private:
         custom_pose_pub->publish(custom_pose_msg);
     }
     void odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg) {
-        std::lock_guard<std::mutex> lock(odom_mutex);
-        x0(0) = msg->pose.pose.position.x;
-        x0(1) = msg->pose.pose.position.y;
-        x0(2) = msg->twist.twist.linear.x;
-        //std::cout << "odome" << x0 << std::endl;
+
+        x_odo = msg->pose.pose.position.x;
+        y_odo = msg->pose.pose.position.y;
+        v_odo = msg->twist.twist.linear.x;
+
         tf2::Quaternion q(
             msg->pose.pose.orientation.x,
             msg->pose.pose.orientation.y,
@@ -235,8 +241,8 @@ private:
             msg->pose.pose.orientation.w
         );
         tf2::Matrix3x3 m(q);
-        m.getRPY(x0(3), yaw_comp, yaw_comp);
-        x0(3) += yaw_comp;
+        m.getRPY(roll_odo, pitch_odo, yaw_odo);
+        yaw_odo = yaw_odo + yaw_comp;
 
         odom_updated = true;
     }
@@ -286,17 +292,24 @@ private:
     }
 
     void publishTrajectory(double x, double y, double steering, double yaw, double ttime, double error_traj) {
-        std_msgs::msg::Float64 msg_x, msg_y, msg_yaw, msg_time, msg_error, msg_steering;
+        std_msgs::msg::Float64 msg_time;
+        geometry_msgs::msg::Point msg_xyz,  msg_error, msg_steering, msg_yaw;
 
-        msg_x.data = x;
-        msg_y.data = y;
-        msg_yaw.data = yaw;
-        msg_steering.data = steering;
+        msg_xyz.x = x;
+        msg_xyz.y = y;
+        msg_xyz.z = 0.0; // Optional, set to 0 if not used
+
+        msg_yaw.x = ttime;
+        msg_yaw.y = yaw;
+
+        msg_steering.x = ttime;
+        msg_steering.y = steering;
+
         msg_time.data = ttime;
-        msg_error.data = error_traj;
+        msg_error.x = ttime;
+        msg_error.y = error_traj;
 
-        target_x_pub->publish(msg_x);
-        target_y_pub->publish(msg_y);
+        target_xy_pub->publish(msg_xyz);
         target_yaw_pub->publish(msg_yaw);
         steering_pub->publish(msg_steering);
         target_time_pub->publish(msg_time);
@@ -361,7 +374,6 @@ private:
             }
 
             if (!path_updated) {
-
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for global path...");
                 //rate.sleep();
                 continue;
@@ -401,19 +413,17 @@ private:
             ctr = QPSolution.block(4 * (mpcWindow + 1), 0, 2, 1);
 
             double speed = x0(2) + ctr(0) * DT;
-            //x0(0) = x_odo;
-            //x0(1) = y_odo;
-            //x0(2) = v_odo;
-            //x0(3) = yaw_odo;
-
-            std::cout << "--> " << x0 << std::endl;
+            x0(0) = x_odo;
+            x0(1) = y_odo;
+            x0(2) = v_odo;
+            x0(3) = yaw_odo;
 
             double steering = ctr(1);
 
-            x0(3) += (speed / WB) * tan(ctr(1)) * DT;
-            x0(0) += speed * cos(x0(3)) * DT;
-            x0(1) += speed * sin(x0(3)) * DT;
-            x0(2) = speed;
+            //x0(3) += (speed / WB) * tan(ctr(1)) * DT;
+            //x0(0) += speed * cos(x0(3)) * DT;
+            //x0(1) += speed * sin(x0(3)) * DT;
+            //x0(2) = speed;
 
             //x0 = a * x0 + b * ctr + c; linearized model
 

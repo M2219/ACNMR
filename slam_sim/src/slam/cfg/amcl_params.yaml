@@ -10,7 +10,7 @@ amcl:
     laser_scan_topic: "/scan"  # Ensures AMCL listens to Fake LiDAR
     laser_model_type: "likelihood_field"  # likelihood_field is better for grid maps
     laser_max_beams: 60
-    laser_max_range: 20.0  # Matches Fake LiDAR's max range
+    laser_max_range: 50.0  # Matches Fake LiDAR's max range
 
     ## Particle Filter Configuration
     min_particles: 500
@@ -20,11 +20,11 @@ amcl:
 
     ## Odometry Model (Assumes Differential Drive)
     odom_model_type: "diff"
-    odom_alpha1: 0.2  # Rotational noise due to rotational velocity
-    odom_alpha2: 0.2  # Rotational noise due to translational velocity
-    odom_alpha3: 0.2  # Translational noise due to translational velocity
-    odom_alpha4: 0.2  # Translational noise due to rotational velocity
-    odom_alpha5: 0.1  # Noise parameter for drift
+    odom_alpha1: 0.02  # Rotational noise due to rotational velocity
+    odom_alpha2: 0.02  # Rotational noise due to translational velocity
+    odom_alpha3: 0.02  # Translational noise due to translational velocity
+    odom_alpha4: 0.02  # Translational noise due to rotational velocity
+    odom_alpha5: 0.01  # Noise parameter for drift
 
     ## Laser Scan Noise Model
     laser_z_hit: 0.9   # Probability of correct hit

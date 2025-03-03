@@ -26,7 +26,7 @@ def generate_launch_description():
                                                    description='Whether running with simulator')
     sim_control_rate_arg = DeclareLaunchArgument('control_rate', default_value='50',
                                                  description='Simulation control loop update rate')
-    
+
     hunter_base_node = launch_ros.actions.Node(
         package='hunter_base',
         executable='hunter_base_node',
@@ -34,7 +34,7 @@ def generate_launch_description():
         emulate_tty=True,
         parameters=[{
                 'use_sim_time': launch.substitutions.LaunchConfiguration('use_sim_time'),
-                'port_name': launch.substitutions.LaunchConfiguration('port_name'),                
+                'port_name': launch.substitutions.LaunchConfiguration('port_name'),
                 'odom_frame': launch.substitutions.LaunchConfiguration('odom_frame'),
                 'base_frame': launch.substitutions.LaunchConfiguration('base_frame'),
                 'odom_topic_name': launch.substitutions.LaunchConfiguration('odom_topic_name'),
@@ -44,7 +44,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         use_sim_time_arg,
-        port_name_arg,        
+        port_name_arg,
         odom_frame_arg,
         base_link_frame_arg,
         odom_topic_arg,

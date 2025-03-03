@@ -1,6 +1,6 @@
 <launch>
     <!-- Declare arguments -->
-    <arg name="repeat_rate" default="100.0"/>
+    <arg name="repeat_rate" default="50.0"/>
 
     <!-- Start the MPC Control Node -->
     <node name="mpc_control_node"
