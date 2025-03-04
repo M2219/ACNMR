@@ -25,3 +25,11 @@ lidar_sim/install/
 lidar_sim/log/
 record_camera/
 catkin_ws_lidar_real/
+ORB_SLAM3/
+00/
+publish_stereo_pkg/install/
+publish_stereo_pkg/build/
+publish_stereo_pkg/log/
+orbslam_ws/install/
+orbslam_ws/build/
+orbslam_ws/log/
