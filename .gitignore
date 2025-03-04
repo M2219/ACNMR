@@ -33,4 +33,4 @@ publish_stereo_pkg/log/
 orbslam_ws/install/
 orbslam_ws/build/
 orbslam_ws/log/
-orbslam_ws/src/orbslam3_ros2/vocabulary/ORBvoc.txt
+orbslam_ws/src/orbslam3_ros2/vocabulary/
