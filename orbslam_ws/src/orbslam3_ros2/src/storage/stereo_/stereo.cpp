@@ -4,13 +4,13 @@
 #include <chrono>
 
 #include "rclcpp/rclcpp.hpp"
-#include "stereo-node.hpp"
+#include "stereo-slam-node.hpp"
 
 int main(int argc, char **argv)
 {
-    if(argc < 3)
+    if (argc < 3)
     {
-        std::cerr << "\nUsage: ros2 run orbslam stereo - imu path_to_vocabulary path_to_settings" << std::endl;
+        std::cerr << "\nUsage: ros2 run orbslam stereo path_to_vocabulary path_to_settings" << std::endl;
         return 1;
     }
 
@@ -19,12 +19,9 @@ int main(int argc, char **argv)
     auto node = std::make_shared<ORB_SLAM3_Wrapper::StereoSlamNode>(argv[1], argv[2], ORB_SLAM3::System::STEREO);
     std::cout << "============================ " << std::endl;
 
-    //auto executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();        
-    rclcpp::executors::MultiThreadedExecutor executor;
-    executor.add_node(node);
-    executor.spin();
-    //executor->add_node(node);
-    //executor->spin();
+    auto executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
+    executor->add_node(node);
+    executor->spin();
     rclcpp::shutdown();
 
     return 0;

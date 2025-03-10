@@ -1,7 +1,7 @@
 /**
- * @file STEREO-slam-node.hpp
- * @brief Definition of the StereoInertialSlamNode Wrapper class.
- * @author Suchetan R S (rssuchetan@gmail.com)
+ * @file stereo-slam-node.cpp
+ * @brief Implementation of the StereoSlamNode Wrapper class.
+ * @author Shivam Sharma (ssharma4@wpi.edu)
  */
 
 #ifndef STEREO_SLAM_NODE_HPP_
@@ -14,6 +14,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include <nav_msgs/msg/path.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 
@@ -29,35 +30,32 @@
 #include <message_filters/synchronizer.h>
 #include <message_filters/sync_policies/approximate_time.h>
 
-#include "std_srvs/srv/set_bool.hpp"
-
 #include <slam_msgs/msg/map_data.hpp>
-#include <slam_msgs/msg/slam_info.hpp>
 #include <slam_msgs/srv/get_map.hpp>
 #include <slam_msgs/srv/get_landmarks_in_view.hpp>
-#include <slam_msgs/srv/get_all_landmarks_in_map.hpp>
 
 #include "type_conversion.hpp"
 #include "orb_slam3_interface.hpp"
 
 namespace ORB_SLAM3_Wrapper
 {
-    class StereoInertialSlamNode : public rclcpp::Node
+    class StereoSlamNode : public rclcpp::Node
     {
     public:
-        StereoInertialSlamNode(const std::string &strVocFile,
-                     const std::string &strSettingsFile,
-                     ORB_SLAM3::System::eSensor sensor);
-        ~StereoInertialSlamNode();
+        StereoSlamNode(const std::string &strVocFile,
+                       const std::string &strSettingsFile,
+                       ORB_SLAM3::System::eSensor sensor);
+        ~StereoSlamNode();
 
     private:
         typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::msg::Image, sensor_msgs::msg::Image> approximate_sync_policy;
-        bool topic_exists(const std::string &topic_name);
+        rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub_;
+        nav_msgs::msg::Path path_;
         // ROS 2 Callbacks.
         void ImuCallback(const sensor_msgs::msg::Imu::SharedPtr msgIMU);
         void OdomCallback(const nav_msgs::msg::Odometry::SharedPtr msgOdom);
-        void StereoInertialCallback(const sensor_msgs::msg::Image::SharedPtr msgL,
-                          const sensor_msgs::msg::Image::SharedPtr msgR);
+        void StereoCallback(const sensor_msgs::msg::Image::SharedPtr msgLeft,
+                            const sensor_msgs::msg::Image::SharedPtr msgRight);
 
         /**
          * @brief Publishes map data. (Keyframes and all poses in the current active map.)
@@ -66,13 +64,7 @@ namespace ORB_SLAM3_Wrapper
          */
         void publishMapData();
 
-        void publishMapPointCloud(std::shared_ptr<rmw_request_id_t> request_header,
-                                  std::shared_ptr<slam_msgs::srv::GetAllLandmarksInMap::Request> request,
-                                  std::shared_ptr<slam_msgs::srv::GetAllLandmarksInMap::Response> response);
-
-        void resetActiveMapSrv(std::shared_ptr<rmw_request_id_t> request_header,
-                               std::shared_ptr<std_srvs::srv::SetBool::Request> request,
-                               std::shared_ptr<std_srvs::srv::SetBool::Response> response);
+        void publishMapPointCloud();
 
         /**
          * @brief Callback function for GetMap service.
@@ -90,11 +82,11 @@ namespace ORB_SLAM3_Wrapper
         /**
          * Member variables
          */
-        // Stereo Inertia Sensor specifics
-        std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::Image>> imgLSub_;
-        std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::Image>> imgRSub_;
-        std::shared_ptr<message_filters::Synchronizer<approximate_sync_policy>> syncApproximate_;
+        // stereo sensor specifics
+        std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::Image>> leftSub_;
+        std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::Image>> rightSub_;
 
+        std::shared_ptr<message_filters::Synchronizer<approximate_sync_policy>> syncApproximate_;
         rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imuSub_;
         // ROS Publishers and Subscribers
         rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odomSub_;
@@ -103,7 +95,7 @@ namespace ORB_SLAM3_Wrapper
         rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr visibleLandmarksPub_;
         rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr visibleLandmarksPose_;
         rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr robotPoseMapFrame_;
-        rclcpp::Publisher<slam_msgs::msg::SlamInfo>::SharedPtr slamInfoPub_;
+
         // TF
         std::shared_ptr<tf2_ros::TransformBroadcaster> tfBroadcaster_;
         std::shared_ptr<tf2_ros::TransformListener> tfListener_;
@@ -111,24 +103,23 @@ namespace ORB_SLAM3_Wrapper
         // ROS Services
         rclcpp::Service<slam_msgs::srv::GetMap>::SharedPtr getMapDataService_;
         rclcpp::Service<slam_msgs::srv::GetLandmarksInView>::SharedPtr getMapPointsService_;
-        rclcpp::Service<slam_msgs::srv::GetAllLandmarksInMap>::SharedPtr mapPointsService_;
-        rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr resetLocalMapSrv_;
         // ROS Timers
         rclcpp::TimerBase::SharedPtr mapDataTimer_;
         rclcpp::CallbackGroup::SharedPtr mapDataCallbackGroup_;
+        rclcpp::TimerBase::SharedPtr mapPointsTimer_;
         rclcpp::CallbackGroup::SharedPtr mapPointsCallbackGroup_;
-        rclcpp::CallbackGroup::SharedPtr pointsInViewCallbackGroup_;
         // ROS Params
         std::string robot_base_frame_id_;
         std::string odom_frame_id_;
         std::string global_frame_;
-        double robot_x_, robot_y_, robot_z_, robot_qx_, robot_qy_, robot_qz_, robot_qw_;
+        double robot_x_, robot_y_;
+        bool rosViz_;
         bool isTracked_ = false;
         bool odometry_mode_;
         bool publish_tf_;
         double frequency_tracker_count_ = 0;
         int map_data_publish_frequency_;
-        bool do_loop_closing_;
+        int landmark_publish_frequency_;
         std::chrono::_V2::system_clock::time_point frequency_tracker_clock_;
 
         ORB_SLAM3_Wrapper::WrapperTypeConversions typeConversion_;
@@ -136,4 +127,5 @@ namespace ORB_SLAM3_Wrapper
         geometry_msgs::msg::TransformStamped tfMapOdom_;
     };
 }
+
 #endif

@@ -25,7 +25,7 @@ lidar_sim/install/
 lidar_sim/log/
 record_camera/
 catkin_ws_lidar_real/
-ORB_SLAM3/
+ORB_SLAM3/build/
 00/
 publish_stereo_pkg/install/
 publish_stereo_pkg/build/
@@ -34,3 +34,7 @@ orbslam_ws/install/
 orbslam_ws/build/
 orbslam_ws/log/
 orbslam_ws/src/orbslam3_ros2/vocabulary/
+ORB_SLAM3_b/
+ORB_SLAM3/
+depthai-ros/
+robot_slam.xml/

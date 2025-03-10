@@ -1,0 +1,84 @@
+%YAML:1.0
+
+#--------------------------------------------------------------------------------------------
+# Camera Parameters. Adjust them!
+#--------------------------------------------------------------------------------------------
+Camera.type: "PinHole"
+# Camera calibration and distortion parameters (OpenCV) 
+Camera.fx: 800.3645
+Camera.fy: 799.8122
+Camera.cx: 647.2679
+Camera.cy: 349.6318
+
+# OAK-D has minimal distortion, but if needed, adjust from calibration
+#Camera.k1: 22.420289993286133
+#Camera.k2: -30.014972686767578
+#Camera.p1: 0.0007826939690858126
+#Camera.p2: -0.0005663413903675973
+#Camera.k3: 8.271049499511719
+#
+Camera.k1: 0.0 #22.420289993286133
+Camera.k2: 0.0 #-30.014972686767578
+Camera.p1: 0.0 #0.0007826939690858126
+Camera.p2: 0.0 #-0.0005663413903675973
+Camera.k3: 0.0 #8.271049499511719
+
+# Disable FishEye model
+Camera.bFishEye: 0
+
+# Camera Resolution
+Camera.width: 1280
+Camera.height: 720
+
+InsertKFsWhenLost: 2
+Tracking.threshold: 50  # Increase tracking threshold
+Tracking.iniThFAST: 15  # Lower initial FAST threshold for tracking
+KeyFrame.insert_threshold: 0.05  # Reduce to insert keyframes faster
+
+# Camera frames per second 
+Camera.fps: 30.0   # OAK-D supports 30 FPS, increase for better tracking
+# Stereo baseline times fx (bf = Baseline * fx)
+Camera.bf: 60.0273375  # OAK-D baseline (7.5cm) * fx (800.3645)
+
+# Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
+Camera.RGB: 1  # OAK-D outputs RGB images
+
+# Close/Far threshold. Baseline times.
+ThDepth: 10.0  # Adjusted to match KITTI-like depth range indoor = 5, outdoor = 20
+
+#--------------------------------------------------------------------------------------------
+# ORB Parameters
+#--------------------------------------------------------------------------------------------
+
+# ORB Extractor: Number of features per image
+ORBextractor.nFeatures: 8000  # Increase to improve tracking in featureless areas
+
+# ORB Extractor: Scale factor between levels in the scale pyramid       
+ORBextractor.scaleFactor: 1.2  # Default, good balance between accuracy & speed
+
+# ORB Extractor: Number of levels in the scale pyramid  
+ORBextractor.nLevels: 16  # Default, works well for depth consistency
+
+#--------------------------------------------------------------------------------------------
+# Feature Matching
+#--------------------------------------------------------------------------------------------
+
+# ORB Extractor: Initial FAST threshold (default 20)
+ORBextractor.iniThFAST: 10 #10 low texture area # 25 in high texture area 
+
+# ORB Extractor: Minimum FAST threshold
+ORBextractor.minThFAST: 5 #5 low texture area # 10 in high texture area
+
+#--------------------------------------------------------------------------------------------
+# Viewer Parameters
+#--------------------------------------------------------------------------------------------
+Viewer.KeyFrameSize: 0.6
+Viewer.KeyFrameLineWidth: 2
+Viewer.GraphLineWidth: 1
+Viewer.PointSize: 2
+Viewer.CameraSize: 0.7
+Viewer.CameraLineWidth: 3
+Viewer.ViewpointX: 0
+Viewer.ViewpointY: -100
+Viewer.ViewpointZ: -0.1
+Viewer.ViewpointF: 2000

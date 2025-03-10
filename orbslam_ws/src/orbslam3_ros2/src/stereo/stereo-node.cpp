@@ -1,27 +1,27 @@
 /**
  * @file stereod-slam-node.cpp
- * @brief Implementation of the StereoInertialSlamNode Wrapper class.
+ * @brief Implementation of the StereoSlamNode Wrapper class.
  * @author Suchetan R S (rssuchetan@gmail.com)
  */
-#include "stereo-inertial-node.hpp"
+#include "stereo-node.hpp"
 
 #include <opencv2/core/core.hpp>
 
 namespace ORB_SLAM3_Wrapper
 {
-    StereoInertialSlamNode::StereoInertialSlamNode(const std::string &strVocFile,
+    StereoSlamNode::StereoSlamNode(const std::string &strVocFile,
                                const std::string &strSettingsFile,
                                ORB_SLAM3::System::eSensor sensor)
-
-        : Node("ORB_SLAM3_STEREO_INERTIAL_ROS2")
+        : Node("ORB_SLAM3_STEREO_ROS2")
     {
         // Declare parameters (topic names)
         this->declare_parameter("left_image_topic_name", rclcpp::ParameterValue("/left/image_rect"));
         this->declare_parameter("right_image_topic_name", rclcpp::ParameterValue("/right/image_rect"));
-        this->declare_parameter("imu_topic_name", rclcpp::ParameterValue("/olive/imu/id01/filtered_imu"));
         this->declare_parameter("odom_topic_name", rclcpp::ParameterValue("/odom"));
 
         // ROS Subscribers
+
+
         std::string left_topic = this->get_parameter("left_image_topic_name").as_string();
         std::string right_topic = this->get_parameter("right_image_topic_name").as_string();
 
@@ -36,25 +36,9 @@ namespace ORB_SLAM3_Wrapper
         imgRSub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(this, right_topic);
 
         syncApproximate_ = std::make_shared<message_filters::Synchronizer<approximate_sync_policy>>(approximate_sync_policy(10), *imgLSub_, *imgRSub_);
-        syncApproximate_->registerCallback(&StereoInertialSlamNode::StereoInertialCallback, this);
+        syncApproximate_->registerCallback(&StereoSlamNode::StereoCallback, this);
 
-        std::string imu_topic = this->get_parameter("imu_topic_name").as_string();
-
-        while (rclcpp::ok() && (!topic_exists(imu_topic))) {
-            RCLCPP_WARN(this->get_logger(), "Waiting for IMU topic: %s ...", imu_topic.c_str());
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        }
-        RCLCPP_INFO(this->get_logger(), "Topic detected!");
-
-        rclcpp::QoS qos(rclcpp::KeepLast(4000));
-        qos.reliable();
-        imuSub_ = this->create_subscription<sensor_msgs::msg::Imu>(
-        imu_topic, qos,
-        std::bind(&StereoInertialSlamNode::ImuCallback, this, std::placeholders::_1));
-
-        //imuSub_ = this->create_subscription<sensor_msgs::msg::Imu>(imu_topic, 50000, std::bind(&StereoInertialSlamNode::ImuCallback, this, std::placeholders::_1));
-
-        odomSub_ = this->create_subscription<nav_msgs::msg::Odometry>(this->get_parameter("odom_topic_name").as_string(), 1000, std::bind(&StereoInertialSlamNode::OdomCallback, this, std::placeholders::_1));
+        odomSub_ = this->create_subscription<nav_msgs::msg::Odometry>(this->get_parameter("odom_topic_name").as_string(), 1000, std::bind(&StereoSlamNode::OdomCallback, this, std::placeholders::_1));
 
         // ROS Publishers
         //---- the following is published when a service is called
@@ -67,13 +51,13 @@ namespace ORB_SLAM3_Wrapper
         robotPoseMapFrame_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("robot_pose_slam", 10);
 
         // Services
-        getMapDataService_ = this->create_service<slam_msgs::srv::GetMap>("orb_slam3/get_map_data", std::bind(&StereoInertialSlamNode::getMapServer, this,
+        getMapDataService_ = this->create_service<slam_msgs::srv::GetMap>("orb_slam3/get_map_data", std::bind(&StereoSlamNode::getMapServer, this,
                                                                                                               std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
         pointsInViewCallbackGroup_ = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
-        getMapPointsService_ = this->create_service<slam_msgs::srv::GetLandmarksInView>("orb_slam3/get_landmarks_in_view", std::bind(&StereoInertialSlamNode::getMapPointsInViewServer, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), rmw_qos_profile_services_default, pointsInViewCallbackGroup_);
+        getMapPointsService_ = this->create_service<slam_msgs::srv::GetLandmarksInView>("orb_slam3/get_landmarks_in_view", std::bind(&StereoSlamNode::getMapPointsInViewServer, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), rmw_qos_profile_services_default, pointsInViewCallbackGroup_);
         mapPointsCallbackGroup_ = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
-        mapPointsService_ = this->create_service<slam_msgs::srv::GetAllLandmarksInMap>("orb_slam3/get_all_landmarks_in_map", std::bind(&StereoInertialSlamNode::publishMapPointCloud, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), rmw_qos_profile_services_default, mapPointsCallbackGroup_);
-        resetLocalMapSrv_ = this->create_service<std_srvs::srv::SetBool>("orb_slam3/reset_mapping", std::bind(&StereoInertialSlamNode::resetActiveMapSrv, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), rmw_qos_profile_services_default, mapPointsCallbackGroup_);
+        mapPointsService_ = this->create_service<slam_msgs::srv::GetAllLandmarksInMap>("orb_slam3/get_all_landmarks_in_map", std::bind(&StereoSlamNode::publishMapPointCloud, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), rmw_qos_profile_services_default, mapPointsCallbackGroup_);
+        resetLocalMapSrv_ = this->create_service<std_srvs::srv::SetBool>("orb_slam3/reset_mapping", std::bind(&StereoSlamNode::resetActiveMapSrv, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), rmw_qos_profile_services_default, mapPointsCallbackGroup_);
 
         // TF
         tfBroadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
@@ -140,7 +124,7 @@ namespace ORB_SLAM3_Wrapper
 
         // Timers
         mapDataCallbackGroup_ = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
-        mapDataTimer_ = this->create_wall_timer(std::chrono::milliseconds(map_data_publish_frequency_), std::bind(&StereoInertialSlamNode::publishMapData, this), mapDataCallbackGroup_);
+        mapDataTimer_ = this->create_wall_timer(std::chrono::milliseconds(map_data_publish_frequency_), std::bind(&StereoSlamNode::publishMapData, this), mapDataCallbackGroup_);
 
         interface_ = std::make_shared<ORB_SLAM3_Wrapper::ORBSLAM3Interface>(strVocFile, strSettingsFile,
                                                                             sensor, bUseViewer, do_loop_closing_, initial_pose, global_frame_, odom_frame_id_,
@@ -152,35 +136,22 @@ namespace ORB_SLAM3_Wrapper
         RCLCPP_INFO(this->get_logger(), "CONSTRUCTOR END!");
     }
 
-    StereoInertialSlamNode::~StereoInertialSlamNode()
+    StereoSlamNode::~StereoSlamNode()
     {
         imgLSub_.reset();
         imgRSub_.reset();
-        imuSub_.reset();
         odomSub_.reset();
         interface_.reset();
 
         RCLCPP_INFO(this->get_logger(), "DESTRUCTOR!");
     }
 
-    bool StereoInertialSlamNode::topic_exists(const std::string &topic_name) {
+    bool StereoSlamNode::topic_exists(const std::string &topic_name) {
         auto topic_names_and_types = this->get_topic_names_and_types();
         return topic_names_and_types.find(topic_name) != topic_names_and_types.end();
     }
 
-    void StereoInertialSlamNode::ImuCallback(const sensor_msgs::msg::Imu::SharedPtr msgIMU)
-    {
-
-        if (!msgIMU) {
-            RCLCPP_ERROR(this->get_logger(), "Received NULL IMU message!");
-            return;
-        }
-        // push value to imu buffer.
-        msgIMU->header.stamp = this->now();  // Overwrite IMU timestamp with ROS time
-        interface_->handleIMU(msgIMU);
-    }
-
-    void StereoInertialSlamNode::OdomCallback(const nav_msgs::msg::Odometry::SharedPtr msgOdom)
+    void StereoSlamNode::OdomCallback(const nav_msgs::msg::Odometry::SharedPtr msgOdom)
     {
         if (odometry_mode_)
         {   // populate map to odom tf if odometry is being used
@@ -191,15 +162,15 @@ namespace ORB_SLAM3_Wrapper
             RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 4000, "Odometry msg recorded but no odometry mode is true, set to false to use this odometry");
     }
 
-    void StereoInertialSlamNode::StereoInertialCallback(const sensor_msgs::msg::Image::SharedPtr msgL, const sensor_msgs::msg::Image::SharedPtr msgR)
+    void StereoSlamNode::StereoCallback(const sensor_msgs::msg::Image::SharedPtr msgL, const sensor_msgs::msg::Image::SharedPtr msgR)
     {
         if (!msgL || !msgR) {
-            RCLCPP_ERROR(this->get_logger(), "StereoInertialCallback: One or both images are NULL!");
+            RCLCPP_ERROR(this->get_logger(), "StereoCallback: One or both images are NULL!");
             return;
         }
 
         Sophus::SE3f Tcw;
-        bool track_result = interface_->trackStereoi(msgL, msgR, Tcw);
+        bool track_result = interface_->trackStereo(msgL, msgR, Tcw);
 
         if (track_result)
         {
@@ -228,7 +199,7 @@ namespace ORB_SLAM3_Wrapper
         }
     }
 
-    void StereoInertialSlamNode::publishMapPointCloud(std::shared_ptr<rmw_request_id_t> request_header,
+    void StereoSlamNode::publishMapPointCloud(std::shared_ptr<rmw_request_id_t> request_header,
                                             std::shared_ptr<slam_msgs::srv::GetAllLandmarksInMap::Request> request,
                                             std::shared_ptr<slam_msgs::srv::GetAllLandmarksInMap::Response> response)
     {
@@ -265,40 +236,40 @@ namespace ORB_SLAM3_Wrapper
         }
     }
 
-    void StereoInertialSlamNode::resetActiveMapSrv(std::shared_ptr<rmw_request_id_t> request_header,
+    void StereoSlamNode::resetActiveMapSrv(std::shared_ptr<rmw_request_id_t> request_header,
                            std::shared_ptr<std_srvs::srv::SetBool::Request> request,
                            std::shared_ptr<std_srvs::srv::SetBool::Response> response)
     {
         interface_->resetLocalMapping();
     }
 
-    void StereoInertialSlamNode::publishMapData()
+    void StereoSlamNode::publishMapData()
     {
         if (isTracked_)
         {
             auto start = std::chrono::high_resolution_clock::now();
             slam_msgs::msg::SlamInfo slamInfoMsg;
-            RCLCPP_DEBUG_STREAM(this->get_logger(), "Publishing map data");
+            //RCLCPP_DEBUG_STREAM(this->get_logger(), "Publishing map data");
             double tracking_freq = frequency_tracker_count_ / std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - frequency_tracker_clock_).count();
-            RCLCPP_INFO_STREAM(this->get_logger(), "Current ORB-SLAM3 tracking frequency: " << tracking_freq << " frames / sec");
+            //RCLCPP_INFO_STREAM(this->get_logger(), "Current ORB-SLAM3 tracking frequency: " << tracking_freq << " frames / sec");
             frequency_tracker_clock_ = std::chrono::high_resolution_clock::now();
             frequency_tracker_count_ = 0;
             // publish the map data (current active keyframes etc)
             slam_msgs::msg::MapData mapDataMsg;
             interface_->mapDataToMsg(mapDataMsg, true, false);
-            mapDataPub_->publish(mapDataMsg);
+            //mapDataPub_->publish(mapDataMsg);
             slamInfoMsg.num_maps = interface_->getNumberOfMaps();
             slamInfoMsg.num_keyframes_in_current_map = mapDataMsg.graph.poses_id.size();
             slamInfoMsg.tracking_frequency = tracking_freq;
             auto t1 = std::chrono::high_resolution_clock::now();
             auto time_publishMapData = std::chrono::duration_cast<std::chrono::duration<double>>(t1 - start).count();
-            RCLCPP_DEBUG_STREAM(this->get_logger(), "Time to create mapdata: " << time_publishMapData << " seconds");
-            RCLCPP_INFO_STREAM(this->get_logger(), "*************************");
+            //RCLCPP_DEBUG_STREAM(this->get_logger(), "Time to create mapdata: " << time_publishMapData << " seconds");
+            //RCLCPP_INFO_STREAM(this->get_logger(), "*************************");
             slamInfoPub_->publish(slamInfoMsg);
         }
     }
 
-    void StereoInertialSlamNode::getMapServer(std::shared_ptr<rmw_request_id_t> request_header,
+    void StereoSlamNode::getMapServer(std::shared_ptr<rmw_request_id_t> request_header,
                                     std::shared_ptr<slam_msgs::srv::GetMap::Request> request,
                                     std::shared_ptr<slam_msgs::srv::GetMap::Response> response)
     {
@@ -308,7 +279,7 @@ namespace ORB_SLAM3_Wrapper
         response->data = mapDataMsg;
     }
 
-    void StereoInertialSlamNode::getMapPointsInViewServer(std::shared_ptr<rmw_request_id_t> request_header,
+    void StereoSlamNode::getMapPointsInViewServer(std::shared_ptr<rmw_request_id_t> request_header,
                                                 std::shared_ptr<slam_msgs::srv::GetLandmarksInView::Request> request,
                                                 std::shared_ptr<slam_msgs::srv::GetLandmarksInView::Response> response)
     {

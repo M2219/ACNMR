@@ -1,0 +1,459 @@
+Starting >>> slam_msgs
+Finished <<< slam_msgs [0.37s]
+Starting >>> orbslam3
+--- stderr: orbslam3
+In file included from /root/ACNMR/ORB_SLAM3/include/Frame.h:30,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/include/ImuTypes.h: In member function ‘void ORB_SLAM3::IMU::Preintegrated::printMeasurements() const’:
+/root/ACNMR/ORB_SLAM3/include/ImuTypes.h:204:23: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<ORB_SLAM3::IMU::Preintegrated::integrable>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  204 |         for(int i=0; i<mvMeasurements.size(); i++){
+      |                      ~^~~~~~~~~~~~~~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_vertex.h: At global scope:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:74: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                          ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:41,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/se3quat.h:43:38: warning: extra ‘;’ [-Wpedantic]
+   43 |       EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+      |                                      ^
+      |                                      -
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<3, Eigen::Matrix<double, 3, 1> >’:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_sba.h:40:35:   required from here
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<6, g2o::SE3Quat>’:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:59:33:   required from here
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<6, g2o::SE3Quat, g2o::VertexSE3Expmap, g2o::VertexSE3Expmap>’:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:83:24:   required from here
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:114:35:   required from here
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<3, Eigen::Matrix<double, 3, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:146:41:   required from here
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<7, g2o::Sim3>’:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:48:35:   required from here
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<7, g2o::Sim3, g2o::VertexSim3Expmap, g2o::VertexSim3Expmap>’:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:99:27:   required from here
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSim3Expmap>’:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:130:36:   required from here
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /root/ACNMR/ORB_SLAM3/include/Converter.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/Frame.h:33,
+                 from /root/ACNMR/ORB_SLAM3/include/KeyFrame.h:28,
+                 from /root/ACNMR/ORB_SLAM3/include/MapPoint.h:23,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:26,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/type_conversion.hpp:10,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:39,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/include/Atlas.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/FrameDrawer.h:25,
+                 from /root/ACNMR/ORB_SLAM3/include/Viewer.h:23,
+                 from /root/ACNMR/ORB_SLAM3/include/Tracking.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/System.h:31,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/orb_slam3_interface.hpp:28,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:40,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/include/CameraModels/Pinhole.h: In member function ‘virtual bool ORB_SLAM3::Pinhole::matchAndtriangulate(const cv::KeyPoint&, const cv::KeyPoint&, ORB_SLAM3::GeometricCamera*, Sophus::SE3f&, Sophus::SE3f&, float, float, Eigen::Vector3f&)’:
+/root/ACNMR/ORB_SLAM3/include/CameraModels/Pinhole.h:83:54: warning: unused parameter ‘kp1’ [-Wunused-parameter]
+   83 |         bool matchAndtriangulate(const cv::KeyPoint& kp1, const cv::KeyPoint& kp2, GeometricCamera* pOther,
+      |                                  ~~~~~~~~~~~~~~~~~~~~^~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/Pinhole.h:83:79: warning: unused parameter ‘kp2’ [-Wunused-parameter]
+   83 |         bool matchAndtriangulate(const cv::KeyPoint& kp1, const cv::KeyPoint& kp2, GeometricCamera* pOther,
+      |                                                           ~~~~~~~~~~~~~~~~~~~~^~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/Pinhole.h:83:101: warning: unused parameter ‘pOther’ [-Wunused-parameter]
+   83 |         bool matchAndtriangulate(const cv::KeyPoint& kp1, const cv::KeyPoint& kp2, GeometricCamera* pOther,
+      |                                                                                    ~~~~~~~~~~~~~~~~~^~~~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/Pinhole.h:84:48: warning: unused parameter ‘Tcw1’ [-Wunused-parameter]
+   84 |                                  Sophus::SE3f& Tcw1, Sophus::SE3f& Tcw2,
+      |                                  ~~~~~~~~~~~~~~^~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/Pinhole.h:84:68: warning: unused parameter ‘Tcw2’ [-Wunused-parameter]
+   84 |                                  Sophus::SE3f& Tcw1, Sophus::SE3f& Tcw2,
+      |                                                      ~~~~~~~~~~~~~~^~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/Pinhole.h:85:46: warning: unused parameter ‘sigmaLevel1’ [-Wunused-parameter]
+   85 |                                  const float sigmaLevel1, const float sigmaLevel2,
+      |                                  ~~~~~~~~~~~~^~~~~~~~~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/Pinhole.h:85:71: warning: unused parameter ‘sigmaLevel2’ [-Wunused-parameter]
+   85 |                                  const float sigmaLevel1, const float sigmaLevel2,
+      |                                                           ~~~~~~~~~~~~^~~~~~~~~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/Pinhole.h:86:51: warning: unused parameter ‘x3Dtriangulated’ [-Wunused-parameter]
+   86 |                                  Eigen::Vector3f& x3Dtriangulated) { return false;}
+      |                                  ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/include/Atlas.h:27,
+                 from /root/ACNMR/ORB_SLAM3/include/FrameDrawer.h:25,
+                 from /root/ACNMR/ORB_SLAM3/include/Viewer.h:23,
+                 from /root/ACNMR/ORB_SLAM3/include/Tracking.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/System.h:31,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/orb_slam3_interface.hpp:28,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:40,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(std::vector<float>)’:
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/include/Atlas.h:27,
+                 from /root/ACNMR/ORB_SLAM3/include/FrameDrawer.h:25,
+                 from /root/ACNMR/ORB_SLAM3/include/Viewer.h:23,
+                 from /root/ACNMR/ORB_SLAM3/include/Tracking.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/System.h:31,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/orb_slam3_interface.hpp:28,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:40,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h:47:9: warning:   when initialized here [-Wreorder]
+   47 |         KannalaBrandt8(const std::vector<float> _vParameters) : GeometricCamera(_vParameters), precision(1e-6), mvLappingArea(2,0) ,tvr(nullptr) {
+      |         ^~~~~~~~~~~~~~
+In file included from /root/ACNMR/ORB_SLAM3/include/Atlas.h:27,
+                 from /root/ACNMR/ORB_SLAM3/include/FrameDrawer.h:25,
+                 from /root/ACNMR/ORB_SLAM3/include/Viewer.h:23,
+                 from /root/ACNMR/ORB_SLAM3/include/Tracking.h:26,
+                 from /root/ACNMR/ORB_SLAM3/include/System.h:31,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/orb_slam3_interface.hpp:28,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:40,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(std::vector<float>, float)’:
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h:53:9: warning:   when initialized here [-Wreorder]
+   53 |         KannalaBrandt8(const std::vector<float> _vParameters, const float _precision) : GeometricCamera(_vParameters),
+      |         ^~~~~~~~~~~~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(ORB_SLAM3::KannalaBrandt8*)’:
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+/root/ACNMR/ORB_SLAM3/include/CameraModels/KannalaBrandt8.h:59:9: warning:   when initialized here [-Wreorder]
+   59 |         KannalaBrandt8(KannalaBrandt8* pKannala) : GeometricCamera(pKannala->mvParameters), precision(pKannala->precision), mvLappingArea(2,0) ,tvr(nullptr) {
+      |         ^~~~~~~~~~~~~~
+In file included from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/include/orb_slam3_interface.hpp:28,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.hpp:40,
+                 from /root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:6:
+/root/ACNMR/ORB_SLAM3/include/System.h: In static member function ‘static void ORB_SLAM3::Verbose::PrintMess(std::string, ORB_SLAM3::Verbose::eLevel)’:
+/root/ACNMR/ORB_SLAM3/include/System.h:62:51: warning: unused parameter ‘lev’ [-Wunused-parameter]
+   62 |     static void PrintMess(std::string str, eLevel lev)
+      |                                            ~~~~~~~^~~
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp: In member function ‘void ORB_SLAM3_Wrapper::StereoSlamNode::publishMapPointCloud(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<slam_msgs::srv::GetAllLandmarksInMap_Request_<std::allocator<void> > >, std::shared_ptr<slam_msgs::srv::GetAllLandmarksInMap_Response_<std::allocator<void> > >)’:
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:202:81: warning: unused parameter ‘request_header’ [-Wunused-parameter]
+  202 |     void StereoSlamNode::publishMapPointCloud(std::shared_ptr<rmw_request_id_t> request_header,
+      |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:203:108: warning: unused parameter ‘request’ [-Wunused-parameter]
+  203 |                                             std::shared_ptr<slam_msgs::srv::GetAllLandmarksInMap::Request> request,
+      |                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp: In member function ‘void ORB_SLAM3_Wrapper::StereoSlamNode::resetActiveMapSrv(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<std_srvs::srv::SetBool_Request_<std::allocator<void> > >, std::shared_ptr<std_srvs::srv::SetBool_Response_<std::allocator<void> > >)’:
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:239:78: warning: unused parameter ‘request_header’ [-Wunused-parameter]
+  239 |     void StereoSlamNode::resetActiveMapSrv(std::shared_ptr<rmw_request_id_t> request_header,
+      |                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:240:77: warning: unused parameter ‘request’ [-Wunused-parameter]
+  240 |                            std::shared_ptr<std_srvs::srv::SetBool::Request> request,
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:241:78: warning: unused parameter ‘response’ [-Wunused-parameter]
+  241 |                            std::shared_ptr<std_srvs::srv::SetBool::Response> response)
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp: In member function ‘void ORB_SLAM3_Wrapper::StereoSlamNode::publishMapData()’:
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:265:18: warning: unused variable ‘time_publishMapData’ [-Wunused-variable]
+  265 |             auto time_publishMapData = std::chrono::duration_cast<std::chrono::duration<double>>(t1 - start).count();
+      |                  ^~~~~~~~~~~~~~~~~~~
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp: In member function ‘void ORB_SLAM3_Wrapper::StereoSlamNode::getMapServer(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<slam_msgs::srv::GetMap_Request_<std::allocator<void> > >, std::shared_ptr<slam_msgs::srv::GetMap_Response_<std::allocator<void> > >)’:
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:272:73: warning: unused parameter ‘request_header’ [-Wunused-parameter]
+  272 |     void StereoSlamNode::getMapServer(std::shared_ptr<rmw_request_id_t> request_header,
+      |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp: In member function ‘void ORB_SLAM3_Wrapper::StereoSlamNode::getMapPointsInViewServer(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<slam_msgs::srv::GetLandmarksInView_Request_<std::allocator<void> > >, std::shared_ptr<slam_msgs::srv::GetLandmarksInView_Response_<std::allocator<void> > >)’:
+/root/ACNMR/orbslam_ws/src/orbslam3_ros2/src/stereo/stereo-node.cpp:282:85: warning: unused parameter ‘request_header’ [-Wunused-parameter]
+  282 |     void StereoSlamNode::getMapPointsInViewServer(std::shared_ptr<rmw_request_id_t> request_header,
+      |                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+---
+Finished <<< orbslam3 [20.9s]
+
+Summary: 2 packages finished [21.4s]
+  1 package had stderr output: orbslam3

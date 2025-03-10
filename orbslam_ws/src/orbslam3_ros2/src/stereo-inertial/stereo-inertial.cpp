@@ -6,34 +6,25 @@
 #include "rclcpp/rclcpp.hpp"
 #include "stereo-inertial-node.hpp"
 
-#include "System.h"
-
 int main(int argc, char **argv)
 {
-    if(argc < 4)
+    if(argc < 3)
     {
-        std::cerr << "\nUsage: ros2 run orbslam stereo path_to_vocabulary path_to_settings do_rectify [do_equalize]" << std::endl;
-        rclcpp::shutdown();
+        std::cerr << "\nUsage: ros2 run orbslam stereo - imu path_to_vocabulary path_to_settings" << std::endl;
         return 1;
-    }
-
-    if(argc == 4)
-    {
-        argv[4] = "false";
     }
 
     rclcpp::init(argc, argv);
 
-    // malloc error using new.. try shared ptr
-    // Create SLAM system. It initializes all system threads and gets ready to process frames.
+    auto node = std::make_shared<ORB_SLAM3_Wrapper::StereoInertialSlamNode>(argv[1], argv[2], ORB_SLAM3::System::IMU_STEREO);
+    std::cout << "============================ " << std::endl;
 
-    bool visualization = true;
-    ORB_SLAM3::System pSLAM(argv[1], argv[2], ORB_SLAM3::System::IMU_STEREO, visualization);
-
-    auto node = std::make_shared<StereoInertialNode>(&pSLAM, argv[2], argv[3], argv[4]);
-    std::cout << "============================" << std::endl;
-
-    rclcpp::spin(node);
+    //auto executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();        
+    rclcpp::executors::MultiThreadedExecutor executor;
+    executor.add_node(node);
+    executor.spin();
+    //executor->add_node(node);
+    //executor->spin();
     rclcpp::shutdown();
 
     return 0;

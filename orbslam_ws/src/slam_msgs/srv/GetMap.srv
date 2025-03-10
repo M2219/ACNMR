@@ -1,0 +1,8 @@
+# Get the optimized graph. Optionally, also get landmarks that are associated with a keyframe.  
+
+#request
+bool tracked_points
+int32[] kf_id_for_landmarks
+---
+#response
+slam_msgs/MapData data

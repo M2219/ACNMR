@@ -1,6 +1,6 @@
 /**
  * @file STEREO-slam-node.hpp
- * @brief Definition of the StereoInertialSlamNode Wrapper class.
+ * @brief Definition of the StereoSlamNode Wrapper class.
  * @author Suchetan R S (rssuchetan@gmail.com)
  */
 
@@ -14,7 +14,6 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
-#include <sensor_msgs/msg/imu.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 
 #include <geometry_msgs/msg/pose.hpp>
@@ -42,21 +41,20 @@
 
 namespace ORB_SLAM3_Wrapper
 {
-    class StereoInertialSlamNode : public rclcpp::Node
+    class StereoSlamNode : public rclcpp::Node
     {
     public:
-        StereoInertialSlamNode(const std::string &strVocFile,
+        StereoSlamNode(const std::string &strVocFile,
                      const std::string &strSettingsFile,
                      ORB_SLAM3::System::eSensor sensor);
-        ~StereoInertialSlamNode();
+        ~StereoSlamNode();
 
     private:
         typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::msg::Image, sensor_msgs::msg::Image> approximate_sync_policy;
         bool topic_exists(const std::string &topic_name);
         // ROS 2 Callbacks.
-        void ImuCallback(const sensor_msgs::msg::Imu::SharedPtr msgIMU);
         void OdomCallback(const nav_msgs::msg::Odometry::SharedPtr msgOdom);
-        void StereoInertialCallback(const sensor_msgs::msg::Image::SharedPtr msgL,
+        void StereoCallback(const sensor_msgs::msg::Image::SharedPtr msgL,
                           const sensor_msgs::msg::Image::SharedPtr msgR);
 
         /**
@@ -95,7 +93,6 @@ namespace ORB_SLAM3_Wrapper
         std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::Image>> imgRSub_;
         std::shared_ptr<message_filters::Synchronizer<approximate_sync_policy>> syncApproximate_;
 
-        rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imuSub_;
         // ROS Publishers and Subscribers
         rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odomSub_;
         rclcpp::Publisher<slam_msgs::msg::MapData>::SharedPtr mapDataPub_;

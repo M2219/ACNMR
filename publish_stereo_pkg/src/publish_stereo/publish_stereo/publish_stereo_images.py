@@ -35,8 +35,8 @@ class KittiImagePublisher(Node):
             raise ValueError("Left and right image counts do not match!")
 
         # ROS 2 publishers
-        self.left_pub = self.create_publisher(Image, '/camera/left', 10)
-        self.right_pub = self.create_publisher(Image, '/camera/right', 10)
+        self.left_pub = self.create_publisher(Image, '/left/image_rect', 10)
+        self.right_pub = self.create_publisher(Image, '/right/image_rect', 10)
 
         # CvBridge to convert OpenCV images to ROS Image messages
         self.bridge = CvBridge()
