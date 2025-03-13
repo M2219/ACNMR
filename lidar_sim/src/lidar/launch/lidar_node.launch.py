@@ -10,6 +10,7 @@ def generate_launch_description():
             name="fake_lidar",
             output="screen",
             parameters=[
+                {"use_sim_time": True},
                 {"lidar_range": 5.0},
                 {"angle_min": -1.57},
                 {"angle_max": 1.57},

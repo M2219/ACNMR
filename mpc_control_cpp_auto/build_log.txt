@@ -1,0 +1,6 @@
+[0.165s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/root/ACNMR/mpc_control_cpp_auto/install/custom_teleop' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.165s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/root/ACNMR/mpc_control_cpp_auto/install/custom_teleop' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+Starting >>> custom_teleop
+Finished <<< custom_teleop [12.6s]
+
+Summary: 1 package finished [12.7s]

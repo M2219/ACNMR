@@ -15,6 +15,7 @@ def generate_launch_description():
             name="lifecycle_manager_localization",
             output="screen",
             parameters=[{
+                "use_sim_time": True,
                 "autostart": True,
                 "node_names": ["amcl"]
             }]
@@ -27,7 +28,7 @@ def generate_launch_description():
             name="amcl",
             output="screen",
             parameters=[amcl_params_file, {
-                "use_sim_time": False,
+                "use_sim_time": True,
                 "initial_pose_x": 0.0,
                 "initial_pose_y": 0.0,
                 "initial_pose_a": 0.0,

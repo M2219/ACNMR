@@ -14,6 +14,9 @@
 #include <mutex>
 #include <memory>
 
+#include <tf2/LinearMath/Quaternion.h>
+#include <chrono>
+
 #include <rclcpp/rclcpp.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <geometry_msgs/msg/twist.hpp>
@@ -350,6 +353,89 @@ class HunterMessenger {
     return k*phi_i;
   }
 };
+
+/* change it to a function
+class OdometryPublisher : public rclcpp::Node {
+public:
+    OdometryPublisher() : Node("odometry_publisher") {
+        odom_pub_ = this->create_publisher<nav_msgs::msg::Odometry>("/odom", 10);
+        timer_ = this->create_wall_timer(std::chrono::milliseconds(50),
+            std::bind(&OdometryPublisher::publish_odom, this));
+
+        // Initialize position
+        x_ = 0.0;
+        y_ = 0.0;
+        theta_ = 0.0;
+        last_time_ = this->now();
+    }
+
+private:
+    void publish_odom() {
+        // Set wheel parameters
+        double R = 0.05;  // Wheel radius (meters)
+        double L = 0.3;   // Distance between wheels (meters)
+
+        // Example: Replace these with real sensor values
+        double omega_L = 100.0;  // Left wheel RPM
+        double omega_R = 110.0;  // Right wheel RPM
+
+        // Convert RPM to m/s
+        double v_L = 2.0 * M_PI * R * (omega_L / 60.0);
+        double v_R = 2.0 * M_PI * R * (omega_R / 60.0);
+
+        // Compute velocity
+        double v = (v_L + v_R) / 2.0;
+        double omega = (v_R - v_L) / L;
+
+        // Compute time step
+        rclcpp::Time current_time = this->now();
+        double dt = (current_time - last_time_).seconds();
+        last_time_ = current_time;
+
+        // Update robot position
+        x_ += v * cos(theta_) * dt;
+        y_ += v * sin(theta_) * dt;
+        theta_ += omega * dt;
+
+        // Publish odometry message
+        auto msg = nav_msgs::msg::Odometry();
+        msg.header.stamp = current_time;
+        msg.header.frame_id = "odom";
+        msg.child_frame_id = "base_link";
+
+        // Set position
+        msg.pose.pose.position.x = x_;
+        msg.pose.pose.position.y = y_;
+        msg.pose.pose.position.z = 0.0;
+
+        tf2::Quaternion q;
+        q.setRPY(0, 0, theta_);  // Set yaw
+        msg.pose.pose.orientation.x = q.x();
+        msg.pose.pose.orientation.y = q.y();
+        msg.pose.pose.orientation.z = q.z();
+        msg.pose.pose.orientation.w = q.w();
+
+        // Set velocity
+        msg.twist.twist.linear.x = v;
+        msg.twist.twist.angular.z = omega;
+
+        odom_pub_->publish(msg);
+    }
+
+    rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub_;
+    rclcpp::TimerBase::SharedPtr timer_;
+    double x_, y_, theta_;
+    rclcpp::Time last_time_;
+};
+
+int main(int argc, char **argv) {
+    rclcpp::init(argc, argv);
+    rclcpp::spin(std::make_shared<OdometryPublisher>());
+    rclcpp::shutdown();
+    return 0;
+}
+*/
+
 }  // namespace westonrobot
 
 #endif /* Hunter_MESSENGER_HPP */

@@ -101,16 +101,13 @@ class HunterMessenger {
 
   void PublishStateToROS(double linear, double angular) {
     current_time_ = node_->get_clock()->now();
-
     static bool init_run = true;
     if (init_run) {
       last_time_ = current_time_;
       init_run = false;
       return;
     }
-    double dt = (current_time_ - last_time_).seconds();
-
-    auto state = hunter_->GetRobotState();
+    double dt = 0.02; //(current_time_ - last_time_).seconds();
 
     // publish hunter state message
     hunter_msgs::msg::HunterStatus status_msg;
@@ -119,45 +116,9 @@ class HunterMessenger {
 
     status_msg.linear_velocity = linear; //state.motion_state.linear_velocity;
     status_msg.steering_angle = angular;
-    // status_msg.angular_velocity = state.motion_state.steering_angle;
 
-    status_msg.vehicle_state = state.system_state.vehicle_state;
-    status_msg.control_mode = state.system_state.control_mode;
-    status_msg.error_code = state.system_state.error_code;
-    status_msg.battery_voltage = state.system_state.battery_voltage;
-
-    auto actuator = hunter_->GetActuatorState();
-
-    for (int i = 0; i < 3; ++i) {
-      // actuator_hs_state
-      uint8_t motor_id = actuator.actuator_hs_state[i].motor_id;
-
-      status_msg.actuator_states[motor_id].rpm =
-          actuator.actuator_hs_state[i].rpm;
-      status_msg.actuator_states[motor_id].current =
-          actuator.actuator_hs_state[i].current;
-      status_msg.actuator_states[motor_id].pulse_count =
-          actuator.actuator_hs_state[i].pulse_count;
-
-      // actuator_ls_state
-      motor_id = actuator.actuator_ls_state[i].motor_id;
-
-      status_msg.actuator_states[motor_id].driver_voltage =
-          actuator.actuator_ls_state[i].driver_voltage;
-      status_msg.actuator_states[motor_id].driver_temperature =
-          actuator.actuator_ls_state[i].driver_temp;
-      status_msg.actuator_states[motor_id].motor_temperature =
-          actuator.actuator_ls_state[i].motor_temp;
-      status_msg.actuator_states[motor_id].driver_state =
-          actuator.actuator_ls_state[i].driver_state;
-    }
-
-    status_pub_->publish(status_msg);
-
-    // publish odometry and tf
     PublishOdometryToROS(status_msg, dt);
 
-    // record time for next integration
     last_time_ = current_time_;
   }
 
@@ -169,7 +130,7 @@ class HunterMessenger {
   std::string base_frame_;
   std::string odom_topic_name_;
 
-  bool simulated_robot_ = false;
+  bool simulated_robot_ = true;
   int sim_control_rate_ = 50;
 
   westonrobot::SystemPropagator<BicycleKinematics> model_;

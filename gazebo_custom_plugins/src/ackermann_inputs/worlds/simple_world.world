@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="default">
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Reference to your custom plugin -->
+    <plugin name="custom_ackermann_drive_plugin" filename="libcustom_ackermann_drive_plugin.so"/>
+  </world>
+</sdf>

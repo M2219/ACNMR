@@ -58,11 +58,13 @@ public:
         // Subscribers
 
         odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
-            "/odom", 1, std::bind(&MPCNode::odomCallback, this, std::placeholders::_1));
+            "/odom", 10, std::bind(&MPCNode::odomCallback, this, std::placeholders::_1));
 
+        amcl_sub = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
+            "/amcl_pose", 10, std::bind(&MPCNode::amclCallback, this, std::placeholders::_1));
 
         global_path_sub = this->create_subscription<nav_msgs::msg::Path>(
-            "/searched_path", 1, std::bind(&MPCNode::pathCallback, this, std::placeholders::_1));
+            "/searched_path", 10, std::bind(&MPCNode::pathCallback, this, std::placeholders::_1));
 
         x0.setZero();
 
@@ -139,6 +141,7 @@ private:
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr custom_pose_pub, goal_pub;
 
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub;
+    rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr amcl_sub;
     rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr global_path_sub;
 
     std::thread control_thread;
@@ -173,10 +176,11 @@ private:
     int target_ind;
     int mpcWindow;
     double yaw_comp;
-    double x_odo;
-    double y_odo;
-    double v_odo;
+    double x_odo, x_amcl;
+    double y_odo, y_amcl;
+    double v_odo, v_amcl;
     double roll_odo, pitch_odo, yaw_odo;
+    double roll_amcl, pitch_amcl, yaw_amcl;
 
 
     void sendInitialPose(double x, double y, double yaw, double variance) {
@@ -245,6 +249,18 @@ private:
         yaw_odo = yaw_odo + yaw_comp;
 
         odom_updated = true;
+    }
+
+    void amclCallback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
+    {
+        const auto& pose = msg->pose.pose;
+        x_amcl = pose.position.x;
+        y_amcl = pose.position.y;
+
+        double roll_amcl, pitch_amcl, yaw_amcl;
+        tf2::Quaternion q(pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w);
+        tf2::Matrix3x3(q).getRPY(roll_amcl, pitch_amcl, yaw_amcl);
+
     }
 
     void pathCallback(const nav_msgs::msg::Path::SharedPtr msg) {
@@ -368,7 +384,7 @@ private:
             std::lock_guard<std::mutex> lock(odom_mutex);
 
             if (!odom_updated) {
-                RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for odometry data...");
+                RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for robot odometry data...");
                 //rate.sleep();
                 continue;
             }
@@ -413,8 +429,8 @@ private:
             ctr = QPSolution.block(4 * (mpcWindow + 1), 0, 2, 1);
 
             double speed = x0(2) + ctr(0) * DT;
-            x0(0) = x_odo;
-            x0(1) = y_odo;
+            x0(0) = x_odo; //x_amcl;
+            x0(1) = y_odo; //y_amcl;
             x0(2) = v_odo;
             x0(3) = yaw_odo;
 

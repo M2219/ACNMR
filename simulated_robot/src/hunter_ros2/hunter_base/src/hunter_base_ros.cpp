@@ -34,8 +34,7 @@ void HunterBaseRos::LoadParameters() {
   this->get_parameter_or<std::string>("port_name", port_name_, "can0");//获取参数
   this->get_parameter_or<std::string>("odom_frame", odom_frame_, "odom");
   this->get_parameter_or<std::string>("base_frame", base_frame_, "base_link");
-  this->get_parameter_or<std::string>("odom_topic_name", odom_topic_name_,
-                                      "odom");
+  this->get_parameter_or<std::string>("odom_topic_name", odom_topic_name_, "odom");
 
 
 
@@ -102,6 +101,7 @@ void HunterBaseRos::Run() {
       messenger->PublishStateToROS(linear, angular);
       rclcpp::spin_some(this->get_node_base_interface());
       rate.sleep();
+
     // }
   }
 }

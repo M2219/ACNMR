@@ -1,0 +1,31 @@
+Starting >>> hunter_msgs
+Starting >>> ugv_sdk
+Finished <<< ugv_sdk [0.16s]
+Finished <<< hunter_msgs [0.32s]
+Starting >>> hunter_base
+--- stderr: hunter_base
+In file included from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Recorder.h:25,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Ascent.h:17,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/include/hunter_base/hunter_messenger.hpp:23,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/src/hunter_base_ros.cpp:12:
+/root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/containers/stack.h:54:7: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+   54 |       const pointer operator->() const noexcept
+      |       ^~~~~
+/root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/containers/stack.h:113:7: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+  113 |       const pointer operator->() const
+      |       ^~~~~
+In file included from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/integrators/RK2.h:17,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Ascent.h:26,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/include/hunter_base/hunter_messenger.hpp:23,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/src/hunter_base_ros.cpp:12:
+/root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Utility.h:25:14: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+   25 |    constexpr const value_t cx(long double v) { return static_cast<value_t>(v); }
+      |              ^~~~~
+/root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Utility.h:26:14: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+   26 |    constexpr const value_t operator"" _v(long double v) { return static_cast<value_t>(v); }
+      |              ^~~~~
+---
+Finished <<< hunter_base [6.11s]
+
+Summary: 3 packages finished [6.58s]
+  1 package had stderr output: hunter_base

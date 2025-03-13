@@ -20,11 +20,11 @@ amcl:
 
     ## Odometry Model (Assumes Differential Drive)
     odom_model_type: "diff"
-    odom_alpha1: 0.02  # Rotational noise due to rotational velocity
-    odom_alpha2: 0.02  # Rotational noise due to translational velocity
-    odom_alpha3: 0.02  # Translational noise due to translational velocity
-    odom_alpha4: 0.02  # Translational noise due to rotational velocity
-    odom_alpha5: 0.01  # Noise parameter for drift
+    odom_alpha1: 0.1  # Rotational noise from rotation
+    odom_alpha2: 0.1  # Rotational noise from translation
+    odom_alpha3: 0.1  # Translational noise from translation
+    odom_alpha4: 0.1  # Translational noise from rotation
+    odom_alpha5: 0.1  # Strafe motion noise
 
     ## Laser Scan Noise Model
     laser_z_hit: 0.9   # Probability of correct hit
@@ -35,8 +35,8 @@ amcl:
     laser_lambda_short: 0.1  # Exponential decay for short readings
 
     ## Motion Update Thresholds (Lower = Faster Updates)
-    update_min_d: 0.15  # Trigger update after 15cm movement
-    update_min_a: 0.1  # Trigger update after 0.1 rad rotation
+    update_min_d: 0.02  # Trigger update after 15cm movement
+    update_min_a: 0.01  # Trigger update after 0.1 rad rotation
     resample_interval: 1
 
     ## Transform & Recovery Parameters

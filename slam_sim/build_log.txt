@@ -1,0 +1,6 @@
+[0.161s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/root/ACNMR/slam_sim/install/slam' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.161s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/root/ACNMR/slam_sim/install/slam' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+Starting >>> slam
+Finished <<< slam [1.36s]
+
+Summary: 1 package finished [1.50s]

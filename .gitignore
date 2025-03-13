@@ -38,3 +38,12 @@ ORB_SLAM3_b/
 ORB_SLAM3/
 depthai-ros/
 robot_slam.xml/
+gazebo_custom_plugins/install/
+gazebo_custom_plugins/build/
+gazebo_custom_plugins/log/
+gazebo_sim/install/
+gazebo_sim/build/
+gazebo_sim/log/
+imu_localization/install/
+imu_localization/build/
+imu_localization/log/
