@@ -5,13 +5,13 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-
     bicycle_steering_controller:
       type: 'bicycle_steering_controller/BicycleSteeringController'
 
 bicycle_steering_controller:
   ros__parameters:
 
+    enable_odom_tf: false
     reference_timeout: 1.0
     front_steering: true
     open_loop: false

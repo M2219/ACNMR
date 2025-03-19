@@ -275,4 +275,14 @@
     </plugin>
   </gazebo>
 
+  <!-- Odometry Publisher Plugin -->
+  <gazebo>
+    <plugin filename="libignition-gazebo-odometry-publisher-system.so" 
+            name="ignition::gazebo::systems::OdometryPublisher">
+        <odom_frame>ackermann/odom</odom_frame>
+        <robot_base_frame>ackermann</robot_base_frame>
+        <publish_rate>50</publish_rate>
+    </plugin>
+  </gazebo>
+
 </robot>

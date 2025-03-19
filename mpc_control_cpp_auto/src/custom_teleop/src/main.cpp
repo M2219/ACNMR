@@ -2,6 +2,7 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include "geometry_msgs/msg/twist.hpp"
+#include <geometry_msgs/msg/twist_stamped.hpp>
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
 #include "geometry_msgs/msg/polygon_stamped.hpp"
@@ -41,6 +42,7 @@ public:
 
         // Publishers
         cmd_vel_pub = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
+        cmd_vel_gazebo_pub = this->create_publisher<geometry_msgs::msg::TwistStamped>("/bicycle_steering_controller/reference", 10);
         target_xy_pub = this->create_publisher<geometry_msgs::msg::Point>("/target_xy", 10);
         target_yaw_pub = this->create_publisher<geometry_msgs::msg::Point>("/target_yaw", 10);
         steering_pub = this->create_publisher<geometry_msgs::msg::Point>("/steering", 10);
@@ -59,6 +61,9 @@ public:
 
         odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
             "/odom", 10, std::bind(&MPCNode::odomCallback, this, std::placeholders::_1));
+
+        gazebo_odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
+            "/model/ackermann/odometry", 10, std::bind(&MPCNode::gazeboOdomCallback, this, std::placeholders::_1));
 
         amcl_sub = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
             "/amcl_pose", 10, std::bind(&MPCNode::amclCallback, this, std::placeholders::_1));
@@ -134,15 +139,20 @@ public:
 
 private:
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub;
+    rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr cmd_vel_gazebo_pub;
+
     rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr target_xy_pub, error_pub, steering_pub, target_yaw_pub;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr target_time_pub;
     rclcpp::Publisher<geometry_msgs::msg::PolygonStamped>::SharedPtr footprint_pub;
     rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub;
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr custom_pose_pub, goal_pub;
 
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub, gazebo_odom_sub;
     rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr amcl_sub;
     rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr global_path_sub;
+
+    geometry_msgs::msg::Twist cmd_msg;
+    geometry_msgs::msg::TwistStamped cmd_msg_gazebo;
 
     std::thread control_thread;
     std::mutex odom_mutex;
@@ -165,7 +175,7 @@ private:
     Eigen::VectorXd lowerBound, upperBound;
     OsqpEigen::Solver solver;
     Eigen::VectorXd QPSolution;
-    bool odom_updated, path_updated, path_initialized;
+    bool odom_updated, path_updated, path_initialized, gazebo_odom_updated;
 
     // Reference Trajectory
     std::vector<double> ccx, ccy, ccyaw, ccx_s, ccy_s, ccyaw_s, ccdir, sp, ck;
@@ -176,10 +186,11 @@ private:
     int target_ind;
     int mpcWindow;
     double yaw_comp;
-    double x_odo, x_amcl;
-    double y_odo, y_amcl;
-    double v_odo, v_amcl;
+    double x_odo, x_amcl, x_gazebo_odo;
+    double y_odo, y_amcl, y_gazebo_odo;
+    double v_odo, v_amcl, v_gazebo_odo;
     double roll_odo, pitch_odo, yaw_odo;
+    double roll_gazebo_odo, pitch_gazebo_odo, yaw_gazebo_odo;
     double roll_amcl, pitch_amcl, yaw_amcl;
 
 
@@ -249,6 +260,24 @@ private:
         yaw_odo = yaw_odo + yaw_comp;
 
         odom_updated = true;
+    }
+
+    void gazeboOdomCallback(const nav_msgs::msg::Odometry::SharedPtr msg) {
+
+        x_gazebo_odo = msg->pose.pose.position.x;
+        y_gazebo_odo = msg->pose.pose.position.y;
+        v_gazebo_odo = msg->twist.twist.linear.x;
+
+        tf2::Quaternion q(
+            msg->pose.pose.orientation.x,
+            msg->pose.pose.orientation.y,
+            msg->pose.pose.orientation.z,
+            msg->pose.pose.orientation.w
+        );
+        tf2::Matrix3x3 m(q);
+        m.getRPY(roll_gazebo_odo, pitch_gazebo_odo, yaw_gazebo_odo);
+        yaw_gazebo_odo = yaw_gazebo_odo + yaw_comp;
+        gazebo_odom_updated = true;
     }
 
     void amclCallback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
@@ -389,6 +418,12 @@ private:
                 continue;
             }
 
+            if (!gazebo_odom_updated) {
+                RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for robot gazebo odometry data...");
+                //rate.sleep();
+                continue;
+            }
+
             if (!path_updated) {
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for global path...");
                 //rate.sleep();
@@ -429,10 +464,10 @@ private:
             ctr = QPSolution.block(4 * (mpcWindow + 1), 0, 2, 1);
 
             double speed = x0(2) + ctr(0) * DT;
-            x0(0) = x_odo; //x_amcl;
-            x0(1) = y_odo; //y_amcl;
-            x0(2) = v_odo;
-            x0(3) = yaw_odo;
+            x0(0) = x_gazebo_odo; //x_amcl;
+            x0(1) = y_gazebo_odo; //y_amcl;
+            x0(2) = v_gazebo_odo;
+            x0(3) = yaw_gazebo_odo;
 
             double steering = ctr(1);
 
@@ -463,10 +498,14 @@ private:
             //if (steering < -max_steer_angle) steering = -max_steer_angle;
 
             std::cout << speed << " ---  " << steering << std::endl;
-            geometry_msgs::msg::Twist cmd_msg;
+
             cmd_msg.linear.x = speed;
             cmd_msg.angular.z = steering;
             cmd_vel_pub->publish(cmd_msg);
+
+            cmd_msg_gazebo.twist.linear.x = speed;
+            cmd_msg_gazebo.twist.angular.z = speed / WB * atan(steering);
+            cmd_vel_gazebo_pub->publish(cmd_msg_gazebo);
 
             ttime += DT;
             double error_traj = std::hypot(x0(0) - ccx_s[target_ind], x0(1) - ccy_s[target_ind]);

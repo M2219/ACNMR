@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+from ament_index_python.packages import get_package_share_directory
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
 from launch.actions import RegisterEventHandler
@@ -26,6 +29,9 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     # Launch Arguments
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
+    pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
+    pkg_project_gazebo = get_package_share_directory('ros_gz_example_gazebo')
+    ign_project_gazebo = get_package_share_directory('ign_ros2_control_demos')
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -68,22 +74,46 @@ def generate_launch_description():
     )
 
     # Bridge
+    """
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
         output='screen'
     )
+    """
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        parameters=[{
+            'config_file': os.path.join(ign_project_gazebo, 'config', 'ros_gz_example_bridge.yaml'),
+            'qos_overrides./tf_static.publisher.durability': 'transient_local',
+        }],
+        output='screen'
+    )
 
-    return LaunchDescription([
-        bridge,
-        # Launch gazebo environment
-        IncludeLaunchDescription(
+    # Setup to launch the simulator and Gazebo world
+    gz_sim_2 = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
+        launch_arguments={'gz_args': PathJoinSubstitution(['-r -v 4 ' +
+            pkg_project_gazebo,
+            'worlds',
+            'acker_drive.sdf'
+        ])}.items()
+    )
+    """
+    gz_sim = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 [PathJoinSubstitution([FindPackageShare('ros_gz_sim'),
                                        'launch',
                                        'gz_sim.launch.py'])]),
-            launch_arguments=[('gz_args', [' -r -v 4 empty.sdf'])]),
+            launch_arguments=[('gz_args', [' -r -v 4 empty.sdf'])])
+
+    """
+    return LaunchDescription([
+        gz_sim_2,
+        bridge,
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=gz_spawn_entity,

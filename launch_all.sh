@@ -31,9 +31,8 @@ source install/setup.bash && ros2 launch hybrid_a_star hybrid_a_star_launch_file
 cd ..
 
 sleep 1
-cd gazebo_sim
-source /usr/share/gazebo-11/setup.bash
-source install/setup.bash && ros2 launch hunter2_gazebo hunter_empty_world.launch.py &
+cd bicycle_controller_ign
+source install/setup.bash && ros2 launch ign_ros2_control_demos ackermann_drive_example.launch.py &
 
 
 #cd simulated_robot
