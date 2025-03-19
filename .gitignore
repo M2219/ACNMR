@@ -41,6 +41,9 @@ robot_slam.xml/
 acker_controller_ign/install/
 acker_controller_ign/build/
 acker_controller_ign/log/
+bicycle_controller_ign/install/
+bicycle_controller_ign/build/
+bicycle_controller_ign/log/
 imu_localization/install/
 imu_localization/build/
 imu_localization/log/

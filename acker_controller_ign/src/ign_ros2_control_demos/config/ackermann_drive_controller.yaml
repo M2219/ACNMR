@@ -11,11 +11,11 @@ controller_manager:
 
 ackermann_steering_controller:
   ros__parameters:
-    wheelbase: 1.7
-    front_wheel_track: 1.0
-    rear_wheel_track: 1.0
-    front_wheels_radius: 0.3
-    rear_wheels_radius: 0.3
+    wheelbase: 0.650
+    front_wheel_track: 0.605
+    rear_wheel_track: 0.605
+    front_wheels_radius: 0.165
+    rear_wheels_radius: 0.165
     front_steering: true
     reference_timeout: 2.0
     rear_wheels_names: ['rear_left_joint', 'rear_right_joint']
@@ -26,6 +26,6 @@ ackermann_steering_controller:
     base_frame_id: base_link
     odom_frame_id: odom
     enable_odom_tf: true
-    twist_covariance_diagonal: [0.0, 7.0, 14.0, 21.0, 28.0, 35.0]
-    pose_covariance_diagonal: [0.0, 7.0, 14.0, 21.0, 28.0, 35.0]
+    twist_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    pose_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     position_feedback: false

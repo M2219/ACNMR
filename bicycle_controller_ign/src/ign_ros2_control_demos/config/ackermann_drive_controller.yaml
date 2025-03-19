@@ -1,0 +1,26 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+
+    bicycle_steering_controller:
+      type: 'bicycle_steering_controller/BicycleSteeringController'
+
+bicycle_steering_controller:
+  ros__parameters:
+
+    reference_timeout: 1.0
+    front_steering: true
+    open_loop: false
+    velocity_rolling_window_size: 10
+    position_feedback: false
+    use_stamped_vel: true
+    rear_wheels_names: ['rear_joint']
+    front_wheels_names: ['front_steer_joint']
+
+    wheelbase: 0.650
+    front_wheel_radius: 0.165
+    rear_wheel_radius: 0.165
