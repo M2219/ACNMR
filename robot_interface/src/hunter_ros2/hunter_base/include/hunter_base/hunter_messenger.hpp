@@ -95,7 +95,7 @@ class HunterMessenger {
         std::bind(&HunterMessenger::TwistCmdCallback, this,
                   std::placeholders::_1));
 
-    
+
   }
 
   void PublishStateToROS() {
@@ -164,7 +164,7 @@ class HunterMessenger {
  private:
   std::shared_ptr<HunterType> hunter_;
   rclcpp::Node *node_;
-  
+
 
   std::string odom_frame_;
   std::string base_frame_;
@@ -182,7 +182,7 @@ class HunterMessenger {
   rclcpp::Publisher<hunter_msgs::msg::HunterStatus>::SharedPtr status_pub_;
 
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr motion_cmd_sub_;
-  
+
 
   std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
@@ -201,7 +201,7 @@ class HunterMessenger {
   rclcpp::Time current_time_;
 
   void TwistCmdCallback(const geometry_msgs::msg::Twist::SharedPtr msg) {
-    
+
     if (!simulated_robot_) {
       SetHunterMotionCommand(msg);
     } else {

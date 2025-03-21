@@ -47,3 +47,6 @@ bicycle_controller_ign/log/
 imu_localization/install/
 imu_localization/build/
 imu_localization/log/
+wheel_odometry/install/
+wheel_odometry/build/
+wheel_odometry/log/
