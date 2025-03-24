@@ -38,6 +38,7 @@ public:
         odom_updated = false;
         path_updated = false;
         path_initialized = false;
+        localization_odom_updated = false;
         mpcWindow = 30;
 
         // Publishers
@@ -60,10 +61,13 @@ public:
         // Subscribers
 
         odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
-            "/odom", 10, std::bind(&MPCNode::odomCallback, this, std::placeholders::_1));
+            "/robot_odom", 10, std::bind(&MPCNode::odomCallback, this, std::placeholders::_1));
 
-        gazebo_odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
-            "/model/ackermann/odometry", 10, std::bind(&MPCNode::gazeboOdomCallback, this, std::placeholders::_1));
+        //localization_odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
+        //    "/model/ackermann/odometry", 10, std::bind(&MPCNode::localizationOdomCallback, this, std::placeholders::_1));
+
+        localization_odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
+            "/odometry/filtered", 10, std::bind(&MPCNode::localizationOdomCallback, this, std::placeholders::_1));
 
         amcl_sub = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
             "/amcl_pose", 10, std::bind(&MPCNode::amclCallback, this, std::placeholders::_1));
@@ -147,7 +151,7 @@ private:
     rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub;
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr custom_pose_pub, goal_pub;
 
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub, gazebo_odom_sub;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub, localization_odom_sub;
     rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr amcl_sub;
     rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr global_path_sub;
 
@@ -175,7 +179,7 @@ private:
     Eigen::VectorXd lowerBound, upperBound;
     OsqpEigen::Solver solver;
     Eigen::VectorXd QPSolution;
-    bool odom_updated, path_updated, path_initialized, gazebo_odom_updated;
+    bool odom_updated, path_updated, path_initialized, localization_odom_updated;
 
     // Reference Trajectory
     std::vector<double> ccx, ccy, ccyaw, ccx_s, ccy_s, ccyaw_s, ccdir, sp, ck;
@@ -186,11 +190,11 @@ private:
     int target_ind;
     int mpcWindow;
     double yaw_comp;
-    double x_odo, x_amcl, x_gazebo_odo;
-    double y_odo, y_amcl, y_gazebo_odo;
-    double v_odo, v_amcl, v_gazebo_odo;
+    double x_odo, x_amcl, x_localization_odo;
+    double y_odo, y_amcl, y_localization_odo;
+    double v_odo, v_amcl, v_localization_odo;
     double roll_odo, pitch_odo, yaw_odo;
-    double roll_gazebo_odo, pitch_gazebo_odo, yaw_gazebo_odo;
+    double roll_localization_odo, pitch_localization_odo, yaw_localization_odo;
     double roll_amcl, pitch_amcl, yaw_amcl;
 
 
@@ -262,11 +266,11 @@ private:
         odom_updated = true;
     }
 
-    void gazeboOdomCallback(const nav_msgs::msg::Odometry::SharedPtr msg) {
+    void localizationOdomCallback(const nav_msgs::msg::Odometry::SharedPtr msg) {
 
-        x_gazebo_odo = msg->pose.pose.position.x;
-        y_gazebo_odo = msg->pose.pose.position.y;
-        v_gazebo_odo = msg->twist.twist.linear.x;
+        x_localization_odo = msg->pose.pose.position.x;
+        y_localization_odo = msg->pose.pose.position.y;
+        v_localization_odo = msg->twist.twist.linear.x;
 
         tf2::Quaternion q(
             msg->pose.pose.orientation.x,
@@ -275,9 +279,9 @@ private:
             msg->pose.pose.orientation.w
         );
         tf2::Matrix3x3 m(q);
-        m.getRPY(roll_gazebo_odo, pitch_gazebo_odo, yaw_gazebo_odo);
-        yaw_gazebo_odo = yaw_gazebo_odo + yaw_comp;
-        gazebo_odom_updated = true;
+        m.getRPY(roll_localization_odo, pitch_localization_odo, yaw_localization_odo);
+        yaw_localization_odo = yaw_localization_odo + yaw_comp;
+        localization_odom_updated = true;
     }
 
     void amclCallback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
@@ -414,19 +418,16 @@ private:
 
             if (!odom_updated) {
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for robot odometry data...");
-                //rate.sleep();
-                continue;
-            }
-
-            if (!gazebo_odom_updated) {
-                RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for robot gazebo odometry data...");
-                //rate.sleep();
                 continue;
             }
 
             if (!path_updated) {
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for global path...");
-                //rate.sleep();
+                continue;
+            }
+
+            if (!localization_odom_updated) {
+                RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000, "Waiting for robot localization odometry data...");
                 continue;
             }
 
@@ -464,10 +465,10 @@ private:
             ctr = QPSolution.block(4 * (mpcWindow + 1), 0, 2, 1);
 
             double speed = x0(2) + ctr(0) * DT;
-            x0(0) = x_gazebo_odo; //x_amcl;
-            x0(1) = y_gazebo_odo; //y_amcl;
-            x0(2) = v_gazebo_odo;
-            x0(3) = yaw_gazebo_odo;
+            x0(0) = x_localization_odo; //x_amcl;
+            x0(1) = y_localization_odo; //y_amcl;
+            x0(2) = v_odo;
+            x0(3) = yaw_localization_odo;
 
             double steering = ctr(1);
 

@@ -34,7 +34,7 @@ def generate_launch_description():
                 "initial_pose_a": 0.0,
                 "base_frame_id": "base_link",
                 "global_frame_id": "map",
-                "odom_frame_id": "odom",
+                "odom_frame_id": "odom_amcl",
                 "scan_topic": "/scan"
             }]
         )

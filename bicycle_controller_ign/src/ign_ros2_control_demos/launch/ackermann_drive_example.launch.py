@@ -30,7 +30,7 @@ def generate_launch_description():
     # Launch Arguments
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
-    pkg_project_gazebo = get_package_share_directory('ros_gz_example_gazebo')
+    pkg_project_gazebo = get_package_share_directory('bicycle_model_world')
     ign_project_gazebo = get_package_share_directory('ign_ros2_control_demos')
 
     # Get URDF via xacro
@@ -87,7 +87,7 @@ def generate_launch_description():
         executable='parameter_bridge',
         parameters=[{
             'config_file': os.path.join(ign_project_gazebo, 'config', 'ros_gz_example_bridge.yaml'),
-            'qos_overrides./tf_static.publisher.durability': 'transient_local',
+            'qos_overrides./tf_static.publisher.durability': 'transient_local', "use_sim_time": use_sim_time,
         }],
         output='screen'
     )
@@ -100,7 +100,7 @@ def generate_launch_description():
             pkg_project_gazebo,
             'worlds',
             'acker_drive.sdf'
-        ])}.items()
+        ]), "use_sim_time": use_sim_time}.items()
     )
     """
     gz_sim = IncludeLaunchDescription(

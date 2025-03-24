@@ -1,9 +1,52 @@
+[0.164s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/root/ACNMR/simulated_robot/install/hunter_base' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.165s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/root/ACNMR/simulated_robot/install/hunter_msgs' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.165s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/root/ACNMR/simulated_robot/install/hunter_base' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.165s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/root/ACNMR/simulated_robot/install/ugv_sdk' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.165s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/root/ACNMR/simulated_robot/install/hunter_msgs' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.192s] WARNING:colcon.colcon_core.package_selection:Some selected packages are already built in one or more underlay workspaces:
+	'hunter_msgs' is in: /root/ACNMR/robot_interface/install/hunter_msgs
+If a package in a merged underlay workspace is overridden and it installs headers, then all packages in the overlay must sort their include directories by workspace order. Failure to do so may result in build failures or undefined behavior at run time.
+If the overridden package is used by another package in any underlay, then the overriding package in the overlay must be API and ABI compatible or undefined behavior at run time may occur.
+
+If you understand the risks and want to override a package anyways, add the following to the command line:
+	--allow-overriding hunter_msgs
+
+This may be promoted to an error in a future release of colcon-override-check.
 Starting >>> hunter_msgs
 Starting >>> ugv_sdk
-Finished <<< ugv_sdk [0.16s]
-Finished <<< hunter_msgs [0.32s]
+--- stderr: ugv_sdk
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    CATKIN_INSTALL_INTO_PREFIX_ROOT
+    CATKIN_SYMLINK_INSTALL
+
+
+---
+Finished <<< ugv_sdk [5.16s]
+Finished <<< hunter_msgs [6.24s]
 Starting >>> hunter_base
 --- stderr: hunter_base
+In file included from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Recorder.h:25,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Ascent.h:17,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/include/hunter_base/bicycle_model.hpp:19,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/src/bicycle_model.cpp:10:
+/root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/containers/stack.h:54:7: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+   54 |       const pointer operator->() const noexcept
+      |       ^~~~~
+/root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/containers/stack.h:113:7: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+  113 |       const pointer operator->() const
+      |       ^~~~~
+In file included from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/integrators/RK2.h:17,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Ascent.h:26,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/include/hunter_base/bicycle_model.hpp:19,
+                 from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/src/bicycle_model.cpp:10:
+/root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Utility.h:25:14: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+   25 |    constexpr const value_t cx(long double v) { return static_cast<value_t>(v); }
+      |              ^~~~~
+/root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Utility.h:26:14: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
+   26 |    constexpr const value_t operator"" _v(long double v) { return static_cast<value_t>(v); }
+      |              ^~~~~
 In file included from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Recorder.h:25,
                  from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/ascent/include/ascent/Ascent.h:17,
                  from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/include/hunter_base/hunter_messenger.hpp:23,
@@ -25,7 +68,7 @@ In file included from /root/ACNMR/simulated_robot/src/hunter_ros2/hunter_base/as
    26 |    constexpr const value_t operator"" _v(long double v) { return static_cast<value_t>(v); }
       |              ^~~~~
 ---
-Finished <<< hunter_base [6.11s]
+Finished <<< hunter_base [7.60s]
 
-Summary: 3 packages finished [6.58s]
-  1 package had stderr output: hunter_base
+Summary: 3 packages finished [14.0s]
+  2 packages had stderr output: hunter_base ugv_sdk

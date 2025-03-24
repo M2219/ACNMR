@@ -45,7 +45,7 @@
 
   <!-- chassis_joint -->
   <joint name="chassis_joint" type="fixed">
-    <origin xyz="0.0266989327622036 0.000409203500587652 0.4" rpy="0 0 0" />
+    <origin xyz="0.28018 0.0 0.4" rpy="0 0 0" />
     <parent link="base_link" />
     <child link="chassis" />
   </joint>
@@ -148,8 +148,8 @@
       <surface>
         <friction>
             <ode>
-              <mu>2.1</mu> <!-- Static friction coefficient -->
-              <mu2>1.0</mu2> <!-- Dynamic friction coefficient -->
+              <mu>0.1</mu> <!-- Static friction coefficient -->
+              <mu2>0.1</mu2> <!-- Dynamic friction coefficient -->
               <fdir1>1 0 0</fdir1> <!-- Friction direction (optional) -->
               <slip1>0.0</slip1> <!-- Slip in direction 1 (optional) -->
               <slip2>0.0</slip2> <!-- Slip in direction 2 (optional) -->
@@ -220,8 +220,8 @@
       <surface>
         <friction>
             <ode>
-              <mu>2.1</mu> <!-- Static friction coefficient -->
-              <mu2>1.0</mu2> <!-- Dynamic friction coefficient -->
+              <mu>0.1</mu> <!-- Static friction coefficient -->
+              <mu2>0.1</mu2> <!-- Dynamic friction coefficient -->
               <fdir1>1 0 0</fdir1> <!-- Friction direction (optional) -->
               <slip1>0.0</slip1> <!-- Slip in direction 1 (optional) -->
               <slip2>0.0</slip2> <!-- Slip in direction 2 (optional) -->
@@ -277,19 +277,17 @@
     <pose>0 0 0 0 0 0</pose>
   </joint>
 
-
     <gazebo reference="imu_link">
         <gravity>true</gravity>
         <sensor name='imu_sensor' type='imu'>
             <always_on>1</always_on>
-            <update_rate>1000</update_rate>
+            <update_rate>100</update_rate>
             <visualize>1</visualize>
             <topic>/imu</topic>
             <plugin name='imu_plugin' filename='libgazebo_ros_imu_sensor.so'>
                 <topicName>imu_data</topicName>
                 <bodyName>imu_link</bodyName>
                 <updateRateHZ>100.0</updateRateHZ>
-                <gaussianNoise>0.0</gaussianNoise>
                 <xyzOffset>0 0 0</xyzOffset>
                 <rpyOffset>0 0 0</rpyOffset>
             </plugin>

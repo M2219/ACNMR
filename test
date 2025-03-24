@@ -1,0 +1,215 @@
+[INFO] [launch]: All log files can be found below /root/.ros/log/2025-03-24-12-41-16-172295-mahmoud-17422
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [hunter_base_node-1]: process started with pid [17424]
+[hunter_base_node-1] Loading parameters: 
+[hunter_base_node-1] - port name: can0
+[hunter_base_node-1] - odom frame name: odom
+[hunter_base_node-1] - base frame name: base_link
+[hunter_base_node-1] - odom topic name: robot_odom
+[hunter_base_node-1] - simulated robot: true
+[hunter_base_node-1] - sim control rate: 50
+[hunter_base_node-1] ----------------------------
+[hunter_base_node-1] robot created
+[hunter_base_node-1] Simulated robot base: Hunter
+[hunter_base_node-1] Robot initialized, start running ...
+[INFO] [launch]: All log files can be found below /root/.ros/log/2025-03-24-12-41-21-120037-mahmoud-17462
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [static_transform_publisher-1]: process started with pid [17463]
+[INFO] [lifecycle_manager-2]: process started with pid [17465]
+[INFO] [map_server-3]: process started with pid [17467]
+[static_transform_publisher-1] [WARN] [1742820081.150528795] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-1] [INFO] [1742820081.173759129] [world_to_map]: Spinning until stopped - publishing transform
+[static_transform_publisher-1] translation: ('0.000000', '0.000000', '0.000000')
+[static_transform_publisher-1] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-1] from 'world' to 'map'
+[lifecycle_manager-2] [INFO] [1742820081.176109077] [lifecycle_manager_map_server]: Creating
+[lifecycle_manager-2] [INFO] [1742820081.180311578] [lifecycle_manager_map_server]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[map_server-3] [INFO] [1742820081.181679877] [map_server]: 
+[map_server-3] 	map_server lifecycle node launched. 
+[map_server-3] 	Waiting on external lifecycle transitions to activate
+[map_server-3] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-3] [INFO] [1742820081.181927325] [map_server]: Creating
+[lifecycle_manager-2] [INFO] [1742820081.183579519] [lifecycle_manager_map_server]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-2] [INFO] [1742820081.183694636] [lifecycle_manager_map_server]: [34m[1mConfiguring map_server[0m[0m
+[map_server-3] [INFO] [1742820081.184467184] [map_server]: Configuring
+[map_server-3] [INFO] [1742820081.184611299] [map_io]: Loading yaml file: /root/ACNMR/map_service/install/map_creator/share/map_creator/maps/map_slalom.yaml
+[map_server-3] [INFO] [1742820081.185382427] [map_io]: resolution: 0.5
+[map_server-3] [INFO] [1742820081.185421464] [map_io]: origin[0]: 0
+[map_server-3] [INFO] [1742820081.185439084] [map_io]: origin[1]: 0
+[map_server-3] [INFO] [1742820081.185454371] [map_io]: origin[2]: 0
+[map_server-3] [INFO] [1742820081.185473105] [map_io]: free_thresh: 0.05
+[map_server-3] [INFO] [1742820081.185491212] [map_io]: occupied_thresh: 0.1
+[map_server-3] [INFO] [1742820081.185508809] [map_io]: mode: trinary
+[map_server-3] [INFO] [1742820081.185526118] [map_io]: negate: 0
+[map_server-3] [INFO] [1742820081.185899027] [map_io]: Loading image_file: /root/ACNMR/map_service/install/map_creator/share/map_creator/maps/map_slalom.png
+[map_server-3] [INFO] [1742820081.186198417] [map_io]: Read map /root/ACNMR/map_service/install/map_creator/share/map_creator/maps/map_slalom.png: 100 X 10 map @ 0.5 m/cell
+[lifecycle_manager-2] [INFO] [1742820081.189358408] [lifecycle_manager_map_server]: [34m[1mActivating map_server[0m[0m
+[map_server-3] [INFO] [1742820081.189431897] [map_server]: Activating
+[map_server-3] [INFO] [1742820081.189513244] [map_server]: Creating bond (map_server) to lifecycle manager.
+[lifecycle_manager-2] [INFO] [1742820081.571854069] [lifecycle_manager_map_server]: Server map_server connected with bond.
+[lifecycle_manager-2] [INFO] [1742820081.571996286] [lifecycle_manager_map_server]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-2] [INFO] [1742820081.572038178] [lifecycle_manager_map_server]: [34m[1mCreating bond timer...[0m[0m
+[INFO] [launch]: All log files can be found below /root/.ros/log/2025-03-24-12-41-23-230987-mahmoud-17530
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [fakelidar.py-1]: process started with pid [17531]
+[fakelidar.py-1] [INFO] [1742820083.441716350] [fake_lidar]: Waiting for /odom...
+[INFO] [launch]: All log files can be found below /root/.ros/log/2025-03-24-12-41-25-248858-mahmoud-17573
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [lifecycle_manager-1]: process started with pid [17574]
+[INFO] [amcl-2]: process started with pid [17576]
+[lifecycle_manager-1] [INFO] [1742820085.653955457] [lifecycle_manager_localization]: Creating
+[lifecycle_manager-1] [INFO] [1742820085.660376860] [lifecycle_manager_localization]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[lifecycle_manager-1] [INFO] [1742820085.663777274] [lifecycle_manager_localization]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-1] [INFO] [1742820085.663967757] [lifecycle_manager_localization]: [34m[1mConfiguring amcl[0m[0m
+[amcl-2] [INFO] [1742820085.668565409] [amcl]: 
+[amcl-2] 	amcl lifecycle node launched. 
+[amcl-2] 	Waiting on external lifecycle transitions to activate
+[amcl-2] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[amcl-2] [INFO] [1742820085.670111988] [amcl]: Creating
+[amcl-2] [INFO] [1742820085.773874448] [amcl]: Configuring
+[amcl-2] [INFO] [1742820085.773937037] [amcl]: initTransforms
+[amcl-2] [INFO] [1742820085.779941840] [amcl]: initPubSub
+[amcl-2] [INFO] [1742820085.782992838] [amcl]: Subscribed to map topic.
+[lifecycle_manager-1] [INFO] [1742820085.786219862] [lifecycle_manager_localization]: [34m[1mActivating amcl[0m[0m
+[amcl-2] [INFO] [1742820085.786290174] [amcl]: Activating
+[amcl-2] [INFO] [1742820085.786322857] [amcl]: Creating bond (amcl) to lifecycle manager.
+[amcl-2] [INFO] [1742820085.793375158] [amcl]: Received a 100 X 10 map @ 0.500 m/pix
+[lifecycle_manager-1] [INFO] [1742820085.888800945] [lifecycle_manager_localization]: Server amcl connected with bond.
+[lifecycle_manager-1] [INFO] [1742820085.888862068] [lifecycle_manager_localization]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-1] [INFO] [1742820085.888910001] [lifecycle_manager_localization]: [34m[1mCreating bond timer...[0m[0m
+[INFO] [launch]: All log files can be found below /root/.ros/log/2025-03-24-12-41-26-081683-mahmoud-17614
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [hybrid_astar_launch-1]: process started with pid [17615]
+[INFO] [launch]: All log files can be found below /root/.ros/log/2025-03-24-12-41-26-991244-mahmoud-17638
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [publish_wheel_odometry_gazebo-1]: process started with pid [17639]
+[hybrid_astar_launch-1] [INFO] [1742820087.122087439] [hybrid_astar_launch]: Requesting map from /map_server/map...
+[map_server-3] [INFO] [1742820087.122529118] [map_server]: Handling GetMap request
+[hybrid_astar_launch-1] [INFO] [1742820087.122689456] [hybrid_astar_launch]: Successfully received map from service.
+[hybrid_astar_launch-1] [INFO] [1742820087.122707643] [hybrid_astar_launch]: Received map: width=100, height=10, resolution=0.50
+[publish_wheel_odometry_gazebo-1] [INFO] [1742820087.164277519] [wheel_odometry_gazebo_node]: Waiting for /dynamic_joint_states topic to become available...
+[publish_wheel_odometry_gazebo-1] [INFO] [1742820087.164793342] [wheel_odometry_gazebo_node]: /dynamic_joint_states topic is available!
+[INFO] [launch]: All log files can be found below /root/.ros/log/2025-03-24-12-41-28-022959-mahmoud-17660
+[INFO] [launch]: Default logging verbosity is set to INFO
+Config path: /root/ACNMR/imu_localization/install/imu_localization/share/imu_localization/cfg/ekf_config.yaml
+[INFO] [ekf_node-1]: process started with pid [17661]
+[INFO] [launch]: All log files can be found below /root/.ros/log/2025-03-24-12-41-29-006812-mahmoud-17682
+[INFO] [launch]: Default logging verbosity is set to INFO
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[hybrid_astar_launch-1] [INFO] [1742820089.193220497] [rclcpp]: signal_handler(signum=2)
+[INFO] [publish_wheel_odometry_gazebo-1]: sending signal 'SIGINT' to process[publish_wheel_odometry_gazebo-1]
+[hybrid_astar_launch-1] Stack trace (most recent call last):
+[INFO] [fakelidar.py-1]: sending signal 'SIGINT' to process[fakelidar.py-1]
+[INFO] [hybrid_astar_launch-1]: sending signal 'SIGINT' to process[hybrid_astar_launch-1]
+[INFO] [ekf_node-1]: sending signal 'SIGINT' to process[ekf_node-1]
+[INFO] [hunter_base_node-1]: sending signal 'SIGINT' to process[hunter_base_node-1]
+[publish_wheel_odometry_gazebo-1] Traceback (most recent call last):
+[publish_wheel_odometry_gazebo-1]   File "/root/ACNMR/wheel_odometry_gazebo/install/wheel_odometry_gazebo/lib/wheel_odometry_gazebo/publish_wheel_odometry_gazebo", line 33, in <module>
+[publish_wheel_odometry_gazebo-1]     sys.exit(load_entry_point('wheel-odometry-gazebo', 'console_scripts', 'publish_wheel_odometry_gazebo')())
+[hybrid_astar_launch-1] #6    Object "/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib/hybrid_a_star/hybrid_astar_launch", at 0x64a20f5fafb4, in 
+[publish_wheel_odometry_gazebo-1]   File "/root/ACNMR/wheel_odometry_gazebo/build/wheel_odometry_gazebo/wheel_odometry_gazebo/publish_wheel_odometry_gazebo.py", line 169, in main
+[publish_wheel_odometry_gazebo-1]     rclpy.spin(odometry_node)
+[hybrid_astar_launch-1] #5    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x72a6558cbe3f, in __libc_start_main
+[publish_wheel_odometry_gazebo-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 226, in spin
+[hybrid_astar_launch-1] #4    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x72a6558cbd8f, in 
+[publish_wheel_odometry_gazebo-1]     executor.spin_once()
+[hybrid_astar_launch-1] #3    Object "/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib/hybrid_a_star/hybrid_astar_launch", at 0x64a20f5fac59, in 
+[publish_wheel_odometry_gazebo-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 739, in spin_once
+[hybrid_astar_launch-1] #2    Object "/opt/ros/humble/lib/librclcpp.so", at 0x72a655e04def, in rclcpp::Context::sleep_for(std::chrono::duration<long, std::ratio<1l, 1000000000l> > const&)
+[publish_wheel_odometry_gazebo-1]     self._spin_once_impl(timeout_sec)
+[hybrid_astar_launch-1] #1    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x72a6559362dc, in pthread_cond_clockwait
+[hunter_base_node-1] [0m[INFO] [1742820089.193343380] [rclcpp]: signal_handler(signum=2)[0m
+[publish_wheel_odometry_gazebo-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 728, in _spin_once_impl
+[hybrid_astar_launch-1] #0    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x72a655933117, in 
+[hybrid_astar_launch-1] Interrupt (Signal sent by the kernel 0 0)
+[publish_wheel_odometry_gazebo-1]     handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
+[hunter_base_node-1] [0m[INFO] [1742820089.195320037] [rclcpp]: signal_handler(signum=2)[0m
+[INFO] [amcl-2]: sending signal 'SIGINT' to process[amcl-2]
+[publish_wheel_odometry_gazebo-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 711, in wait_for_ready_callbacks
+[publish_wheel_odometry_gazebo-1]     return next(self._cb_iter)
+[ekf_node-1] [INFO] [1742820089.193242586] [rclcpp]: signal_handler(signum=2)
+[publish_wheel_odometry_gazebo-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 608, in _wait_for_ready_callbacks
+[publish_wheel_odometry_gazebo-1]     wait_set.wait(timeout_nsec)
+[publish_wheel_odometry_gazebo-1] KeyboardInterrupt
+[publish_wheel_odometry_gazebo-1] Exception ignored in: <module 'threading' from '/usr/lib/python3.10/threading.py'>
+[publish_wheel_odometry_gazebo-1] Traceback (most recent call last):
+[ekf_node-1] [INFO] [1742820089.195228237] [rclcpp]: signal_handler(signum=2)
+[publish_wheel_odometry_gazebo-1]   File "/usr/lib/python3.10/threading.py", line 1547, in _shutdown
+[INFO] [map_server-3]: sending signal 'SIGINT' to process[map_server-3]
+[INFO] [lifecycle_manager-1]: sending signal 'SIGINT' to process[lifecycle_manager-1]
+[lifecycle_manager-1] [INFO] [1742820089.193219048] [rclcpp]: signal_handler(signum=2)
+[lifecycle_manager-1] [INFO] [1742820089.193343479] [lifecycle_manager_localization]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_localization)
+[lifecycle_manager-1] [INFO] [1742820089.193390652] [lifecycle_manager_localization]: [34m[1mTerminating bond timer...[0m[0m
+[amcl-2] [INFO] [1742820089.193219311] [rclcpp]: signal_handler(signum=2)
+[amcl-2] [INFO] [1742820089.193437733] [amcl]: Running Nav2 LifecycleNode rcl preshutdown (amcl)
+[amcl-2] [INFO] [1742820089.193524326] [amcl]: Deactivating
+[amcl-2] [INFO] [1742820089.193548157] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[fakelidar.py-1] Traceback (most recent call last):
+[INFO] [lifecycle_manager-2]: sending signal 'SIGINT' to process[lifecycle_manager-2]
+[amcl-2] [INFO] [1742820089.196123412] [rclcpp]: signal_handler(signum=2)
+[fakelidar.py-1]   File "/root/ACNMR/lidar_sim/install/fakelidar/lib/fakelidar/fakelidar.py", line 136, in <module>
+[fakelidar.py-1]     main()
+[fakelidar.py-1]   File "/root/ACNMR/lidar_sim/install/fakelidar/lib/fakelidar/fakelidar.py", line 130, in main
+[hunter_base_node-1] terminate called after throwing an instance of 'rclcpp::exceptions::RCLError'
+[hunter_base_node-1]   what():  failed to create guard condition: the given context is not valid, either rcl_init() was not called or rcl_shutdown() was called., at ./src/rcl/guard_condition.c:67
+[fakelidar.py-1]     node = FakeLidar()
+[fakelidar.py-1]   File "/root/ACNMR/lidar_sim/install/fakelidar/lib/fakelidar/fakelidar.py", line 42, in __init__
+[fakelidar.py-1]     self.wait_for_first_odom()
+[fakelidar.py-1]   File "/root/ACNMR/lidar_sim/install/fakelidar/lib/fakelidar/fakelidar.py", line 62, in wait_for_first_odom
+[INFO] [static_transform_publisher-1]: sending signal 'SIGINT' to process[static_transform_publisher-1]
+[fakelidar.py-1]     rclpy.spin_once(self)
+[fakelidar.py-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 206, in spin_once
+[fakelidar.py-1]     executor.spin_once(timeout_sec=timeout_sec)
+[fakelidar.py-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 739, in spin_once
+[lifecycle_manager-2] [INFO] [1742820089.193235963] [rclcpp]: signal_handler(signum=2)
+[fakelidar.py-1]     self._spin_once_impl(timeout_sec)
+[fakelidar.py-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 728, in _spin_once_impl
+[fakelidar.py-1]     handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
+[fakelidar.py-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 711, in wait_for_ready_callbacks
+[map_server-3] [INFO] [1742820089.193236341] [rclcpp]: signal_handler(signum=2)
+[lifecycle_manager-1] [INFO] [1742820089.197395087] [rclcpp]: signal_handler(signum=2)
+[fakelidar.py-1]     return next(self._cb_iter)
+[fakelidar.py-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 608, in _wait_for_ready_callbacks
+[ERROR] [hybrid_astar_launch-1]: process has died [pid 17615, exit code 1, cmd '/root/ACNMR/hybrid_a_star_ws/install/hybrid_a_star/lib/hybrid_a_star/hybrid_astar_launch --ros-args -r __node:=hybrid_astar_launch'].
+[static_transform_publisher-1] [INFO] [1742820089.193698716] [rclcpp]: signal_handler(signum=2)
+[fakelidar.py-1]     wait_set.wait(timeout_nsec)
+[fakelidar.py-1] KeyboardInterrupt
+[lifecycle_manager-2] [INFO] [1742820089.195713435] [lifecycle_manager_map_server]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_map_server)
+[lifecycle_manager-2] [INFO] [1742820089.195779110] [lifecycle_manager_map_server]: [34m[1mTerminating bond timer...[0m[0m
+[map_server-3] [INFO] [1742820089.195717171] [map_server]: Running Nav2 LifecycleNode rcl preshutdown (map_server)
+[map_server-3] [INFO] [1742820089.195813049] [map_server]: Deactivating
+[map_server-3] [INFO] [1742820089.195833079] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[map_server-3] [INFO] [1742820089.196432961] [rclcpp]: signal_handler(signum=2)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[lifecycle_manager-2] [INFO] [1742820089.197030847] [rclcpp]: signal_handler(signum=2)
+[publish_wheel_odometry_gazebo-1]     _main_thread._stop()
+[publish_wheel_odometry_gazebo-1]   File "/usr/lib/python3.10/threading.py", line 1053, in _stop
+[publish_wheel_odometry_gazebo-1]     _maintain_shutdown_locks()
+[publish_wheel_odometry_gazebo-1]   File "/usr/lib/python3.10/threading.py", line 810, in _maintain_shutdown_locks
+[publish_wheel_odometry_gazebo-1]     to_remove = [lock for lock in _shutdown_locks if not lock.locked()]
+[publish_wheel_odometry_gazebo-1]   File "/usr/lib/python3.10/threading.py", line 810, in <listcomp>
+[publish_wheel_odometry_gazebo-1]     to_remove = [lock for lock in _shutdown_locks if not lock.locked()]
+[publish_wheel_odometry_gazebo-1] KeyboardInterrupt: 
+[ERROR] [static_transform_publisher-1]: process has died [pid 17463, exit code -2, cmd '/opt/ros/humble/lib/tf2_ros/static_transform_publisher 0 0 0 0 0 0 world map --ros-args -r __node:=world_to_map --params-file /tmp/launch_params_r015_jck'].
+[amcl-2] [INFO] [1742820089.204891622] [amcl]: Cleaning up
+[map_server-3] [INFO] [1742820089.206517671] [map_server]: Cleaning up
+[map_server-3] [INFO] [1742820089.207641166] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[lifecycle_manager-1] [INFO] [1742820089.208032256] [lifecycle_manager_localization]: Destroying lifecycle_manager_localization
+[lifecycle_manager-2] [INFO] [1742820089.211315714] [lifecycle_manager_map_server]: Destroying lifecycle_manager_map_server
+[amcl-2] [INFO] [1742820089.212687451] [amcl]: Destroying bond (amcl) to lifecycle manager.
+[map_server-3] [INFO] [1742820089.213983409] [map_server]: Destroying
+[amcl-2] [INFO] [1742820089.221274754] [amcl]: Destroying
+[ERROR] [publish_wheel_odometry_gazebo-1]: process has died [pid 17639, exit code -2, cmd '/root/ACNMR/wheel_odometry_gazebo/install/wheel_odometry_gazebo/lib/wheel_odometry_gazebo/publish_wheel_odometry_gazebo --ros-args -r __node:=wheel_odometry_gazebo_node --params-file /tmp/launch_params_pp46u3u8'].
+[ERROR] [fakelidar.py-1]: process has died [pid 17531, exit code -2, cmd '/root/ACNMR/lidar_sim/install/fakelidar/lib/fakelidar/fakelidar.py --ros-args -r __node:=fake_lidar --params-file /tmp/launch_params_9xmgsivb --params-file /tmp/launch_params_fauudril --params-file /tmp/launch_params_2fxkf2fe --params-file /tmp/launch_params_1kg49cxm --params-file /tmp/launch_params_jzndgrxw'].
+[INFO] [ekf_node-1]: process has finished cleanly [pid 17661]
+[INFO] [lifecycle_manager-2]: process has finished cleanly [pid 17465]
+[INFO] [lifecycle_manager-1]: process has finished cleanly [pid 17574]
+[ERROR] [hunter_base_node-1]: process has died [pid 17424, exit code -6, cmd '/root/ACNMR/simulated_robot/install/hunter_base/lib/hunter_base/hunter_base_node --ros-args --params-file /tmp/launch_params_nixma19_'].
+[INFO] [map_server-3]: process has finished cleanly [pid 17467]
+[INFO] [amcl-2]: process has finished cleanly [pid 17576]
