@@ -119,11 +119,11 @@ class OdometryNode(Node):
         q = self.euler_to_quaternion(0, 0, self.theta)
         odom_msg.pose.pose.orientation = q
 
-        if dt > 0:
-            odom_msg.twist.twist.linear.x = distance / dt
-            print("distance / dt ------------> ", distance / dt)
-            odom_msg.twist.twist.angular.z = delta_theta / dt
-            print("delta_theta / dt ------------> ", delta_theta / dt)
+        vel = False
+        if vel == True:
+            if dt > 0:
+                odom_msg.twist.twist.linear.x = distance / dt
+                odom_msg.twist.twist.angular.z = delta_theta / dt
 
         self.odom_pub.publish(odom_msg)
 

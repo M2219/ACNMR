@@ -15,7 +15,10 @@ def generate_launch_description():
             executable="ekf_node",
             name="ekf_filter_node",
             output="screen",
-            parameters=[config_path, {"use_sim_time": False}],
+            parameters=[config_path, {"use_sim_time": False, "debug": False}],
         )
     ])
 
+
+
+# arguments=["--ros-args", "--log-level", "debug"] debug arguments

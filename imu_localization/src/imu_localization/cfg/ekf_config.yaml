@@ -1,7 +1,7 @@
 ekf_filter_node:
   ros__parameters:
     sensor_timeout: 0.01
-    frequency: 100.0
+    frequency: 50.0
     two_d_mode: true
     publish_tf: true
     world_frame: "odom"
@@ -21,12 +21,13 @@ ekf_filter_node:
                    false, false, false,
                    false, false, false]
 
-    odom0_differential: false
-    odom0_queue_size: 2
+    #control_config: [true, false, false, false, false, true]
     odom0_nodelay: false
+    odom0_differential: false
+    odom0_queue_size: 4
 
     #imu_frame: "ackermann/base_link/imu_sensor"
-    imu_frame: "imu_link"  #"imu_link" look at the tf tree
+    imu_frame: "ackermann/base_link/imu_sensor"  #"imu_link" # base_link # id01_base_link look at the tf tree
     imu0: "ackermann/imu"  #"/olive/imu/id01/filtered_imu" "ackermann/imu"
 
     imu0_config: [false, false, false,
@@ -36,13 +37,14 @@ ekf_filter_node:
                   true, true, true]
 
     imu0_nodelay: false
-    imu0_relative: false
-    imu0_queue_size: 7
-    imu0_pose_rejection_threshold: 0.8
-    imu0_twist_rejection_threshold: 0.8
-    imu0_linear_acceleration_rejection_threshold: 0.8
+    imu0_relative: true
+    imu0_queue_size: 10
+    imu0_pose_rejection_threshold: 0.5
+    imu0_twist_rejection_threshold: 0.5
+    imu0_linear_acceleration_rejection_threshold: 0.5
     imu0_differential: false
     imu0_remove_gravitational_acceleration: true
+    dynamic_process_noise_covariance: true
 
-    print_diagnostics: false
-    debug: false
+    print_diagnostics: true
+    debug: true
