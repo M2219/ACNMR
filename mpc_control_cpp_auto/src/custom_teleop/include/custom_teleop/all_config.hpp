@@ -16,13 +16,13 @@
         <param name="planner/shot_distance" value="5.0"/>#
 
 */
-static constexpr double  WB = 0.650; // m
+static constexpr double  WB = 0.610; // m
 static constexpr double  V_LENGTH = 0.980 + 0.2; // m since hybrid A* currently does not support local costmap added 0.2
 static constexpr double  V_WIDTH = 0.745 + 0.2; // m since hybrid A* currently does not support local costmap added 0.2
 static constexpr double  REAR_AXLE_DISTANCE = 0.165+0.0; // m
 
 // Controller
-static constexpr int GOAL_X = 48.0; //44 goalx
+static constexpr int GOAL_X = 32.0; //48 goalx
 static constexpr int GOAL_Y = 2.5; // goaly
 static constexpr int GOAL_Z = 0.0; // goalz
 
@@ -37,7 +37,7 @@ static constexpr double  MIN_SPEED = 0; //-HunterV2Params::max_linear_speed;
 static constexpr double  MAX_ACCEL = 2.0; // m/ss max accelration
 static constexpr double GOAL_DIS = 1.5;  // goal distance m
 static constexpr double STOP_SPEED = 0.125; // stop speed m/s
-static constexpr double TARGET_SPEED = 0.5; // m/s
+static constexpr double TARGET_SPEED = 0.55; // m/s
 
 // Global Planner
 // Note: current global planner just uses /map as a static map must be develop to support dynamic map /global_costmap/costmap

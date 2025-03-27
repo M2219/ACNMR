@@ -13,13 +13,13 @@ import random
 class OdometryNode(Node):
     def __init__(self):
         super().__init__('publish_wheel_odometry_node')
-        # 146
-        # 151
+        # 0.15485
+        # 0.15186
         self.WHEEL_RADIUS_LEFT = 0.15485
         self.WHEEL_RADIUS_RIGHT = 0.15186
         self.ENCODER_RESOLUTION = 409500  # pulses per revolution (for rear wheels)
         self.STEERING_RESOLUTION = 409500  # pulses per revolution (for steering motor)
-        self.WHEELBASE = 0.650  # meters (distance between front and rear axles)
+        self.WHEELBASE = 0.610  # meters (distance between front and rear axles)
 
         self.wheel_calibration = False
         left_ticks = []

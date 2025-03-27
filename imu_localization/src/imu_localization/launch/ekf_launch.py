@@ -26,7 +26,7 @@ def generate_launch_description():
             executable="ekf_node",
             name="ekf_filter_node",
             output="screen",
-            parameters=[config_path, {"use_sim_time": False, "debug": True}],
+            parameters=[config_path, {"use_sim_time": False, "debug": False}],
         ),
 
         # Static transform from base_link to id01_base_link
