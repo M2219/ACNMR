@@ -13,11 +13,18 @@ import random
 class OdometryNode(Node):
     def __init__(self):
         super().__init__('publish_wheel_odometry_node')
-
-        self.WHEEL_RADIUS = 0.165
+        # 146
+        # 151
+        self.WHEEL_RADIUS_LEFT = 0.15485
+        self.WHEEL_RADIUS_RIGHT = 0.15186
         self.ENCODER_RESOLUTION = 409500  # pulses per revolution (for rear wheels)
         self.STEERING_RESOLUTION = 409500  # pulses per revolution (for steering motor)
         self.WHEELBASE = 0.650  # meters (distance between front and rear axles)
+
+        self.wheel_calibration = False
+        left_ticks = []
+        right_ticks = []
+        self.wheel_calibration_factor = 1.0
 
         self.en_range = 16777215
 
@@ -90,6 +97,26 @@ class OdometryNode(Node):
 
         return steering_angle_deg
 
+    def calibrate_wheels(self):
+        """Calibrates the wheel radius using encoder readings over a set number of revolutions."""
+        print("Starting wheel calibration...")
+
+        # Command straight motion at low speed
+
+        self.left_ticks.append(self.pulse_left)
+        self.right_ticks.append(self.pulse_right)
+
+        # Calculate effective wheel distances
+        left_dist = ((max(left_ticks) - min(left_ticks)) / self.ENCODER_RESOLUTION) * (2 * math.pi * self.WHEEL_RADIUS)
+        right_dist = ((max(right_ticks) - min(right_ticks)) / self.ENCODER_RESOLUTION) * (2 * math.pi * self.WHEEL_RADIUS)
+
+        # Compute calibration factor (>1 if left wheel is effectively larger)
+        self.wheel_calibration_factor = right_dist / left_dist
+        print(f"Calibration factor: {self.wheel_calibration_factor:.4f}")
+
+        # Stop motion after calibration
+        self.command_velocity(0, 0)
+
     def update_odometry(self):
 
         # Step 1: Calculate delta pulse counts (accounting for rollover)
@@ -105,8 +132,11 @@ class OdometryNode(Node):
         #self.prev_pulse_steering = self.pulse_steering
 
         # Step 2: Calculate distance traveled by each rear wheel
-        distance_left = (delta_pulse_left / self.ENCODER_RESOLUTION) * (2 * math.pi * self.WHEEL_RADIUS)
-        distance_right = (delta_pulse_right / self.ENCODER_RESOLUTION) * (2 * math.pi * self.WHEEL_RADIUS)
+        distance_left = (delta_pulse_left / self.ENCODER_RESOLUTION) * (2 * math.pi * self.WHEEL_RADIUS_LEFT)
+        distance_right = (delta_pulse_right / self.ENCODER_RESOLUTION) * (2 * math.pi * self.WHEEL_RADIUS_RIGHT * self.wheel_calibration_factor)
+
+        if self.wheel_calibration:
+            self.calibrate_wheels()
 
         # Step 3: Calculate the steering angle from the steering motor's pulse count
         #print("before", delta_pulse_steering)
@@ -125,7 +155,6 @@ class OdometryNode(Node):
 
         # Step 4: Calculate average distance
         distance_avg = (distance_left + distance_right) / 2
-
         #self.steering_angle = self.steering_angle + random.gauss(0, 0.05)
         # Step 5: Calculate change in orientation (yaw)
         if abs(self.steering_angle) > 1e-6:

@@ -34,7 +34,7 @@ cd robot_interface
 source install/setup.bash && ros2 run wheel_odometry publish_wheel_odometry &
 cd ..
 
-# Adjust the config for imu localization in practice and sim
+# Adjust the config for imu localization in practice and sim and take care of base_link to imu publisher
 sleep 1
 cd imu_localization
 source install/setup.bash && ros2 launch imu_localization ekf_launch.py &
