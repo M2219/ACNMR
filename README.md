@@ -1,4 +1,4 @@
-# Autonomous Control and Navigation for Mobile Robots (ACM)
+# Autonomous Control and Navigation for Mobile Robots (ACNMR)
 Author: **[Mahmoud Tahmasebi]**
 
 This branch is updating based on ROS2 ...
