@@ -21,9 +21,9 @@ This branch is updating based on ROS2 ...
     - [orbslam_ws](#orbslam_ws)
     - [imu_localization](#imu_localization)
   - [Usage](#usage)
-  - [Simulation Result](#simulation result)
-  - [Practical Usage](#Practical Usage)
-  - [Practical Result](#Practical Result)
+  - [simulation_result](#simulation_result)
+  - [practical_usage](#practical_usage)
+  - [practical_result](#practical_result)
   - [Todo](#Todo)
 
 
