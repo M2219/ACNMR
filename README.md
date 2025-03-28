@@ -135,7 +135,7 @@ Note: the initial conditions and parameters can be set in mpc_control_cpp_auto/s
 * The dynamic reconfiguration will be added soon
 
 ---
-## Simulation Result
+## simulation_result
 If everything goes well, the following result will be shown in RViz.
 
 <p align="center" style="margin:0">
@@ -145,7 +145,7 @@ If everything goes well, the following result will be shown in RViz.
 ![Hunter V2](./imgs/diagram.png)
 
 ---
-## Practical Usage
+## practical_usage
 
 For testing on the real robot (Hunter V2) run the following commands.
 
@@ -164,7 +164,7 @@ source install/setup.bash
 ros2 launch custom_teleop mpc_launch.launch.xml
 ```
 ---
-## Practical Result
+## practical_result
 
 ---
 ## Todo
