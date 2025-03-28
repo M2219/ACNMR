@@ -52,3 +52,4 @@ wheel_odometry_gazebo/build/
 wheel_odometry_gazebo/log/
 HesaiLidar_ROS_2.0/
 record_camera/
+publish_stereo_pkg/
