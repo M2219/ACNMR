@@ -53,3 +53,7 @@ wheel_odometry_gazebo/log/
 HesaiLidar_ROS_2.0/
 record_camera/
 publish_stereo_pkg/
+depthai_oakdpro/install/
+depthai_oakdpro/build/
+depthai_oakdpro/log/
+
