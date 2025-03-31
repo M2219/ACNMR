@@ -4,8 +4,7 @@ controller_manager:
     update_rate: 50  # Hz
 
     joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
-
+      type: 'joint_state_broadcaster/JointStateBroadcaster'
 
     ackermann_steering_controller:
       type: 'ackermann_steering_controller/AckermannSteeringController'

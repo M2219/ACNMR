@@ -46,19 +46,19 @@ def generate_launch_description():
     )
     robot_description = {'robot_description': robot_description_content}
 
-    node_robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        output='screen',
-        parameters=[robot_description]
-    )
-
     gz_spawn_entity = Node(
         package='ros_gz_sim',
         executable='create',
         output='screen',
         arguments=['-topic', 'robot_description', '-name',
                    'ackermann', '-allow_renaming', 'true'],
+    )
+
+    node_robot_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        parameters=[robot_description]
     )
 
     load_joint_state_broadcaster = ExecuteProcess(
