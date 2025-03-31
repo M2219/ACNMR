@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="ackermann_drive" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <link name="base_link" />
+
+  <!-- chassis -->
+  <link name="chassis">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="21" />
+      <inertia
+        ixx="0.0332370959804736"
+        ixy="-1.013150489971E-06"
+        ixz="-0.00188859201421112"
+        iyy="0.111072002332437"
+        iyz="-5.13308150598312E-07"
+        izz="0.12660862809283" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find ign_ros2_control_demos)/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find ign_ros2_control_demos)/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+    <gazebo>
+       <sensor>
+            <always_on>true</always_on>
+            <update_rate>100</update_rate>
+            <visualize>true</visualize>
+            <topic>ackermann/imu</topic>
+            <plugin filename="libignition-gazebo-imu-system.so"
+                    name="ignition::gazebo::systems::Imu">
+            </plugin>
+       </sensor>    
+  </gazebo>
+
+  </link>
+
+  <!-- chassis_joint -->
+  <joint name="chassis_joint" type="fixed">
+    <origin xyz="0.0266989327622036 0.000409203500587652 0.4" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="chassis" />
+  </joint>
+
+  <!-- front_steer_link -->
+  <link
+    name="front_steer_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.5" />
+      <inertia
+        ixx="0.0222"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0.0222"
+        iyz="0.0"
+        izz="0.0222" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- front_steer_joint -->
+  <joint
+    name="front_steer_joint"
+    type="revolute">
+    <origin
+      xyz="0.37142 0.0 -0.1955"
+      rpy="1.5708 0 0" />
+    <parent
+      link="chassis" />
+    <child
+      link="front_steer_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit effort="1000.0" lower="-100.57" upper="100.57" velocity="30"/>
+  </joint>
+
+  <!-- front_wheel_link  -->
+  <link
+    name="front_wheel_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="1" />
+      <inertia
+        ixx="0.063724"
+        ixy="0"
+        ixz="0"
+        iyy="0.063724"
+        iyz="0"
+        izz="0.11072" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find ign_ros2_control_demos)/meshes/front_left_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.165" length="0.14"/>
+      </geometry>
+    </collision>
+      <surface>
+        <friction>
+            <ode>
+              <mu>2.1</mu> <!-- Static friction coefficient -->
+              <mu2>1.0</mu2> <!-- Dynamic friction coefficient -->
+              <fdir1>1 0 0</fdir1> <!-- Friction direction (optional) -->
+              <slip1>0.0</slip1> <!-- Slip in direction 1 (optional) -->
+              <slip2>0.0</slip2> <!-- Slip in direction 2 (optional) -->
+            </ode>
+        </friction>
+        <contact>
+            <ode>
+              <kp>10000000.0</kp> <!-- Contact stiffness -->
+              <kd>1.0</kd> <!-- Contact damping -->
+            </ode>
+        </contact>
+      </surface>
+  </link>
+
+  <!-- front_wheel_joint -->
+  <joint
+    name="front_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="front_steer_link" />
+    <child
+      link="front_wheel_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+
+  <!-- rear_link  -->
+  <link
+    name="rear_link">
+    <inertial>
+      <origin
+        xyz="0.0 0.0 0.0"
+        rpy="0 0 0" />
+      <mass
+        value="1" />
+      <inertia
+        ixx="0.063724"
+        ixy="0"
+        ixz="0"
+        iyy="0.063724"
+        iyz="0"
+        izz="0.11072" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find ign_ros2_control_demos)/meshes/left_rear_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.165" length="0.14"/>
+      </geometry>
+      <surface>
+        <friction>
+            <ode>
+              <mu>2.1</mu> <!-- Static friction coefficient -->
+              <mu2>1.0</mu2> <!-- Dynamic friction coefficient -->
+              <fdir1>1 0 0</fdir1> <!-- Friction direction (optional) -->
+              <slip1>0.0</slip1> <!-- Slip in direction 1 (optional) -->
+              <slip2>0.0</slip2> <!-- Slip in direction 2 (optional) -->
+            </ode>
+        </friction>
+        <contact>
+            <ode>
+              <kp>10000000.0</kp> <!-- Contact stiffness -->
+              <kd>1.0</kd> <!-- Contact damping -->
+            </ode>
+        </contact>
+      </surface>
+    </collision>
+  </link>
+
+  <!-- rear_joint  -->
+  <joint
+    name="rear_joint"
+    type="continuous">
+    <origin
+      xyz="-0.28018 0 -0.1955"
+      rpy="1.5708 0 0" />
+    <parent
+      link="chassis" />
+    <child
+      link="rear_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+
+  <!-- Ros2 Control -->
+  <ros2_control name="IgnitionSystem" type="system">
+    <hardware>
+      <plugin>ign_ros2_control/IgnitionSystem</plugin>
+    </hardware>
+
+    <joint name="rear_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="velocity"/>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="front_steer_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+  </ros2_control>
+
+  <gazebo>
+    <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+      <parameters>$(find ign_ros2_control_demos)/config/ackermann_drive_controller.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <!-- Odometry Publisher Plugin -->
+  <gazebo>
+    <plugin filename="libignition-gazebo-odometry-publisher-system.so" 
+            name="ignition::gazebo::systems::OdometryPublisher">
+        <odom_frame>ackermann/odom</odom_frame>
+        <robot_base_frame>ackermann</robot_base_frame>
+        <publish_rate>50</publish_rate>
+    </plugin>
+  </gazebo>
+
+
+</robot>

@@ -16,7 +16,7 @@
         <param name="planner/shot_distance" value="5.0"/>#
 
 */
-static constexpr double  WB = 0.610; // m
+static constexpr double  WB = 0.645; // m
 static constexpr double  V_LENGTH = 0.980 + 0.2; // m since hybrid A* currently does not support local costmap added 0.2
 static constexpr double  V_WIDTH = 0.745 + 0.2; // m since hybrid A* currently does not support local costmap added 0.2
 static constexpr double  REAR_AXLE_DISTANCE = 0.165+0.0; // m

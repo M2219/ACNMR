@@ -43,7 +43,7 @@ public:
 
         // Publishers
         cmd_vel_pub = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
-        cmd_vel_gazebo_pub = this->create_publisher<geometry_msgs::msg::TwistStamped>("/bicycle_steering_controller/reference", 10);
+        cmd_vel_gazebo_pub = this->create_publisher<geometry_msgs::msg::TwistStamped>("/ackermann_steering_controller/reference", 10);
         target_xy_pub = this->create_publisher<geometry_msgs::msg::Point>("/target_xy", 10);
         target_yaw_pub = this->create_publisher<geometry_msgs::msg::Point>("/target_yaw", 10);
         steering_pub = this->create_publisher<geometry_msgs::msg::Point>("/steering", 10);

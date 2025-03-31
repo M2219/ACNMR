@@ -1,0 +1,258 @@
+<?xml version="1.0" ?>
+<sdf version="1.8" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <model name='ackermann' canonical_link="base_link">
+    <link name="base_link">
+      <must_be_base_link>true</must_be_base_link>
+    </link>
+        <!-- chassis -->
+            <link name='chassis'>
+            <pose relative_to="chassis_joint"/>
+            <inertial>
+                <pose>0.027083 0.000409 -0.135874 0 0 0</pose>
+                <mass>20</mass> <!-- change to real weight -->
+                <inertia>
+                    <ixx>0.0332426</ixx>
+                    <ixy>-3.94979e-08</ixy>
+                    <ixz>-0.00196456</ixz>
+                    <iyy>0.112168</iyy>
+                    <iyz>-4.45485e-07</iyz>
+                    <izz>0.1277</izz>
+                </inertia>
+            </inertial>
+
+            <visual name='chassis_visual'>
+              <geometry>
+                <mesh>
+                  <scale>1 1 1</scale>
+                  <uri>package://ros_gz_example_description/models/diff_drive/meshes/base_link.STL</uri>
+                </mesh>
+              </geometry>
+              <material>
+                  <ambient>0.792156862745098 0.819607843137255 0.933333333333333 1</ambient>
+                  <diffuse>0.792156862745098 0.819607843137255 0.933333333333333 1</diffuse>
+                  <specular>0.792156862745098 0.819607843137255 0.933333333333333 1</specular>
+              </material>
+            </visual>
+
+            <collision name='chassis_collision'>
+              <pose>0 0 0 0 0 0</pose>
+              <geometry>
+                <mesh>
+                  <scale>1 1 1</scale>
+                  <uri>package://ros_gz_example_description/models/diff_drive/meshes/base_link.STL</uri>
+                </mesh>
+              </geometry>
+            </collision>
+            </link>
+
+            <!-- chassis_joint -->
+
+            <joint name="chassis_joint" type="fixed">
+              <parent>base_link</parent>
+              <child>chassis</child>
+              <pose relative_to="base_link">0 0 1.0 0 0 0</pose>
+            </joint>
+           
+            <!-- front_steer_joint -->
+
+            <joint name='front_steer_joint' type='revolute'>
+              <pose relative_to='chassis'>0.37142 0.0 -0.1955 1.5708 0 0</pose>
+              <parent>chassis</parent>
+              <child>front_steer_link</child>
+              <axis>
+                <xyz>0 1 0</xyz>
+                <dynamics>
+                  <spring_reference>0</spring_reference>
+                  <spring_stiffness>0</spring_stiffness>
+                </dynamics>
+              </axis>
+            </joint>
+
+            <!-- front_steer_link -->
+
+            <link name='front_steer_link'>
+              <pose relative_to='front_steer_joint'>0 0 0 0 0 0</pose>
+              <inertial>
+                <pose>-0.012614 0 0.002313 0 0 0</pose>
+                <mass>7.8526</mass>
+                <inertia>
+                  <ixx>0.063827</ixx>
+                  <ixy>1.5154e-07</ixy>
+                  <ixz>3.1921e-07</ixz>
+                  <iyy>0.063827</iyy>
+                  <iyz>2.9854e-08</iyz>
+                  <izz>0.11091</izz>
+                </inertia>
+              </inertial>
+
+              <collision name='front_steer_link_collision'>
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                  <cylinder>
+                    <radius>0.005</radius>
+                    <length>0.001</length>
+                   </cylinder>
+                </geometry>
+              </collision>
+
+              <visual name='front_steer_link_visual'>
+                <geometry>
+                  <cylinder>
+                    <radius>0.005</radius>
+                    <length>0.001</length>
+                   </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0 0 1 1</ambient>
+                    <diffuse>0 0 1 1</diffuse>
+                    <specular>0 0 1 1</specular>
+                </material>
+
+              </visual>
+            </link>
+
+            <!-- front_wheel_joint -->
+
+            <joint name='front_wheel_joint' type='revolute'>
+              <pose relative_to='front_steer_link'>0 0 0 0 0 0</pose>
+              <parent>front_steer_link</parent>
+              <child>front_wheel_link</child>
+              <axis>
+                <xyz>0 0 -1</xyz>
+                <dynamics>
+                  <spring_reference>0</spring_reference>
+                  <spring_stiffness>0</spring_stiffness>
+                </dynamics>
+              </axis>
+            </joint>
+
+            <!-- front_wheel_link -->
+
+            <link name='front_wheel_link'>
+              <pose relative_to='front_wheel_joint'>0 0 0 0 0 0</pose>
+              <inertial>
+                <pose>0 0 0 0 0 0</pose>
+                <mass>7.7007</mass>
+                <inertia>
+                  <ixx>0.063724</ixx>
+                  <ixy>-3.8745e-08</ixy>
+                  <ixz>2.2753e-07</ixz>
+                  <iyy>0.063724</iyy>
+                  <iyz>-4.88e-08</iyz>
+                  <izz>0.11072</izz>
+                </inertia>
+              </inertial>
+
+              <collision name='front_wheel_link_collision'>
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                  <mesh>
+                    <scale>1 1 1</scale>
+                    <uri>package://ros_gz_example_description/models/diff_drive/meshes/front_left_wheel_link.STL</uri>
+                  </mesh>
+                </geometry>
+              </collision>
+
+              <visual name='front_wheel_link_visual'>
+                <geometry>
+                  <mesh>
+                    <scale>1 1 1</scale>
+                    <uri>package://ros_gz_example_description/models/diff_drive/meshes/front_left_wheel_link.STL</uri>
+                  </mesh>
+                </geometry>
+                <material>
+                    <ambient>0 0 0 1</ambient>
+                    <diffuse>0 0 0 1</diffuse>
+                    <specular>0 0 0 1</specular>
+                </material>
+              </visual>
+            </link>
+
+            <!-- rear_joint -->
+
+            <joint name='rear_joint' type='revolute'>
+              <pose relative_to='chassis'>-0.28018 0 -0.1955 1.5708 0 0</pose>
+              <parent>chassis</parent>
+              <child>rear_link</child>
+              <axis>
+                <xyz>0 0 -1</xyz>
+                <dynamics>
+                  <spring_reference>0</spring_reference>
+                  <spring_stiffness>0</spring_stiffness>
+                </dynamics>
+              </axis>
+            </joint>
+
+            <!-- rear_link -->
+
+            <link name='rear_link'>
+              <pose relative_to='rear_joint'>0 0 0 0 0 0</pose>
+              <inertial>
+                <pose>0 0 0 0 0 0</pose>
+                <mass>7.6692</mass>
+                <inertia>
+                  <ixx>0.063699</ixx>
+                  <ixy>-2.542e-07</ixy>
+                  <ixz>2.638e-08</ixz>
+                  <iyy>0.063699</iyy>
+                  <iyz>-5.9934e-08</iyz>
+                  <izz>0.11067</izz>
+                </inertia>
+              </inertial>
+              <collision name='rear_link_collision'>
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                  <mesh>
+                    <scale>1 1 1</scale>
+                    <uri>package://ros_gz_example_description/models/diff_drive/meshes/left_rear_link.STL</uri>
+                  </mesh>
+                </geometry>
+              </collision>
+              <visual name='rear_link_visual'>
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                  <mesh>
+                    <scale>1 1 1</scale>
+                    <uri>package://ros_gz_example_description/models/diff_drive/meshes/left_rear_link.STL</uri>
+                  </mesh>
+                </geometry>
+                <material>
+                    <ambient>0 0 0 1</ambient>
+                    <diffuse>0 0 0 1</diffuse>
+                    <specular>0 0 0 1</specular>
+                </material>
+              </visual>
+            </link>
+
+            <!-- plugins -->
+
+      <!-- ROS 2 Control Plugin -->
+      <plugin filename="libign_ros2_control-system.so"
+              name="ign_ros2_control::IgnitionROS2ControlPlugin">
+        <ros2_control name="IgnitionSystem" type="system">
+          <hardware>
+            <plugin>ign_ros2_control/IgnitionSystem</plugin>
+          </hardware>
+          <joint name="rear_joint">
+            <command_interface name="velocity"/>
+            <state_interface name="velocity"/>
+            <state_interface name="position"/>
+          </joint>
+          <joint name="front_steer_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+          </joint>
+        </ros2_control>
+        <parameters>$(find ign_ros2_control_demos)/config/ackermann_drive_controller.yaml</parameters>
+      </plugin>
+
+      <!-- Odometry Publisher Plugin -->
+      <plugin filename="libignition-gazebo-odometry-publisher-system.so" 
+              name="ignition::gazebo::systems::OdometryPublisher">
+          <odom_frame>ackermann/odom</odom_frame>
+          <robot_base_frame>ackermann</robot_base_frame>
+          <publish_rate>50</publish_rate>
+      </plugin>
+
+        </model>
+</sdf>

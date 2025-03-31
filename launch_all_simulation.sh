@@ -42,15 +42,9 @@ source install/setup.bash && ros2 launch imu_localization ekf_launch.py &
 cd ..
 
 sleep 1
-cd bicycle_controller_ign
+cd acker_controller_ign
 source install/setup.bash && ros2 launch ign_ros2_control_demos ackermann_drive_example.launch.py &
 cd ..
-
-
-
-#sleep 1
-#cd robot_interface
-#source install/setup.bash && ros2 run wheel_odometry publish_wheel_odometry &
 
 #cd ..
 # Keep script running

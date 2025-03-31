@@ -18,9 +18,11 @@ class OdometryNode(Node):
         self.WHEEL_RADIUS = 0.165
         self.WHEELBASE = 0.650
 
-        self.wheel_position = 0.0
+        self.wheel_position_left = 0.0
+        self.wheel_position_right = 0.0
         self.steering_position = 0.0
-        self.prev_wheel_position = 0.0
+        self.prev_wheel_position_left = 0.0
+        self.prev_wheel_position_right = 0.0
         self.prev_time = None
 
         self.x, self.y, self.theta = 0.0, 0.0, 0.0
@@ -56,13 +58,16 @@ class OdometryNode(Node):
         Extracts wheel position and steering position.
         """
         for i, joint_name in enumerate(msg.joint_names):
-            if joint_name == 'rear_joint':
-                self.wheel_position = msg.interface_values[i].values[1]
+            if joint_name == 'rear_left_joint':
+                self.wheel_position_left = msg.interface_values[i].values[1]
+            if joint_name == 'rear_right_joint':
+                self.wheel_position_right = msg.interface_values[i].values[1]
             elif joint_name == 'front_steer_joint':
                 self.steering_position = msg.interface_values[i].values[0]
 
         if self.first_callback == True:
-            self.prev_wheel_position = self.wheel_position
+            self.prev_wheel_position_left = self.wheel_position_left
+            self.prev_wheel_position_right = self.wheel_position_right
             self.prev_time = self.get_clock().now()
             self.first_callback = False
 
@@ -78,28 +83,32 @@ class OdometryNode(Node):
         dt = (current_time - self.prev_time).nanoseconds * 1e-9
         self.prev_time = current_time
 
-        if self.wheel_position == 0.0 and self.steering_position == 0.0:
+        if self.wheel_position_left == 0.0 and self.wheel_position_right == 0.0 and self.steering_position == 0.0:
             print("waiting for the commands")
             return
 
         #wheel_noise = random.gauss(0, 0.02)  # Gaussian noise with mean=0, std=0.02
-        distance = (self.wheel_position - self.prev_wheel_position) * self.WHEEL_RADIUS
+        distance_left = (self.wheel_position_left - self.prev_wheel_position_left) * self.WHEEL_RADIUS
+        distance_right = (self.wheel_position_right - self.prev_wheel_position_right) * self.WHEEL_RADIUS
 
-        self.prev_wheel_position = self.wheel_position
+        distance_avg = (distance_left + distance_right) / 2
+
+        self.prev_wheel_position_left = self.wheel_position_left
+        self.prev_wheel_position_right = self.wheel_position_right
         steering_angle = self.steering_position
 
         if abs(steering_angle) > 1e-8:
             turning_radius = self.WHEELBASE / math.tan(steering_angle)
-            delta_theta = distance / turning_radius
+            delta_theta = distance_avg / turning_radius
         else:
-            delta_theta = 0.0
+            delta_theta = abs(distance_right - distance_left) / self.WHEELBASE
 
         if abs(steering_angle) > 1e-8:
             delta_x = turning_radius * (math.sin(self.theta + delta_theta) - math.sin(self.theta))
             delta_y = turning_radius * (math.cos(self.theta) - math.cos(self.theta + delta_theta))
         else:
-            delta_x = distance * math.cos(self.theta)
-            delta_y = distance * math.sin(self.theta)
+            delta_x = distance_avg * math.cos(self.theta)
+            delta_y = distance_avg * math.sin(self.theta)
 
         self.x += delta_x
         self.y += delta_y

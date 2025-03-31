@@ -5,7 +5,6 @@ import os
 from ament_index_python.packages import get_package_share_directory
 import math
 
-
 def generate_launch_description():
 
     distance = 5.8
@@ -47,4 +46,3 @@ def generate_launch_description():
         )
 
     ])
-
