@@ -1,6 +1,6 @@
 ekf_filter_node:
   ros__parameters:
-    sensor_timeout: 0.0001
+    sensor_timeout: 0.01
     frequency: 50.0
     two_d_mode: true
     publish_tf: true
@@ -14,47 +14,31 @@ ekf_filter_node:
     #         roll_vel, pitch_vel, yaw_vel,
     #         x_accel , y_accel  , z_accel]
 
-    #robot
-    odom0: "wheel_odom"
-
+    odom0: "wheel_odom_gazebo" # "wheel_odom" "wheel_odom_gazebo" 
     odom0_config: [true, true, false,
-                   false, false, false,
+                   false, false, true,
                    false, false, false,
                    false, false, false,
                    false, false, false]
 
-    odom0_nodelay: false
-    odom0_differential: true
-    odom0_queue_size: 4
-    odom0_relative: false
-
-
-    #use_control: true
-    #stamped_control: false
-
-
-    #control_timeout: 0.0002
     #control_config: [true, false, false, false, false, true]
+    odom0_nodelay: false
+    odom0_differential: false
+    odom0_queue_size: 4
 
-    # Places limits on how large the acceleration term will be. Should match your robot's kinematics.
-    #acceleration_limits: [10.0, 0.0, 0.0, 0.0, 0.0, 10.0]
-    #deceleration_limits: [10.0, 0.0, 0.0, 0.0, 0.0, 10.0]
-    #acceleration_gains: [0.8, 0.0, 0.0, 0.0, 0.0, 0.9]
-    #deceleration_gains: [1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
-
-    # robot
-    imu_frame: "id01_sensor_link"
-    imu0: "olive/imu/id01/filtered_imu"
+    #imu_frame: "ackermann/base_link/imu_sensor"
+    imu_frame: "ackermann/base_link/imu_sensor"  #"imu_link" # base_link # id01_base_link look at the tf tree
+    imu0: "ackermann/imu"  #"/olive/imu/id01/filtered_imu" "ackermann/imu"
 
     imu0_config: [false, false, false,
                   false, false, true,
                   false, false, false,
                   false, false, true,
-                  false, false, false]
+                  true, true, true]
 
     imu0_nodelay: false
     imu0_relative: true
-    imu0_queue_size: 15
+    imu0_queue_size: 10
     imu0_pose_rejection_threshold: 0.5
     imu0_twist_rejection_threshold: 0.5
     imu0_linear_acceleration_rejection_threshold: 0.5
@@ -62,22 +46,5 @@ ekf_filter_node:
     imu0_remove_gravitational_acceleration: true
     dynamic_process_noise_covariance: true
 
-    print_diagnostics: false
-    debug: false
-
-    # ordered as x, y, z, roll, pitch, yaw, vx, vy, vz, vroll, vpitch, vyaw, ax, ay, az. Defaults to the matrix below if
-    process_noise_covariance: [0.05,   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.05,   0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.05,   0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.02,   0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.02,   0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.02,    0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.02,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.03,   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.02,   0.0,    0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.02,   0.0,    0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.02,   0.0,    0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.02,   0.0,    0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.02,   0.0,
-                               0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.02]
+    print_diagnostics: true
+    debug: true

@@ -4,7 +4,7 @@ import random
 import rclpy
 from rclpy.node import Node
 from nav_msgs.msg import Odometry
-from sensor_msgs.msg import JointState
+from control_msgs.msg import DynamicJointState
 import math
 from rclpy.wait_for_message import wait_for_message
 from rclpy.duration import Duration
@@ -17,76 +17,52 @@ class OdometryNode(Node):
 
         self.WHEEL_RADIUS = 0.165
         self.WHEELBASE = 0.650
-        self.WHEEL_SEP = 0.605
 
-        self.wheel_position_left = 0.0
-        self.wheel_position_right = 0.0
-        self.steering_position_left = 0.0
-        self.steering_position_right = 0.0
-        self.prev_wheel_position_left = 0.0
-        self.prev_wheel_position_right = 0.0
+        self.wheel_position = 0.0
+        self.steering_position = 0.0
+        self.prev_wheel_position = 0.0
         self.prev_time = None
 
         self.x, self.y, self.theta = 0.0, 0.0, 0.0
 
-        self.get_logger().info("Waiting for /joint_states topic to become available...")
+        self.get_logger().info("Waiting for /dynamic_joint_states topic to become available...")
         start_time = self.get_clock().now()
         timeout = Duration(seconds=10)
 
         while rclpy.ok():
             topic_names_and_types = self.get_topic_names_and_types()
-            if '/joint_states' in dict(topic_names_and_types):
-                self.get_logger().info("/joint_states topic is available!")
+            if '/dynamic_joint_states' in dict(topic_names_and_types):
+                self.get_logger().info("/dynamic_joint_states topic is available!")
                 break
 
             if (self.get_clock().now() - start_time) > timeout:
-                self.get_logger().error("Timeout waiting for /joint_states topic!")
-                raise RuntimeError("Timeout waiting for /joint_states topic!")
+                self.get_logger().error("Timeout waiting for /dynamic_joint_states topic!")
+                raise RuntimeError("Timeout waiting for /dynamic_joint_states topic!")
 
             self.get_logger().info("Topic not available yet, retrying...")
             rclpy.spin_once(self, timeout_sec=1.0)
 
         self.first_callback = True
-        self.dynamic_joints_sub = self.create_subscription(JointState, '/joint_states', self.joint_states_callback, 10)
+        self.dynamic_joints_sub = self.create_subscription(DynamicJointState, '/dynamic_joint_states', self.dynamic_joint_states_callback, 10)
 
         self.odom_pub = self.create_publisher(Odometry, 'wheel_odom_gazebo', 10)
         self.tf_broadcaster = TransformBroadcaster(self)
 
         self.timer = self.create_timer(0.02, self.update_odometry)
 
-    def joint_states_callback(self, msg):
+    def dynamic_joint_states_callback(self, msg):
         """
-        Callback function to process /joint_states messages.
+        Callback function to process /dynamic_joint_states messages.
         Extracts wheel position and steering position.
         """
-        for i, joint_name in enumerate(msg.name):
-            try:
-                if joint_name == 'rear_left_wheel_bearing':
-                    if not math.isnan(msg.position[i]):
-                        self.wheel_position_left = msg.position[i]
-                    if not math.isnan(msg.velocity[i]):
-                        self.wheel_velocity_left = msg.velocity[i]
-
-                elif joint_name == 'rear_right_wheel_bearing':
-                    if not math.isnan(msg.position[i]):
-                        self.wheel_position_right = msg.position[i]
-                    if not math.isnan(msg.velocity[i]):
-                        self.wheel_velocity_right = msg.velocity[i]
-
-                elif joint_name == 'front_left_steer_bearing':
-                    if not math.isnan(msg.position[i]):
-                        self.steering_position_left = msg.position[i]
-
-                elif joint_name == 'front_right_steer_bearing':
-                    if not math.isnan(msg.position[i]):
-                        self.steering_position_right = msg.position[i]
-
-            except IndexError:
-                self.get_logger().warn(f"Index error processing joint {joint_name}")
+        for i, joint_name in enumerate(msg.joint_names):
+            if joint_name == 'rear_joint':
+                self.wheel_position = msg.interface_values[i].values[1]
+            elif joint_name == 'front_steer_joint':
+                self.steering_position = msg.interface_values[i].values[0]
 
         if self.first_callback == True:
-            self.prev_wheel_position_left = self.wheel_position_left
-            self.prev_wheel_position_right = self.wheel_position_right
+            self.prev_wheel_position = self.wheel_position
             self.prev_time = self.get_clock().now()
             self.first_callback = False
 
@@ -102,37 +78,28 @@ class OdometryNode(Node):
         dt = (current_time - self.prev_time).nanoseconds * 1e-9
         self.prev_time = current_time
 
-        if self.wheel_position_left == 0.0 and self.wheel_position_right == 0.0 and self.steering_position_left == 0.0 and self.steering_position_right == 0.0:
+        if self.wheel_position == 0.0 and self.steering_position == 0.0:
             print("waiting for the commands")
             return
 
-        self.steering_position = 0.5 * (
-           math.atan((self.WHEELBASE * math.tan(self.steering_position_left)) / (self.WHEELBASE + (self.WHEEL_SEP/2) * math.tan(self.steering_position_left))) +
-           math.atan((self.WHEELBASE * math.tan(self.steering_position_right)) / (self.WHEELBASE - (self.WHEEL_SEP/2) * math.tan(self.steering_position_right))))
-
-
         #wheel_noise = random.gauss(0, 0.02)  # Gaussian noise with mean=0, std=0.02
-        distance_left = (self.wheel_position_left - self.prev_wheel_position_left) * self.WHEEL_RADIUS
-        distance_right = (self.wheel_position_right - self.prev_wheel_position_right) * self.WHEEL_RADIUS
+        distance = (self.wheel_position - self.prev_wheel_position) * self.WHEEL_RADIUS
 
-        distance_avg = (distance_left + distance_right) / 2
-
-        self.prev_wheel_position_left = self.wheel_position_left
-        self.prev_wheel_position_right = self.wheel_position_right
+        self.prev_wheel_position = self.wheel_position
         steering_angle = self.steering_position
 
         if abs(steering_angle) > 1e-8:
             turning_radius = self.WHEELBASE / math.tan(steering_angle)
-            delta_theta = distance_avg / turning_radius
+            delta_theta = distance / turning_radius
         else:
-            delta_theta = abs(distance_right - distance_left) / self.WHEELBASE
+            delta_theta = 0.0
 
         if abs(steering_angle) > 1e-8:
             delta_x = turning_radius * (math.sin(self.theta + delta_theta) - math.sin(self.theta))
             delta_y = turning_radius * (math.cos(self.theta) - math.cos(self.theta + delta_theta))
         else:
-            delta_x = distance_avg * math.cos(self.theta)
-            delta_y = distance_avg * math.sin(self.theta)
+            delta_x = distance * math.cos(self.theta)
+            delta_y = distance * math.sin(self.theta)
 
         self.x += delta_x
         self.y += delta_y
