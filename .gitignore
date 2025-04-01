@@ -50,6 +50,9 @@ imu_localization/log/
 wheel_odometry_gazebo/install/
 wheel_odometry_gazebo/build/
 wheel_odometry_gazebo/log/
+wheel_odometry_gazebo_acker/install/
+wheel_odometry_gazebo_acker/build/
+wheel_odometry_gazebo_acker/log/
 HesaiLidar_ROS_2.0/
 record_camera/
 publish_stereo_pkg/

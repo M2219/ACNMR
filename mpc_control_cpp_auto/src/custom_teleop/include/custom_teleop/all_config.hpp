@@ -22,8 +22,8 @@ static constexpr double  V_WIDTH = 0.745 + 0.2; // m since hybrid A* currently d
 static constexpr double  REAR_AXLE_DISTANCE = 0.165+0.0; // m
 
 // Controller
-static constexpr int GOAL_X = 32.0; //48 goalx
-static constexpr int GOAL_Y = 2.5; // goaly
+static constexpr int GOAL_X = 48.0; //48 goalx
+static constexpr int GOAL_Y = 3.5; // goaly
 static constexpr int GOAL_Z = 0.0; // goalz
 
 static constexpr int NX = 4; // states
