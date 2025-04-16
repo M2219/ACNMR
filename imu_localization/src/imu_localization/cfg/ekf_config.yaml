@@ -1,6 +1,6 @@
 ekf_filter_node:
   ros__parameters:
-    sensor_timeout: 0.0001
+    sensor_timeout: 0.01
     frequency: 50.0
     two_d_mode: true
     publish_tf: true
@@ -54,7 +54,7 @@ ekf_filter_node:
 
     imu0_nodelay: false
     imu0_relative: true
-    imu0_queue_size: 15
+    imu0_queue_size: 20
     imu0_pose_rejection_threshold: 0.5
     imu0_twist_rejection_threshold: 0.5
     imu0_linear_acceleration_rejection_threshold: 0.5

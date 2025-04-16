@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import random
 import rclpy
 from rclpy.node import Node
@@ -109,7 +108,6 @@ class OdometryNode(Node):
         self.steering_position = 0.5 * (
            math.atan((self.WHEELBASE * math.tan(self.steering_position_left)) / (self.WHEELBASE + (self.WHEEL_SEP/2) * math.tan(self.steering_position_left))) +
            math.atan((self.WHEELBASE * math.tan(self.steering_position_right)) / (self.WHEELBASE - (self.WHEEL_SEP/2) * math.tan(self.steering_position_right))))
-
 
         #wheel_noise = random.gauss(0, 0.02)  # Gaussian noise with mean=0, std=0.02
         distance_left = (self.wheel_position_left - self.prev_wheel_position_left) * self.WHEEL_RADIUS

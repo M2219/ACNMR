@@ -12,9 +12,8 @@ def generate_launch_description():
     lateral_error = 2
     yaw_correction = 0 * math.atan2(lateral_error, distance)
 
-
     config_path = os.path.join(
-        get_package_share_directory('imu_localization'), 'cfg', 'ekf_config_simulation.yaml'
+        get_package_share_directory('imu_localization'), 'cfg', 'ekf_config.yaml'
     )
 
     print(f"Config path: {config_path}")
@@ -29,12 +28,11 @@ def generate_launch_description():
             parameters=[config_path, {"use_sim_time": False, "debug": False}],
         ),
 
-        # Static transform from base_link to id01_base_link
         Node(
             package="tf2_ros",
             executable="static_transform_publisher",
             name="static_transform_publisher",
-            arguments=["0", "0", "0", "0.0", "0.0", str(yaw_correction), "base_link", "ackermann/base_link/imu_sensor"],
+            arguments=["0", "0", "0", "0.0", "0.0", str(yaw_correction), "base_link", "id01_base_link"],
             output="screen"
         ),
 
@@ -42,9 +40,24 @@ def generate_launch_description():
             package="tf2_ros",
             executable="static_transform_publisher",
             name="static_transform_publisher",
-            arguments=["0", "0", "0", "0.0", "0.0", "0.0", "ackermann/base_link/imu_sensor", "imu_link"],
+            arguments=["0", "0", "0", "0.0", "0.0", "0.0", "id01_base_link", "id01_sensor_link"],
             output="screen"
         )
+        # Static transform from base_link to id01_base_link
+        #Node(
+        #    package="tf2_ros",
+        #    executable="static_transform_publisher",
+        #    name="static_transform_publisher",
+        #    arguments=["0", "0", "0", "0.0", "0.0", str(yaw_correction), "base_link", "ackermann/base_link/imu_sensor"],
+        #    output="screen"
+        #),
 
+        #Node(
+        #    package="tf2_ros",
+        #    executable="static_transform_publisher",
+        #    name="static_transform_publisher",
+        #    arguments=["0", "0", "0", "0.0", "0.0", "0.0", "ackermann/base_link/imu_sensor", "imu_link"],
+        #    output="screen"
+        #)
     ])
 

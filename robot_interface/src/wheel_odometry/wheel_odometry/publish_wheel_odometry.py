@@ -19,7 +19,7 @@ class OdometryNode(Node):
         self.WHEEL_RADIUS_RIGHT = 0.15186
         self.ENCODER_RESOLUTION = 409500  # pulses per revolution (for rear wheels)
         self.STEERING_RESOLUTION = 409500  # pulses per revolution (for steering motor)
-        self.WHEELBASE = 0.610  # meters (distance between front and rear axles)
+        self.WHEELBASE = 0.645  # meters (distance between front and rear axles)
 
         self.wheel_calibration = False
         left_ticks = []

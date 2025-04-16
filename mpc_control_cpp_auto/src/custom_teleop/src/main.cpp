@@ -39,7 +39,7 @@ public:
         path_updated = false;
         path_initialized = false;
         localization_odom_updated = false;
-        mpcWindow = 30;
+        mpcWindow = 10;
 
         // Publishers
         cmd_vel_pub = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);

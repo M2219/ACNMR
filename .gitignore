@@ -30,12 +30,10 @@ ORB_SLAM3/build/
 publish_stereo_pkg/install/
 publish_stereo_pkg/build/
 publish_stereo_pkg/log/
-orbslam_ws/install/
-orbslam_ws/build/
-orbslam_ws/log/
-orbslam_ws/src/orbslam3_ros2/vocabulary/
-ORB_SLAM3_b/
-ORB_SLAM3/
+openvins/install/
+openvins/build/
+openvins/log/
+openvins/V2/
 depthai-ros/
 robot_slam.xml/
 acker_controller_ign/install/

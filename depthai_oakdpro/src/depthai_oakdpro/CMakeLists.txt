@@ -22,6 +22,7 @@ include_directories(
 
 # Define executable
 add_executable(depthai_oakdpro_node src/depthai_oakdpro_node.cpp)
+add_executable(sync_sanity_checker src/sync_sanity_checker.cpp)
 
 # Link libraries
 target_link_libraries(depthai_oakdpro_node
@@ -29,6 +30,7 @@ target_link_libraries(depthai_oakdpro_node
   depthai_bridge::depthai_bridge  # Ensure depthai_bridge is linked
   ${OpenCV_LIBS}
 )
+
 
 # Add dependencies
 ament_target_dependencies(depthai_oakdpro_node
@@ -38,10 +40,12 @@ ament_target_dependencies(depthai_oakdpro_node
   depthai_bridge
 )
 
+ament_target_dependencies(sync_sanity_checker rclcpp sensor_msgs)
+
+
 # Install the node
-install(TARGETS depthai_oakdpro_node
-  DESTINATION lib/${PROJECT_NAME}
-)
+install(TARGETS depthai_oakdpro_node  DESTINATION lib/${PROJECT_NAME})
+install(TARGETS sync_sanity_checker DESTINATION lib/${PROJECT_NAME})
 
 # Install launch files
 install(DIRECTORY launch/
