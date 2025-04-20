@@ -13,7 +13,7 @@ class KittiImagePublisher(Node):
         self.get_logger().info("Image Publisher Node Started!")
 
         # Read parameters
-        self.kitti_path = '/root/ACNMR/00'
+        self.kitti_path = '/root/ACNMR/ktest'
         self.fps = 10
 
         # Directories for left and right images

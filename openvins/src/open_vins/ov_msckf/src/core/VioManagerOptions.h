@@ -441,8 +441,13 @@ struct VioManagerOptions {
   /// Frequency we want to track images at (higher freq ones will be dropped)
   double track_frequency = 20.0;
 
+  bool use_nn = true;
+
+  std::string stereo_model_path = "default";
+  bool use_cuda = true;
   /// Parameters used by our feature initialize / triangulator
   ov_core::FeatureInitializerOptions featinit_options;
+
 
   /**
    * @brief This function will load print out all parameters related to visual tracking
@@ -454,6 +459,7 @@ struct VioManagerOptions {
     if (parser != nullptr) {
       parser->parse_config("use_stereo", use_stereo);
       parser->parse_config("use_klt", use_klt);
+      parser->parse_config("use_nn", use_nn);
       parser->parse_config("use_aruco", use_aruco);
       parser->parse_config("downsize_aruco", downsize_aruco);
       parser->parse_config("downsample_cameras", downsample_cameras);
@@ -465,6 +471,8 @@ struct VioManagerOptions {
       parser->parse_config("grid_x", grid_x);
       parser->parse_config("grid_y", grid_y);
       parser->parse_config("min_px_dist", min_px_dist);
+      parser->parse_config("stereo_model_path", stereo_model_path);
+      parser->parse_config("use_cuda", use_cuda);
       std::string histogram_method_str = "HISTOGRAM";
       parser->parse_config("histogram_method", histogram_method_str);
       if (histogram_method_str == "NONE") {
@@ -499,6 +507,9 @@ struct VioManagerOptions {
     PRINT_DEBUG("  - hist method: %d\n", (int)histogram_method);
     PRINT_DEBUG("  - knn ratio: %.3f\n", knn_ratio);
     PRINT_DEBUG("  - track frequency: %.1f\n", track_frequency);
+    PRINT_DEBUG("  - use_nn: %d\n", use_nn);
+    PRINT_DEBUG("  - use_cuda: %d\n", use_cuda);
+    PRINT_DEBUG("  - stereo_model_path: %s\n", stereo_model_path.c_str());
     featinit_options.print(parser);
   }
 

@@ -17,12 +17,12 @@ launch_args = [
     ),
     DeclareLaunchArgument(
         name="config",
-        default_value="oak_d_pro",
+        default_value="euroc_mav",
         description="euroc_mav, tum_vi, rpng_aruco...",
     ),
     DeclareLaunchArgument(
         name="config_path",
-        default_value="/root/ACNMR/openvins/src/open_vins/config/oak_d_pro/estimator_config.yaml",
+        default_value="",
         description="path to estimator_config.yaml. If not given, determined based on provided 'config' above",
     ),
     DeclareLaunchArgument(

@@ -27,6 +27,7 @@
 #include "track/TrackAruco.h"
 #include "track/TrackDescriptor.h"
 #include "track/TrackKLT.h"
+#include "track/TrackACC.h"
 #include "track/TrackSIM.h"
 #include "types/Landmark.h"
 #include "types/LandmarkRepresentation.h"
@@ -129,21 +130,35 @@ VioManager::VioManager(VioManagerOptions &params_) : thread_init_running(false),
   // NOTE: after we initialize we will increase the total number of feature tracks
   // NOTE: we will split the total number of features over all cameras uniformly
   int init_max_features = std::floor((double)params.init_options.init_max_features / (double)params.state_options.num_cameras);
-  if (params.use_klt) {
-    trackFEATS = std::shared_ptr<TrackBase>(new TrackKLT(state->_cam_intrinsics_cameras, init_max_features,
-                                                         state->_options.max_aruco_features, params.use_stereo, params.histogram_method,
-                                                         params.fast_threshold, params.grid_x, params.grid_y, params.min_px_dist));
-  } else {
-    trackFEATS = std::shared_ptr<TrackBase>(new TrackDescriptor(
-        state->_cam_intrinsics_cameras, init_max_features, state->_options.max_aruco_features, params.use_stereo, params.histogram_method,
-        params.fast_threshold, params.grid_x, params.grid_y, params.min_px_dist, params.knn_ratio));
+
+  if(!params.use_nn)
+  {
+      if (params.use_klt) {
+          trackFEATS = std::shared_ptr<TrackBase>(new TrackKLT(state->_cam_intrinsics_cameras, init_max_features,
+                                                               state->_options.max_aruco_features, params.use_stereo, params.histogram_method,
+                                                               params.fast_threshold, params.grid_x, params.grid_y, params.min_px_dist));
+      } else {
+          trackFEATS = std::shared_ptr<TrackBase>(new TrackDescriptor(
+                  state->_cam_intrinsics_cameras, params.num_pts, state->_options.max_aruco_features, params.use_stereo, params.histogram_method,
+                  params.fast_threshold, params.grid_x, params.grid_y, params.min_px_dist, params.knn_ratio));
+      }
   }
+  else
+  {
+          trackFEATS = std::shared_ptr<TrackBase>(new TrackACC(state->_cam_intrinsics_cameras, init_max_features,
+                                                               state->_options.max_aruco_features, params.use_stereo, params.histogram_method,
+                                                               params.fast_threshold, params.grid_x, params.grid_y, params.min_px_dist,
+                                                               params.stereo_model_path, params.use_cuda));
+  }
+
 
   // Initialize our aruco tag extractor
   if (params.use_aruco) {
     trackARUCO = std::shared_ptr<TrackBase>(new TrackAruco(state->_cam_intrinsics_cameras, state->_options.max_aruco_features,
                                                            params.use_stereo, params.histogram_method, params.downsize_aruco));
   }
+
+
 
   // Initialize our state propagator
   propagator = std::make_shared<Propagator>(params.imu_noises, params.gravity_mag);

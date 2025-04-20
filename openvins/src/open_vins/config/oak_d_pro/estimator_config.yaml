@@ -7,6 +7,7 @@ integration: "rk4" # discrete, rk4, analytical (if rk4 or analytical used then a
 use_stereo: true # if we have more than 1 camera, if we should try to track stereo constraints between pairs
 max_cameras: 2 # how many cameras we have 1 = mono, 2 = stereo, >2 = binocular (all mono tracking)
 
+
 calib_cam_extrinsics: true # if the transform between camera and IMU should be optimized R_ItoC, p_CinI
 calib_cam_intrinsics: true # if camera intrinsics should be optimized (focal, center, distortion)
 calib_cam_timeoffset: true # if timeoffset between camera and IMU should be optimized
@@ -95,6 +96,11 @@ use_aruco: false
 num_aruco: 1024
 downsize_aruco: true
 
+# stereo matching model
+use_nn: true
+use_cuda: true
+stereo_model_path: "/tmp/stereoacc_traced.pt"
+
 # ==================================================================
 # ==================================================================
 
@@ -113,7 +119,3 @@ use_mask: false
 # imu config should also have the correct noise values
 relative_config_imu: "kalibr_imu_chain.yaml"
 relative_config_imucam: "kalibr_imucam_chain.yaml"
-
-
-
-

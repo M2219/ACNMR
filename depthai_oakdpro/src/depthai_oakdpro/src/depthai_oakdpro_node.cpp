@@ -22,8 +22,8 @@ int main(int argc, char **argv) {
     auto imu = pipeline->create<dai::node::IMU>();
     auto xoutImu = pipeline->create<dai::node::XLinkOut>();
     xoutImu->setStreamName("imu");
-    imu->enableIMUSensor(dai::IMUSensor::ACCELEROMETER_RAW, 400);
-    imu->enableIMUSensor(dai::IMUSensor::GYROSCOPE_RAW, 400);
+    imu->enableIMUSensor(dai::IMUSensor::ACCELEROMETER_RAW, 200);
+    imu->enableIMUSensor(dai::IMUSensor::GYROSCOPE_RAW, 200);
     imu->setBatchReportThreshold(1);
     imu->setMaxBatchReports(1);  // Get one message only for now.
     imu->out.link(xoutImu->input);
@@ -39,14 +39,22 @@ int main(int argc, char **argv) {
     auto xoutRectifL = pipeline->create<dai::node::XLinkOut>();
     auto xoutRectifR = pipeline->create<dai::node::XLinkOut>();
 
+    auto controlIn = pipeline->create<dai::node::XLinkIn>();
+
+
+    controlIn->setStreamName("control");
+    controlIn->out.link(camRight->inputControl);
+    controlIn->out.link(camLeft->inputControl);
+
+
     // Set camera properties
     camLeft->setBoardSocket(dai::CameraBoardSocket::LEFT);
-    camLeft->setResolution(dai::MonoCameraProperties::SensorResolution::THE_720_P);
+    camLeft->setResolution(dai::MonoCameraProperties::SensorResolution::THE_400_P);
     camLeft->setFps(20.0);
     //camLeft.setSyncMode(True)
 
     camRight->setBoardSocket(dai::CameraBoardSocket::RIGHT);
-    camRight->setResolution(dai::MonoCameraProperties::SensorResolution::THE_720_P);
+    camRight->setResolution(dai::MonoCameraProperties::SensorResolution::THE_400_P);
     camRight->setFps(20.0);
     //camRight.setSyncMode(True)
 
@@ -68,6 +76,23 @@ int main(int argc, char **argv) {
 
     std::shared_ptr<dai::Device> device = std::make_shared<dai::Device>(*pipeline);
     auto calibrationHandler = device->readCalibration();
+
+    auto controlQueue = device->getInputQueue("control");
+    // Set manual exposure
+    dai::CameraControl ctrl;
+    ctrl.setManualExposure(2000, 100);
+    ctrl.setAutoExposureLock(true);
+    ctrl.setManualWhiteBalance(5500);    // Daylight ~5500K
+    ctrl.setAutoWhiteBalanceLock(true);
+    ctrl.setManualFocus(128);  // 0-255 range
+    ctrl.setAntiBandingMode(dai::CameraControl::AntiBandingMode::MAINS_50_HZ);
+    ctrl.setLumaDenoise(2);      // Try 1–2
+    ctrl.setChromaDenoise(2);    // Try 1–2
+    ctrl.setSharpness(1);  // Range 0–4
+    controlQueue->send(ctrl);
+    //ctrl.setContrast(1);
+    //ctrl.setBrightness(0);
+    //ctrl.setSaturation(0);
 
     auto leftQueue = device->getOutputQueue("left", 30, false);
     auto rightQueue = device->getOutputQueue("right", 30, false);

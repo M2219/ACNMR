@@ -24,9 +24,6 @@ lidar_sim/build/
 lidar_sim/install/
 lidar_sim/log/
 record_camera/
-catkin_ws_lidar_real/
-ORB_SLAM3/build/
-00/
 publish_stereo_pkg/install/
 publish_stereo_pkg/build/
 publish_stereo_pkg/log/
@@ -34,8 +31,8 @@ openvins/install/
 openvins/build/
 openvins/log/
 openvins/V2/
+openvins/
 depthai-ros/
-robot_slam.xml/
 acker_controller_ign/install/
 acker_controller_ign/build/
 acker_controller_ign/log/
@@ -57,4 +54,10 @@ publish_stereo_pkg/
 depthai_oakdpro/install/
 depthai_oakdpro/build/
 depthai_oakdpro/log/
-
+StereoACC_cpp/
+GHUStereo_cpp/
+disparity_oakdpro/install/
+disparity_oakdpro/build/
+disparity_oakdpro/log/
+disparity_oakdpro/src/disparity_oakdpro/config/
+oakV2/

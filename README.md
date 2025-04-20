@@ -18,7 +18,7 @@ This branch is updating based on ROS2 ...
     - [map_service](#map_service)
     - [lidar_sim](#lidar_sim)
     - [wheel_odometry_gazebo](#wheel_odometry_gazebo)
-    - [orbslam_ws](#orbslam_ws)
+    - [openvins](#openvins)
     - [imu_localization](#imu_localization)
   - [Usage](#usage)
   - [simulation_result](#simulation_result)
@@ -94,8 +94,8 @@ This package serves as the host for LiDAR data processing. Currently, it include
 ## wheel_odometry_gazebo
 This package pubishes wheel odometry based on gazebo simulation.
 
-## orbslam_ws
-This package aims to generates map and trajectory using OrbSlAM3.
+## openvins
+This package aims to generates map and trajectory using openvins visual-inertial.
 
 ## imu_localization
 This package provides /odometry/filtered by fusing IMU and wheel encoder odometry.
