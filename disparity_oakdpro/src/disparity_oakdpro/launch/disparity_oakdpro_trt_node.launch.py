@@ -9,7 +9,7 @@ def generate_launch_description():
         get_package_share_directory('disparity_oakdpro'),
         'config'
     )
-    model_path = os.path.join(config_dir, 'model_ghustereo8_nce.plan')
+    model_path = os.path.join(config_dir, 'model_stereoacc.plan')
 
     disparity_node_trt = Node(
         package='disparity_oakdpro',

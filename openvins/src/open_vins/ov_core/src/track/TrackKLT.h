@@ -114,6 +114,12 @@ protected:
                                 const cv::Mat &mask1, size_t cam_id_left, size_t cam_id_right, std::vector<cv::KeyPoint> &pts0,
                                 std::vector<cv::KeyPoint> &pts1, std::vector<size_t> &ids0, std::vector<size_t> &ids1);
 
+  void vis_stereo(const std::vector<cv::Point2f> &pts0,
+                          const std::vector<cv::Point2f> &pts1,
+                          const std::vector<uchar> &mask_out,
+                          const cv::Mat &img0,
+                          const cv::Mat &img1);
+
   /**
    * @brief KLT track between two images, and do RANSAC afterwards
    * @param img0pyr starting image pyramid

@@ -443,8 +443,6 @@ struct VioManagerOptions {
 
   bool use_nn = true;
 
-  std::string stereo_model_path = "default";
-  bool use_cuda = true;
   /// Parameters used by our feature initialize / triangulator
   ov_core::FeatureInitializerOptions featinit_options;
 
@@ -471,8 +469,6 @@ struct VioManagerOptions {
       parser->parse_config("grid_x", grid_x);
       parser->parse_config("grid_y", grid_y);
       parser->parse_config("min_px_dist", min_px_dist);
-      parser->parse_config("stereo_model_path", stereo_model_path);
-      parser->parse_config("use_cuda", use_cuda);
       std::string histogram_method_str = "HISTOGRAM";
       parser->parse_config("histogram_method", histogram_method_str);
       if (histogram_method_str == "NONE") {
@@ -508,8 +504,6 @@ struct VioManagerOptions {
     PRINT_DEBUG("  - knn ratio: %.3f\n", knn_ratio);
     PRINT_DEBUG("  - track frequency: %.1f\n", track_frequency);
     PRINT_DEBUG("  - use_nn: %d\n", use_nn);
-    PRINT_DEBUG("  - use_cuda: %d\n", use_cuda);
-    PRINT_DEBUG("  - stereo_model_path: %s\n", stereo_model_path.c_str());
     featinit_options.print(parser);
   }
 

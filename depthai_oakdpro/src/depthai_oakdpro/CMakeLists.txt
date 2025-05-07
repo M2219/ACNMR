@@ -14,23 +14,42 @@ find_package(depthai_ros_msgs REQUIRED)
 find_package(depthai_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 
+# oak pro gpu
+find_package(CUDA REQUIRED)
+set(TENSORRT_LIBS nvinfer nvonnxparser nvinfer_plugin)
+
 # Include directories
 include_directories(
   include
   ${OpenCV_INCLUDE_DIRS}
+  ${CUDA_INCLUDE_DIRS}
+  /usr/include/x86_64-linux-gnu
+
 )
 
 # Define executable
 add_executable(depthai_oakdpro_node src/depthai_oakdpro_node.cpp)
+add_executable(depthai_oakdpro_cuda_node src/depthai_oakdpro_cuda_node.cpp)
 add_executable(sync_sanity_checker src/sync_sanity_checker.cpp)
 
 # Link libraries
 target_link_libraries(depthai_oakdpro_node
   depthai::core
   depthai_bridge::depthai_bridge  # Ensure depthai_bridge is linked
+  depthai::opencv
   ${OpenCV_LIBS}
 )
 
+target_link_libraries(depthai_oakdpro_cuda_node
+  depthai::core
+  depthai_bridge::depthai_bridge  # Ensure depthai_bridge is linked
+  depthai::opencv
+  ${OpenCV_LIBS}
+  ${TENSORRT_LIBS}
+  ${CUDA_LIBRARIES}
+  /usr/lib/x86_64-linux-gnu
+
+)
 
 # Add dependencies
 ament_target_dependencies(depthai_oakdpro_node
@@ -38,6 +57,15 @@ ament_target_dependencies(depthai_oakdpro_node
   sensor_msgs
   depthai_ros_msgs
   depthai_bridge
+  OpenCV
+)
+
+ament_target_dependencies(depthai_oakdpro_cuda_node
+  rclcpp
+  sensor_msgs
+  depthai_ros_msgs
+  depthai_bridge
+  OpenCV
 )
 
 ament_target_dependencies(sync_sanity_checker rclcpp sensor_msgs)
@@ -45,6 +73,7 @@ ament_target_dependencies(sync_sanity_checker rclcpp sensor_msgs)
 
 # Install the node
 install(TARGETS depthai_oakdpro_node  DESTINATION lib/${PROJECT_NAME})
+install(TARGETS depthai_oakdpro_cuda_node  DESTINATION lib/${PROJECT_NAME})
 install(TARGETS sync_sanity_checker DESTINATION lib/${PROJECT_NAME})
 
 # Install launch files

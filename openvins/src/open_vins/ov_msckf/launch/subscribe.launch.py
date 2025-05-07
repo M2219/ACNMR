@@ -44,6 +44,24 @@ launch_args = [
         name="save_total_state",
         default_value="false",
         description="record the total state with calibration and features to a txt file",
+    ),
+    # New arguments for PoseToFileNode
+    DeclareLaunchArgument(
+        name="topic",
+        default_value="/ov_msckf/poseimu",
+        description="Topic to subscribe to (e.g. /pose, /odom)"
+    ),
+
+    DeclareLaunchArgument(
+        name="topic_type",
+        default_value="PoseWithCovarianceStamped",
+        description="Type of the topic to subscribe to (e.g. PoseStamped, Odometry)"
+    ),
+
+    DeclareLaunchArgument(
+        name="output",
+        default_value="/tmp/pose_output.txt",
+        description="Output file path for recording the data"
     )
 ]
 
@@ -104,7 +122,20 @@ def launch_setup(context):
             ],
     )
 
-    return [node1, node2]
+    node3 = Node(
+        package="ov_eval",
+        executable="pose_to_file",
+        namespace=LaunchConfiguration("namespace"),
+        output="screen",
+        parameters=[
+            {"verbosity": LaunchConfiguration("verbosity")},
+            {"topic": LaunchConfiguration("topic")},
+            {"topic_type": LaunchConfiguration("topic_type")},
+            {"output": LaunchConfiguration("output")},
+        ]
+    )
+
+    return [node1, node2, node3]
 
 
 def generate_launch_description():

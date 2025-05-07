@@ -29,11 +29,11 @@
 #include <Eigen/Eigen>
 #include <boost/filesystem.hpp>
 
-#include <geometry_msgs/PoseStamped.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
-#include <geometry_msgs/TransformStamped.h>
-#include <nav_msgs/Odometry.h>
-#include <ros/ros.h>
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
+#include <geometry_msgs/msg/transform_stamped.hpp>
+#include <nav_msgs/msg/odometry.hpp>
+#include <rclcpp/rclcpp.hpp>
 
 namespace ov_eval {
 
@@ -44,43 +44,48 @@ namespace ov_eval {
  * Output is in a text file that is space deliminated and can be read by all scripts.
  * If we have a covariance then we also save the upper triangular part to file so we can calculate NEES values.
  */
-class Recorder {
-
+class Recorder
+{
 public:
-  /**
-   * @brief Default constructor that will open the specified file on disk.
-   * If the output directory does not exists this will also create the directory path to this file.
-   * @param filename Desired file we want to "record" into
-   */
-  Recorder(std::string filename) {
-    // Create folder path to this location if not exists
-    boost::filesystem::path dir(filename.c_str());
-    if (boost::filesystem::create_directories(dir.parent_path())) {
-      ROS_INFO("Created folder path to output file.");
-      ROS_INFO("Path: %s", dir.parent_path().c_str());
-    }
-    // If it exists, then delete it
-    if (boost::filesystem::exists(filename)) {
-      ROS_WARN("Output file exists, deleting old file....");
-      boost::filesystem::remove(filename);
-    }
-    // Open this file we want to write to
-    outfile.open(filename.c_str());
-    if (outfile.fail()) {
-      ROS_ERROR("Unable to open output file!!");
-      ROS_ERROR("Path: %s", filename.c_str());
-      std::exit(EXIT_FAILURE);
-    }
-    outfile << "# timestamp(s) tx ty tz qx qy qz qw Pr11 Pr12 Pr13 Pr22 Pr23 Pr33 Pt11 Pt12 Pt13 Pt22 Pt23 Pt33" << std::endl;
-    // Set initial state values
-    timestamp = -1;
-    q_ItoG << 0, 0, 0, 1;
-    p_IinG = Eigen::Vector3d::Zero();
-    cov_rot = Eigen::Matrix<double, 3, 3>::Zero();
-    cov_pos = Eigen::Matrix<double, 3, 3>::Zero();
-    has_covariance = false;
-  }
+    /**
+     * @brief Default constructor that will open the specified file on disk.
+     * If the output directory does not exist, this will also create the directory path to this file.
+     * @param filename Desired file we want to "record" into
+     */
+    Recorder(const std::string &filename)
+    {
 
+        // Create folder path to this location if not exists
+        boost::filesystem::path dir(filename.c_str());
+        if (boost::filesystem::create_directories(dir.parent_path())) {
+            RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Created folder path to output file.");
+            RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Path: %s", dir.parent_path().c_str());
+        }
+
+        // If it exists, then delete it
+        if (boost::filesystem::exists(filename)) {
+            RCLCPP_WARN(rclcpp::get_logger("rclcpp"), "Output file exists, deleting old file....");
+            boost::filesystem::remove(filename);
+        }
+
+        // Open this file we want to write to
+        outfile.open(filename.c_str());
+        if (outfile.fail()) {
+            RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Unable to open output file!!");
+            RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Path: %s", filename.c_str());
+            std::exit(EXIT_FAILURE);
+        }
+
+        outfile << "# timestamp(s) tx ty tz qx qy qz qw Pr11 Pr12 Pr13 Pr22 Pr23 Pr33 Pt11 Pt12 Pt13 Pt22 Pt23 Pt33" << std::endl;
+
+        // Set initial state values
+        timestamp = -1;
+        q_ItoG << 0, 0, 0, 1;
+        p_IinG = Eigen::Vector3d::Zero();
+        cov_rot = Eigen::Matrix<double, 3, 3>::Zero();
+        cov_pos = Eigen::Matrix<double, 3, 3>::Zero();
+        has_covariance = false;
+    }
   /**
    * @brief Callback for nav_msgs::Odometry message types.
    *
@@ -89,31 +94,41 @@ public:
    *
    * @param msg New message
    */
-  void callback_odometry(const nav_msgs::OdometryPtr &msg) {
-    timestamp = msg->header.stamp.toSec();
-    q_ItoG << msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w;
-    p_IinG << msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z;
-    cov_pos << msg->pose.covariance.at(0), msg->pose.covariance.at(1), msg->pose.covariance.at(2), msg->pose.covariance.at(6),
-        msg->pose.covariance.at(7), msg->pose.covariance.at(8), msg->pose.covariance.at(12), msg->pose.covariance.at(13),
-        msg->pose.covariance.at(14);
-    cov_rot << msg->pose.covariance.at(21), msg->pose.covariance.at(22), msg->pose.covariance.at(23), msg->pose.covariance.at(27),
-        msg->pose.covariance.at(28), msg->pose.covariance.at(29), msg->pose.covariance.at(33), msg->pose.covariance.at(34),
-        msg->pose.covariance.at(35);
-    has_covariance = true;
-    write();
-  }
+    void callback_odometry(const nav_msgs::msg::Odometry::SharedPtr msg)
+    {
+        timestamp = msg->header.stamp.sec + msg->header.stamp.nanosec * 1e-9;  // Convert to seconds
+        q_ItoG << msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, 
+                  msg->pose.pose.orientation.z, msg->pose.pose.orientation.w;
+        p_IinG << msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z;
 
+        // Extract covariance matrix for position and rotation
+        cov_pos << msg->pose.covariance[0], msg->pose.covariance[1], msg->pose.covariance[2],
+                   msg->pose.covariance[6], msg->pose.covariance[7], msg->pose.covariance[8],
+                   msg->pose.covariance[12], msg->pose.covariance[13], msg->pose.covariance[14];
+
+        cov_rot << msg->pose.covariance[21], msg->pose.covariance[22], msg->pose.covariance[23],
+                   msg->pose.covariance[27], msg->pose.covariance[28], msg->pose.covariance[29],
+                   msg->pose.covariance[33], msg->pose.covariance[34], msg->pose.covariance[35];
+
+        has_covariance = true;
+
+        // Call a function to handle the data, e.g., writing it to a file
+        write();
+    }
   /**
    * @brief Callback for geometry_msgs::PoseStamped message types
    * @param msg New message
    */
-  void callback_pose(const geometry_msgs::PoseStampedPtr &msg) {
-    timestamp = msg->header.stamp.toSec();
-    q_ItoG << msg->pose.orientation.x, msg->pose.orientation.y, msg->pose.orientation.z, msg->pose.orientation.w;
-    p_IinG << msg->pose.position.x, msg->pose.position.y, msg->pose.position.z;
-    write();
-  }
+    void callback_pose(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
+    {
+        timestamp = msg->header.stamp.sec + msg->header.stamp.nanosec * 1e-9;  // Convert to seconds
+        q_ItoG << msg->pose.orientation.x, msg->pose.orientation.y,
+                  msg->pose.orientation.z, msg->pose.orientation.w;
+        p_IinG << msg->pose.position.x, msg->pose.position.y, msg->pose.position.z;
 
+        // Call a function to handle the data (e.g., writing it to a file)
+        write();
+    }
   /**
    * @brief Callback for geometry_msgs::PoseWithCovarianceStamped message types.
    *
@@ -122,31 +137,52 @@ public:
    *
    * @param msg New message
    */
-  void callback_posecovariance(const geometry_msgs::PoseWithCovarianceStampedPtr &msg) {
-    timestamp = msg->header.stamp.toSec();
-    q_ItoG << msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w;
-    p_IinG << msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z;
-    cov_pos << msg->pose.covariance.at(0), msg->pose.covariance.at(1), msg->pose.covariance.at(2), msg->pose.covariance.at(6),
-        msg->pose.covariance.at(7), msg->pose.covariance.at(8), msg->pose.covariance.at(12), msg->pose.covariance.at(13),
-        msg->pose.covariance.at(14);
-    cov_rot << msg->pose.covariance.at(21), msg->pose.covariance.at(22), msg->pose.covariance.at(23), msg->pose.covariance.at(27),
-        msg->pose.covariance.at(28), msg->pose.covariance.at(29), msg->pose.covariance.at(33), msg->pose.covariance.at(34),
-        msg->pose.covariance.at(35);
-    has_covariance = true;
-    write();
-  }
+    void callback_posecovariance(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
+    {
+        // Extract timestamp from the message
+        timestamp = msg->header.stamp.sec + msg->header.stamp.nanosec * 1e-9;  // Convert to seconds
+
+        // Extract quaternion orientation
+        q_ItoG << msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, 
+                  msg->pose.pose.orientation.z, msg->pose.pose.orientation.w;
+
+        // Extract position (translation)
+        p_IinG << msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z;
+
+        // Extract covariance for position and rotation
+        cov_pos << msg->pose.covariance[0], msg->pose.covariance[1], msg->pose.covariance[2], 
+                   msg->pose.covariance[6], msg->pose.covariance[7], msg->pose.covariance[8], 
+                   msg->pose.covariance[12], msg->pose.covariance[13], msg->pose.covariance[14];
+
+        cov_rot << msg->pose.covariance[21], msg->pose.covariance[22], msg->pose.covariance[23], 
+                   msg->pose.covariance[27], msg->pose.covariance[28], msg->pose.covariance[29], 
+                   msg->pose.covariance[33], msg->pose.covariance[34], msg->pose.covariance[35];
+
+        has_covariance = true;
+
+        // Call write function (you can define your own logic)
+        write();
+    }
 
   /**
    * @brief Callback for geometry_msgs::TransformStamped message types
    * @param msg New message
    */
-  void callback_transform(const geometry_msgs::TransformStampedPtr &msg) {
-    timestamp = msg->header.stamp.toSec();
-    q_ItoG << msg->transform.rotation.x, msg->transform.rotation.y, msg->transform.rotation.z, msg->transform.rotation.w;
-    p_IinG << msg->transform.translation.x, msg->transform.translation.y, msg->transform.translation.z;
-    write();
-  }
+    void callback_transform(const geometry_msgs::msg::TransformStamped::SharedPtr msg)
+    {
+        // Extract timestamp from the message
+        timestamp = msg->header.stamp.sec + msg->header.stamp.nanosec * 1e-9;  // Convert to seconds
 
+        // Extract quaternion orientation
+        q_ItoG << msg->transform.rotation.x, msg->transform.rotation.y, 
+                  msg->transform.rotation.z, msg->transform.rotation.w;
+
+        // Extract position (translation)
+        p_IinG << msg->transform.translation.x, msg->transform.translation.y, msg->transform.translation.z;
+
+        // Call write function (you can define your own logic)
+        write();
+    }
 protected:
   /**
    * @brief This is the main write function that will save to disk.

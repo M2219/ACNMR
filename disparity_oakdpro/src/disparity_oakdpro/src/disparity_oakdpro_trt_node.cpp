@@ -20,7 +20,7 @@ using namespace std::chrono;
 class StereoNode : public rclcpp::Node {
 public:
     StereoNode() : Node("stereo_inference_node") {
-        this->declare_parameter<std::string>("model_path", "model_ghustereo8_nce.plan");
+        this->declare_parameter<std::string>("model_path", "model_stereoacc.plan");
         this->get_parameter("model_path", model_path_);
 
         left_sub_ = this->create_subscription<sensor_msgs::msg::Image>(
@@ -45,10 +45,10 @@ public:
         outputSize_ = 1 * net_input_height_ * net_input_width_ * sizeof(float);
 
         // Tensor name matching with flexible naming conventions
-        leftNames = {"input1", "input_left", "left", "input_left:0", "input_1"};
-        rightNames = {"input2", "input_right", "right", "input_right:0", "input_2"};
-        outputNames = {"output", "disp", "output_0", "output:0"};
-        leftIndex_ = -1, rightIndex_ = -1, outputIndex_ = -1;
+        //leftNames = {"input1", "input_left", "left", "input_left:0", "input_1"};
+        ///rightNames = {"input2", "input_right", "right", "input_right:0", "input_2"};
+        //outputNames = {"output", "disp", "output_0", "output:0"};
+        //leftIndex_ = -1, rightIndex_ = -1, outputIndex_ = -1;
 
         // Tensor name matching with flexible naming conventions
         std::vector<std::string> leftNames  = {"input1", "input_left", "left", "input_left:0", "input_1"};
@@ -122,26 +122,68 @@ private:
     int leftIndex_, rightIndex_, outputIndex_;
     size_t inputSize_, outputSize_;
 
-    std::vector<std::string> leftNames = {"input1", "input_left", "left", "input_left:0", "input_1"};
-    std::vector<std::string> rightNames = {"input2", "input_right", "right", "input_right:0", "input_2"};
-    std::vector<std::string> outputNames = {"output", "disp", "output_0", "output:0"};
+    //std::vector<std::string> leftNames = {"input1", "input_left", "left", "input_left:0", "input_1"};
+    //std::vector<std::string> rightNames = {"input2", "input_right", "right", "input_right:0", "input_2"};
+    //std::vector<std::string> outputNames = {"output", "disp", "output_0", "output:0"};
 
     nvinfer1::Dims4 inputDims;
 
     int net_input_height_ = 416;
     int net_input_width_ = 672;
+    //int net_input_height_ = 384; //kitti
+    //int net_input_width_ = 1248; //kitti
     int pad_right;
     int pad_bottom;
-    double max_disp = 96;
+    double max_disp = 192;
     cv::Mat disp_filtered;
     float alpha = 0.5;  // Adjust for responsiveness vs. smoothness
     bool record_video = false;  // Set to false to disable recording
     cv::VideoWriter video_writer;
-
+    int frame_counter = 0;
 
     void left_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
         left_img_ = msg;
         process_if_ready();
+    }
+
+
+    void rectifyStereoImages(const cv::Mat& left, const cv::Mat& right,
+                             cv::Mat& left_rect, cv::Mat& right_rect) {
+        // cam0 intrinsics
+        cv::Mat K1 = (cv::Mat_<double>(3, 3) << 809.4182764202308, 0.0, 647.6422542510353,
+                                                0.0, 805.6864499913798, 362.1203344621752,
+                                                0.0, 0.0, 1.0);
+        cv::Mat D1 = (cv::Mat_<double>(4, 1) << -0.0043279930076504936, -0.0354540987944918,
+                                                0.002101823987952484, 0.00012060718821675076);
+
+        // cam1 intrinsics
+        cv::Mat K2 = (cv::Mat_<double>(3, 3) << 806.279611933925, 0.0, 647.781267496406,
+                                                0.0, 803.1187646522317, 346.8637536464489,
+                                                0.0, 0.0, 1.0);
+        cv::Mat D2 = (cv::Mat_<double>(4, 1) << -0.003041970188352833, -0.03517262328959603,
+                                                0.0029221267247867286, -0.001623803476429974);
+
+        // Rotation and translation from cam0 to cam1
+        cv::Mat R = (cv::Mat_<double>(3, 3) << 0.99985716, -0.00507341, -0.01612204,
+                                               0.00516383,  0.99997114,  0.00557172,
+                                               0.0160933,  -0.00565418,  0.99985451);
+        cv::Mat T = (cv::Mat_<double>(3, 1) << -0.07505134, -0.00021969, -0.00077246);  // in meters
+
+        // Image size (you can use actual image size or set it manually)
+        cv::Size imageSize = left.size();
+
+        // Outputs
+        cv::Mat R1, R2, P1, P2, Q;
+        cv::stereoRectify(K1, D1, K2, D2, imageSize, R, T, R1, R2, P1, P2, Q);
+
+        // Create rectification maps
+        cv::Mat map1x, map1y, map2x, map2y;
+        cv::initUndistortRectifyMap(K1, D1, R1, P1, imageSize, CV_32FC1, map1x, map1y);
+        cv::initUndistortRectifyMap(K2, D2, R2, P2, imageSize, CV_32FC1, map2x, map2y);
+
+        // Apply remapping
+        cv::remap(left, left_rect, map1x, map1y, cv::INTER_LINEAR);
+        cv::remap(right, right_rect, map2x, map2y, cv::INTER_LINEAR);
     }
 
     void right_callback(const sensor_msgs::msg::Image::SharedPtr msg) {
@@ -156,13 +198,13 @@ private:
         cv::Mat right = cv_bridge::toCvCopy(right_img_, "mono8")->image;
 
         // Optional: stereo rectification
-        // cv::Mat left_rect, right_rect;
-        // rectifyStereoImages(left, right, left_rect, right_rect);
-        // left = left_rect; right = right_rect;
+        //cv::Mat left_rect, right_rect;
+        //rectifyStereoImages(left, right, left_rect, right_rect);
+        //left = left_rect; right = right_rect;
 
-        float* inputLeft = new float[1 * 3 * 416 * 672];
-        float* inputRight = new float[1 * 3 * 416 * 672];
-        float* outputData = new float[1 * 416 * 672];
+        float* inputLeft = new float[1 * 3 * net_input_height_ * net_input_width_];
+        float* inputRight = new float[1 * 3 * net_input_height_ * net_input_width_];
+        float* outputData = new float[1 * net_input_height_ * net_input_width_];
 
         inputLeft = preprocess_image(left);
         inputRight = preprocess_image(right);
@@ -191,7 +233,7 @@ private:
 
         // Timing
         double elapsed_ms = duration<double, std::milli>(end - start).count();
-
+        std::cout << "Elapsed time: " << elapsed_ms << " ms" << std::endl;
         // Convert and display
         cv::Mat disp_mat(net_input_height_, net_input_width_, CV_32FC1, outputData);
 
@@ -267,15 +309,20 @@ private:
         if (record_video && video_writer.isOpened()) {
             video_writer.write(combined);
         }
-        std::cout << "Original Image Size: " << left.cols << " x " << left.rows << std::endl;
-        std::cout << "Disparity Size: " << disp_color.cols << " x " << disp_color.rows << std::endl;
-
-        left_img_.reset();
-        right_img_.reset();
 
         delete[] inputLeft;
         delete[] inputRight;
         delete[] outputData;
+
+        std::cout << "Original Image Size: " << left.cols << " x " << left.rows << std::endl;
+        std::cout << "Disparity Size: " << disp_color.cols << " x " << disp_color.rows << std::endl;
+
+        frame_counter = frame_counter + 1;
+        std::cout << "Number of frames: " << frame_counter << std::endl;
+
+        left_img_.reset();
+        right_img_.reset();
+
 
     }
 

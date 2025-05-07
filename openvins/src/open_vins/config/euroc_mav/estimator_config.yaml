@@ -62,12 +62,12 @@ init_dyn_bias_a: [ 0.0, 0.0, 0.0 ] # initial accelerometer bias guess
 # ==================================================================
 # ==================================================================
 
-record_timing_information: false # if we want to record timing information of the method
+record_timing_information: true # if we want to record timing information of the method
 record_timing_filepath: "/tmp/traj_timing.txt" # https://docs.openvins.com/eval-timing.html#eval-ov-timing-flame
 
 # if we want to save the simulation state and its diagional covariance
 # use this with rosrun ov_eval error_simulation
-save_total_state: false
+save_total_state: true
 filepath_est: "/tmp/ov_estimate.txt"
 filepath_std: "/tmp/ov_estimate_std.txt"
 filepath_gt: "/tmp/ov_groundtruth.txt"
@@ -78,7 +78,7 @@ filepath_gt: "/tmp/ov_groundtruth.txt"
 # our front-end feature tracking parameters
 # we have a KLT and descriptor based (KLT is better implemented...)
 use_klt: true # if true we will use KLT, otherwise use a ORB descriptor + robust matching
-num_pts: 200 # number of points (per camera) we will extract and try to track
+num_pts: 2000 # number of points (per camera) we will extract and try to track
 fast_threshold: 20 # threshold for fast extraction (warning: lower threshs can be expensive)
 grid_x: 5 # extraction sub-grid count for horizontal direction (uniform tracking)
 grid_y: 5 # extraction sub-grid count for vertical direction (uniform tracking)
@@ -94,6 +94,9 @@ histogram_method: "HISTOGRAM" # NONE, HISTOGRAM, CLAHE
 use_aruco: false
 num_aruco: 1024
 downsize_aruco: true
+
+# Disparity
+use_nn: true
 
 # ==================================================================
 # ==================================================================

@@ -28,6 +28,7 @@
 #include "feat/FeatureDatabase.h"
 #include "utils/opencv_lambda_body.h"
 #include "utils/print.h"
+#include <iomanip>
 
 using namespace ov_core;
 
@@ -649,6 +650,8 @@ void TrackKLT::perform_detection_stereo(const std::vector<cv::Mat> &img0pyr, con
       pts0_new.push_back(kpt.pt);
     }
 
+
+
     // TODO: Project points from the left frame into the right frame
     // TODO: This will not work for large baseline systems.....
     // TODO: If we had some depth estimates we could do a better projection
@@ -664,12 +667,29 @@ void TrackKLT::perform_detection_stereo(const std::vector<cv::Mat> &img0pyr, con
       // Do our KLT tracking from the left to the right frame of reference
       // NOTE: we have a pretty big window size here since our projection might be bad
       // NOTE: but this might cause failure in cases of repeated textures (eg. checkerboard)
+
+
       std::vector<uchar> mask;
       // perform_matching(img0pyr, img1pyr, kpts0_new, kpts1_new, cam_id_left, cam_id_right, mask);
       std::vector<float> error;
       cv::TermCriteria term_crit = cv::TermCriteria(cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 30, 0.01);
       cv::calcOpticalFlowPyrLK(img0pyr, img1pyr, pts0_new, pts1_new, mask, error, win_size, pyr_levels, term_crit,
                                cv::OPTFLOW_USE_INITIAL_FLOW);
+
+       //vis_stereo(pts0_new, pts1_new, mask, img0pyr.at(0), img1pyr.at(0));
+
+       static int image_counter2 = 0; // Persistent counter
+       image_counter2 = image_counter2 + 1;
+
+       std::cout << "sssssssssssssssssssss image_counter2 : " << image_counter2 << std::endl;
+       std::cout << "sssssssssssssssssssss: " << pts0_new.size() << std::endl;
+       std::cout << "Tracked points (Left -> Right):" << std::endl;
+       for (size_t i = 0; i < pts0_new.size(); ++i) {
+           std::cout << "Point " << i << ": "
+                     << "Left (" << pts0_new[i].x << ", " << pts0_new[i].y << ") -> "
+                     << "Right (" << pts1_new[i].x << ", " << pts1_new[i].y << ") "
+                     << "Mask: " << static_cast<int>(mask[i]) << std::endl;
+       }
 
       // Loop through and record only ones that are valid
       for (size_t i = 0; i < pts0_new.size(); i++) {
@@ -883,4 +903,46 @@ void TrackKLT::perform_matching(const std::vector<cv::Mat> &img0pyr, const std::
     kpts0.at(i).pt = pts0.at(i);
     kpts1.at(i).pt = pts1.at(i);
   }
+}
+
+void TrackKLT::vis_stereo(const std::vector<cv::Point2f> &pts0,
+                          const std::vector<cv::Point2f> &pts1,
+                          const std::vector<uchar> &mask_out,
+                          const cv::Mat &img0,
+                          const cv::Mat &img1) {
+
+
+
+    // Clone the images for annotation
+    cv::Mat left_vis = img0.clone();
+    cv::Mat right_vis = img1.clone();
+
+    // Draw feature points
+    for (size_t i = 0; i < pts0.size(); ++i) {
+        if (mask_out[i]) {
+            cv::circle(left_vis, pts0[i], 2, cv::Scalar(0, 255, 0), -1);  // Valid point: green
+            cv::circle(right_vis, pts1[i], 2, cv::Scalar(0, 0, 255), -1); // Valid match: red
+        } else {
+            cv::Point2f pt = pts0[i];
+            cv::rectangle(left_vis, cv::Rect(pt.x - 10, pt.y - 10, 20, 20), cv::Scalar(0, 0, 255), 1);
+        }
+    }
+    // Show visualizations
+    std::string output_dir = "/stored_images";
+
+static int image_counter = 0; // Persistent counter
+image_counter = image_counter + 1;
+// Save images with numbered filenames
+std::ostringstream filename;
+filename << std::setw(5) << std::setfill('0') << image_counter;
+
+cv::imwrite(output_dir + "/left_" + filename.str() + ".png", left_vis);
+cv::imwrite(output_dir + "/right_" + filename.str() + ".png", right_vis);
+
+
+
+    // Show visualizations
+    //cv::imshow("Left Image (pts0)", left_vis);
+    //cv::imshow("Right Image (pts1)", right_vis);
+    //cv::waitKey(1);
 }

@@ -5,9 +5,6 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(cv_bridge REQUIRED)
 
-set(Torch_DIR "/usr/local/libtorch/share/cmake/Torch")
-find_package(Torch REQUIRED)
-
 # Describe ROS project
 option(ENABLE_ROS "Enable or disable building with ROS (if it is found)" ON)
 if (NOT ENABLE_ROS)
@@ -20,14 +17,12 @@ include_directories(
         src
         ${EIGEN3_INCLUDE_DIR}
         ${Boost_INCLUDE_DIRS}
-        ${TORCH_INCLUDE_DIRS}
 )
 
 # Set link libraries used by all binaries
 list(APPEND thirdparty_libraries
         ${Boost_LIBRARIES}
         ${OpenCV_LIBRARIES}
-        ${TORCH_LIBRARIES}
 )
 
 ##################################################
@@ -55,7 +50,7 @@ file(GLOB_RECURSE LIBRARY_HEADERS "src/*.h")
 add_library(ov_core_lib SHARED ${LIBRARY_SOURCES} ${LIBRARY_HEADERS})
 ament_target_dependencies(ov_core_lib rclcpp cv_bridge)
 target_link_libraries(ov_core_lib ${thirdparty_libraries})
-target_include_directories(ov_core_lib PUBLIC src/ ${TORCH_INCLUDE_DIRS})
+target_include_directories(ov_core_lib PUBLIC src/)
 install(TARGETS ov_core_lib
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin

@@ -9,11 +9,11 @@
 #include "depthai_bridge/ImuConverter.hpp"
 #include "depthai/pipeline/node/ColorCamera.hpp"
 #include "depthai/pipeline/node/StereoDepth.hpp"
+#include <opencv2/opencv.hpp>
 
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv);
     auto node = rclcpp::Node::make_shared("depthai_oakdpro_node");
-
     // Initialize pipeline
     std::shared_ptr<dai::Pipeline> pipeline;
     pipeline = std::make_shared<dai::Pipeline>();
@@ -122,7 +122,6 @@ int main(int argc, char **argv) {
 
     int width = 1280;
     int height = 720;
-
     auto leftCameraInfo = imageConverterLeft.calibrationToCameraInfo(calibrationHandler, dai::CameraBoardSocket::CAM_B, width, height);
     auto rightCameraInfo = imageConverterRight.calibrationToCameraInfo(calibrationHandler, dai::CameraBoardSocket::CAM_C, width, height);
 

@@ -178,18 +178,26 @@ void ROS2Visualizer::setup_subscribers(std::shared_ptr<ov_core::YamlParser> pars
   // https://answers.ros.org/question/96346/subscribe-to-two-image_raws-with-one-function/?answer=96491#post-id-96491
   if (_app->get_params().state_options.num_cameras == 2) {
     // Read in the topics
-    std::string cam_topic0, cam_topic1;
+    std::string cam_topic0, cam_topic1, topic_disp;
     _node->declare_parameter<std::string>("topic_camera" + std::to_string(0), "/cam" + std::to_string(0) + "/image_raw");
     _node->get_parameter("topic_camera" + std::to_string(0), cam_topic0);
     _node->declare_parameter<std::string>("topic_camera" + std::to_string(1), "/cam" + std::to_string(1) + "/image_raw");
     _node->get_parameter("topic_camera" + std::to_string(1), cam_topic1);
+    _node->declare_parameter<std::string>("topic_disp", "/disparity/image_raw");
+    _node->get_parameter("topic_disp", topic_disp);
+
     parser->parse_external("relative_config_imucam", "cam" + std::to_string(0), "rostopic", cam_topic0);
     parser->parse_external("relative_config_imucam", "cam" + std::to_string(1), "rostopic", cam_topic1);
+    //parser->parse_external("relative_config_disparity", "disparity", "rostopic", topic_disp);
+
     // Create sync filter (they have unique pointers internally, so we have to use move logic here...)
     auto image_sub0 = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(_node, cam_topic0);
     auto image_sub1 = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(_node, cam_topic1);
-    auto sync = std::make_shared<message_filters::Synchronizer<sync_pol>>(sync_pol(10), *image_sub0, *image_sub1);
-    sync->registerCallback(std::bind(&ROS2Visualizer::callback_stereo, this, std::placeholders::_1, std::placeholders::_2, 0, 1));
+    auto image_sub2 = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(_node, topic_disp);
+
+    auto sync = std::make_shared<message_filters::Synchronizer<sync_pol>>(sync_pol(10), *image_sub0, *image_sub1, *image_sub2);
+    sync->registerCallback(std::bind(&ROS2Visualizer::callback_stereo, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, 0, 1));
+
     // sync->registerCallback([](const sensor_msgs::msg::Image::SharedPtr msg0, const sensor_msgs::msg::Image::SharedPtr msg1)
     // {callback_stereo(msg0, msg1, 0, 1);});
     // sync->registerCallback(&callback_stereo2); // since the above two alternatives fail to compile for some reason
@@ -197,8 +205,10 @@ void ROS2Visualizer::setup_subscribers(std::shared_ptr<ov_core::YamlParser> pars
     sync_cam.push_back(sync);
     sync_subs_cam.push_back(image_sub0);
     sync_subs_cam.push_back(image_sub1);
+    sync_subs_cam.push_back(image_sub2);
     PRINT_INFO("subscribing to cam (stereo): %s\n", cam_topic0.c_str());
     PRINT_INFO("subscribing to cam (stereo): %s\n", cam_topic1.c_str());
+    PRINT_INFO("subscribing to disparity: %s\n", topic_disp.c_str());
   } else {
     // Now we should add any non-stereo callbacks here
     for (int i = 0; i < _app->get_params().state_options.num_cameras; i++) {
@@ -534,7 +544,9 @@ void ROS2Visualizer::callback_monocular(const sensor_msgs::msg::Image::SharedPtr
   std::sort(camera_queue.begin(), camera_queue.end());
 }
 
-void ROS2Visualizer::callback_stereo(const sensor_msgs::msg::Image::ConstSharedPtr msg0, const sensor_msgs::msg::Image::ConstSharedPtr msg1,
+void ROS2Visualizer::callback_stereo(const sensor_msgs::msg::Image::ConstSharedPtr msg0,
+                                     const sensor_msgs::msg::Image::ConstSharedPtr msg1,
+                                     const sensor_msgs::msg::Image::ConstSharedPtr msg2,
                                      int cam_id0, int cam_id1) {
 
   // Check if we should drop this image
@@ -563,6 +575,15 @@ void ROS2Visualizer::callback_stereo(const sensor_msgs::msg::Image::ConstSharedP
     return;
   }
 
+  // Get disparity image
+  cv_bridge::CvImageConstPtr cv_ptr_disp;
+  try {
+    cv_ptr_disp = cv_bridge::toCvShare(msg2, msg2->encoding);  // e.g., "32FC1"
+  } catch (cv_bridge::Exception &e) {
+    PRINT_ERROR("cv_bridge exception [disparity]: %s", e.what());
+    return;
+  }
+
   // Create the measurement
   ov_core::CameraData message;
   message.timestamp = cv_ptr0->header.stamp.sec + cv_ptr0->header.stamp.nanosec * 1e-9;
@@ -581,6 +602,9 @@ void ROS2Visualizer::callback_stereo(const sensor_msgs::msg::Image::ConstSharedP
     message.masks.push_back(cv::Mat::zeros(cv_ptr0->image.rows, cv_ptr0->image.cols, CV_8UC1));
     message.masks.push_back(cv::Mat::zeros(cv_ptr1->image.rows, cv_ptr1->image.cols, CV_8UC1));
   }
+
+
+  message.disparities.push_back(cv_ptr_disp->image.clone());
 
   // append it to our queue of images
   std::lock_guard<std::mutex> lck(camera_queue_mtx);

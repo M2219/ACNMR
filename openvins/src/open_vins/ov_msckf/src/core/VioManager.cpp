@@ -147,8 +147,7 @@ VioManager::VioManager(VioManagerOptions &params_) : thread_init_running(false),
   {
           trackFEATS = std::shared_ptr<TrackBase>(new TrackACC(state->_cam_intrinsics_cameras, init_max_features,
                                                                state->_options.max_aruco_features, params.use_stereo, params.histogram_method,
-                                                               params.fast_threshold, params.grid_x, params.grid_y, params.min_px_dist,
-                                                               params.stereo_model_path, params.use_cuda));
+                                                               params.fast_threshold, params.grid_x, params.grid_y, params.min_px_dist));
   }
 
 
@@ -157,8 +156,6 @@ VioManager::VioManager(VioManagerOptions &params_) : thread_init_running(false),
     trackARUCO = std::shared_ptr<TrackBase>(new TrackAruco(state->_cam_intrinsics_cameras, state->_options.max_aruco_features,
                                                            params.use_stereo, params.histogram_method, params.downsize_aruco));
   }
-
-
 
   // Initialize our state propagator
   propagator = std::make_shared<Propagator>(params.imu_noises, params.gravity_mag);

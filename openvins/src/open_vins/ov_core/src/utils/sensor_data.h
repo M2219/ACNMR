@@ -66,6 +66,9 @@ struct CameraData {
   /// Tracking masks for each camera we have
   std::vector<cv::Mat> masks;
 
+  /// (NEW) Disparity image(s) corresponding to the stereo pair
+  std::vector<cv::Mat> disparities;
+
   /// Sort function to allow for using of STL containers
   bool operator<(const CameraData &other) const {
     if (timestamp == other.timestamp) {

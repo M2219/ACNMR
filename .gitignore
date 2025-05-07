@@ -31,7 +31,7 @@ openvins/install/
 openvins/build/
 openvins/log/
 openvins/V2/
-openvins/
+org_openvins/
 depthai-ros/
 acker_controller_ign/install/
 acker_controller_ign/build/
@@ -61,3 +61,11 @@ disparity_oakdpro/build/
 disparity_oakdpro/log/
 disparity_oakdpro/src/disparity_oakdpro/config/
 oakV2/
+oakV3/
+bag_humehall_record/
+kitti_publisher/install/
+kitti_publisher/build/
+kitti_publisher/log/
+euroc_publisher/install/
+euroc_publisher/build/
+euroc_publisher/log/
