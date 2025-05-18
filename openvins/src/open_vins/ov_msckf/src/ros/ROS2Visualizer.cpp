@@ -30,7 +30,10 @@
 #include "utils/dataset_reader.h"
 #include "utils/print.h"
 #include "utils/sensor_data.h"
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
 
+#include "rclcpp/clock.hpp"
 using namespace ov_core;
 using namespace ov_type;
 using namespace ov_msckf;
@@ -294,8 +297,9 @@ void ROS2Visualizer::visualize_odometry(double timestamp) {
 
     // Our odometry message
     nav_msgs::msg::Odometry odomIinM;
-    odomIinM.header.stamp = ROSVisualizerHelper::get_time_from_seconds(timestamp);
-    odomIinM.header.frame_id = "global";
+    odomIinM.header.stamp = odomIinM.header.stamp = _node->get_clock()->now(); //ROSVisualizerHelper::get_time_from_seconds(timestamp);
+    odomIinM.header.frame_id = "odom1";
+    odomIinM.child_frame_id = "base_link1";
 
     // The POSE component (orientation and position)
     odomIinM.pose.pose.orientation.x = state_plus(0);
@@ -307,7 +311,6 @@ void ROS2Visualizer::visualize_odometry(double timestamp) {
     odomIinM.pose.pose.position.z = state_plus(6);
 
     // The TWIST component (angular and linear velocities)
-    odomIinM.child_frame_id = "imu";
     odomIinM.twist.twist.linear.x = state_plus(7);   // vel in local frame
     odomIinM.twist.twist.linear.y = state_plus(8);   // vel in local frame
     odomIinM.twist.twist.linear.z = state_plus(9);   // vel in local frame
@@ -341,11 +344,11 @@ void ROS2Visualizer::visualize_odometry(double timestamp) {
   odom_pose->set_value(state_plus.block(0, 0, 7, 1));
   geometry_msgs::msg::TransformStamped trans = ROSVisualizerHelper::get_stamped_transform_from_pose(_node, odom_pose, false);
   trans.header.stamp = _node->now();
-  trans.header.frame_id = "global";
-  trans.child_frame_id = "imu";
-  if (publish_global2imu_tf) {
-    mTfBr->sendTransform(trans);
-  }
+  trans.header.frame_id = "odom1";
+  trans.child_frame_id = "base_link1";
+  //if (publish_global2imu_tf) {
+  //mTfBr->sendTransform(trans);
+  //}
 
   // Loop through each camera calibration and publish it
   for (const auto &calib : state->_calib_IMUtoCAM) {
@@ -877,22 +880,82 @@ void ROS2Visualizer::publish_loopclosure_information() {
 
   //======================================================
   // Check if we have subscribers for the pose odometry, camera intrinsics, or extrinsics
-  if (pub_loop_pose->get_subscription_count() != 0 || pub_loop_extrinsic->get_subscription_count() != 0 ||
-      pub_loop_intrinsics->get_subscription_count() != 0) {
+if (pub_loop_pose->get_subscription_count() != 0 || pub_loop_extrinsic->get_subscription_count() != 0 ||
+    pub_loop_intrinsics->get_subscription_count() != 0) {
 
-    // PUBLISH HISTORICAL POSE ESTIMATE
-    nav_msgs::msg::Odometry odometry_pose;
-    odometry_pose.header = header;
-    odometry_pose.header.frame_id = "global";
-    odometry_pose.pose.pose.position.x = _app->get_state()->_clones_IMU.at(active_tracks_time1)->pos()(0);
-    odometry_pose.pose.pose.position.y = _app->get_state()->_clones_IMU.at(active_tracks_time1)->pos()(1);
-    odometry_pose.pose.pose.position.z = _app->get_state()->_clones_IMU.at(active_tracks_time1)->pos()(2);
-    odometry_pose.pose.pose.orientation.x = _app->get_state()->_clones_IMU.at(active_tracks_time1)->quat()(0);
-    odometry_pose.pose.pose.orientation.y = _app->get_state()->_clones_IMU.at(active_tracks_time1)->quat()(1);
-    odometry_pose.pose.pose.orientation.z = _app->get_state()->_clones_IMU.at(active_tracks_time1)->quat()(2);
-    odometry_pose.pose.pose.orientation.w = _app->get_state()->_clones_IMU.at(active_tracks_time1)->quat()(3);
-    pub_loop_pose->publish(odometry_pose);
+  // PUBLISH HISTORICAL POSE ESTIMATE
+  nav_msgs::msg::Odometry odometry_pose;
+  //odometry_pose.header.stamp = _node->now();  // Use current time
 
+  odometry_pose.header.stamp = _node->get_clock()->now(); // - rclcpp::Duration(30574667-6169, 0);
+  odometry_pose.header.frame_id = "odom";
+  odometry_pose.child_frame_id = "base_link";
+
+  auto imu_state = _app->get_state()->_clones_IMU.at(active_tracks_time1);
+  odometry_pose.pose.pose.position.x = imu_state->pos()(0);
+  odometry_pose.pose.pose.position.y = imu_state->pos()(1);
+  odometry_pose.pose.pose.position.z = imu_state->pos()(2);
+//RCLCPP_INFO(_node->get_logger(), "Publishing odometry position: x: %.3f, y: %.3f, z: %.3f",
+//             imu_state->pos()(0), imu_state->pos()(1), imu_state->pos()(2));
+  odometry_pose.pose.pose.orientation.x = imu_state->quat()(0);
+  odometry_pose.pose.pose.orientation.y = imu_state->quat()(1);
+  odometry_pose.pose.pose.orientation.z = imu_state->quat()(2);
+  odometry_pose.pose.pose.orientation.w = imu_state->quat()(3);
+
+
+// X, Y, Z position covariances
+//odometry_pose.pose.covariance[0] = 0.1;  // X position
+//odometry_pose.pose.covariance[7] = 0.1;  // Y position
+//odometry_pose.pose.covariance[14] = 0.1; // Z position
+
+// Roll, Pitch, Yaw orientation covariances
+//odometry_pose.pose.covariance[21] = 0.1; // Roll
+//odometry_pose.pose.covariance[28] = 0.1; // Pitch
+//odometry_pose.pose.covariance[35] = 0.1; // Yaw
+
+  pub_loop_pose->publish(odometry_pose);
+
+  // Publish TF
+  auto odom_pose = std::make_shared<ov_type::PoseJPL>();
+
+  geometry_msgs::msg::TransformStamped trans;
+
+  trans.header.stamp =  _node->get_clock()->now(); // - rclcpp::Duration(30574667-6169, 0);
+  trans.header.frame_id = "odom";
+  trans.child_frame_id = "base_link";
+
+  trans.transform.translation.x = imu_state->pos()(0);
+  trans.transform.translation.y = imu_state->pos()(1);
+  trans.transform.translation.z = imu_state->pos()(2);
+
+tf2::Quaternion q_orig(
+    imu_state->quat()(0),
+    imu_state->quat()(1),
+    imu_state->quat()(2),
+    imu_state->quat()(3)
+);
+
+// 180° rotation around Z-axis (yaw = π)
+tf2::Quaternion q_rot_z;
+q_rot_z.setRPY(0, 0, 0);  // Roll=0, Pitch=0, Yaw=π
+
+// 180° rotation around Y-axis (pitch = π)
+tf2::Quaternion q_rot_y;
+q_rot_y.setRPY(0, 0, 0);  // Roll=0, Pitch=π, Yaw=0
+
+// Combine rotations: first Z, then Y
+tf2::Quaternion q_combined = q_rot_y * q_rot_z * q_orig;
+q_combined.normalize();  // Ensure normalization
+
+// Apply the new quaternion to the transform
+trans.transform.rotation.x = q_combined.x();
+trans.transform.rotation.y = q_combined.y();
+trans.transform.rotation.z = q_combined.z();
+trans.transform.rotation.w = q_combined.w();
+
+
+
+  mTfBr->sendTransform(trans);
     // PUBLISH IMU TO CAMERA0 EXTRINSIC
     // need to flip the transform to the IMU frame
     Eigen::Vector4d q_ItoC = _app->get_state()->_calib_IMUtoCAM.at(0)->quat();

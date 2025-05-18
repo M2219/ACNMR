@@ -1,6 +1,0 @@
-[0.160s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/root/ACNMR/lidar_sim/install/fakelidar' in the environment variable AMENT_PREFIX_PATH doesn't exist
-[0.160s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/root/ACNMR/lidar_sim/install/fakelidar' in the environment variable CMAKE_PREFIX_PATH doesn't exist
-Starting >>> fakelidar
-Finished <<< fakelidar [0.75s]
-
-Summary: 1 package finished [0.89s]

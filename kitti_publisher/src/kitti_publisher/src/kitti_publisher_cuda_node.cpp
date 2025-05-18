@@ -1,7 +1,5 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
-#include "sensor_msgs/msg/imu.hpp"
-#include "rosbag2_cpp/reader.hpp"
 #include <signal.h>
 #include "geometry_msgs/msg/transform_stamped.hpp"
 
@@ -22,6 +20,16 @@
 
 #include <opencv2/ximgproc/edge_filter.hpp>
 
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/image.hpp>
+#include <cv_bridge/cv_bridge.h>
+#include <opencv2/opencv.hpp>
+#include <filesystem>
+#include <string>
+#include <vector>
+
+namespace fs = std::filesystem;
+
 std::mutex queue_mutex;
 std::condition_variable queue_cv;
 bool shutdown_flag = false;
@@ -29,8 +37,8 @@ bool shutdown_flag = false;
 namespace fs = std::filesystem;
 using namespace std::chrono;
 
-int net_input_height_ = 512;
-int net_input_width_ = 768;
+int net_input_height_ = 384;
+int net_input_width_ = 1248;
 int pad_right;
 int pad_bottom;
 double max_disp = 96;
@@ -39,8 +47,8 @@ float alpha = 0.4;  // Adjust for responsiveness vs. smoothness
 bool record_video = false;  // Set to false to disable recording
 cv::VideoWriter video_writer;
 
-//std::string model_path_ = "/tmp/model_ghustereo8_nce_euroc.plan";
-std::string model_path_ = "/tmp/model_stereoacc_euroc.plan";
+//std::string model_path_ = "/tmp/model_ghustereo8_nce_kitti.plan";
+std::string model_path_ = "/tmp/model_stereoacc_kitti.plan";
 
 nvinfer1::ICudaEngine* engine_{nullptr};
 nvinfer1::IExecutionContext* context_{nullptr};
@@ -199,219 +207,88 @@ bool initializeTensorRT() {
     return true;
 }
 
-void setupStereoRectification(cv::Size image_size,
-                             cv::Mat& R1, cv::Mat& R2,
-                             cv::Mat& P1, cv::Mat& P2,
-                             cv::Mat& Q,
-                             cv::Mat& map11, cv::Mat& map12,
-                             cv::Mat& map21, cv::Mat& map22) {
-    cv::Mat K1 = (cv::Mat_<double>(3,3) <<
-        458.654, 0, 367.215,
-        0, 457.296, 248.375,
-        0, 0, 1);
 
-    cv::Mat D1 = (cv::Mat_<double>(4,1) <<
-        -0.28340811, 0.07395907, 0.00019359, 1.76187114e-05);
+class KittiImagePublisher : public rclcpp::Node {
+public:
+    KittiImagePublisher() : Node("kitti_image_publisher"), current_index_(0) {
+        RCLCPP_INFO(this->get_logger(), "Image Publisher Node Started!");
 
-    cv::Mat K2 = (cv::Mat_<double>(3,3) <<
-        457.587, 0, 379.999,
-        0, 456.134, 255.238,
-        0, 0, 1);
+        // Parameters
+        this->declare_parameter<std::string>("kitti_path", "./10");
+        kitti_path = this->get_parameter("kitti_path").as_string();
 
-    cv::Mat D2 = (cv::Mat_<double>(4,1) <<
-        -0.28368365, 0.07451284, -0.00010473, -3.55590700e-05);
+        fps_ = 20;
+        left_dir_ = kitti_path + "/image_2";
+        right_dir_ = kitti_path + "/image_3";
 
-    cv::Mat T = (cv::Mat_<double>(4,4) <<
-        0.999997256477797, 0.002317135723275, 0.000343393120620, -0.110074137800478,
-        -0.002312067192432, 0.999898048507103, 0.014090668452683, 0.000156612054392,
-        -0.000376008102320,-0.014089835846691, 0.999900662638081, -0.000889382785432,
-        0, 0, 0, 1.000000000000000);
+        if (!fs::exists(left_dir_) || !fs::exists(right_dir_)) {
+            RCLCPP_ERROR(this->get_logger(), "Invalid KITTI dataset path: %s", kitti_path.c_str());
+            throw std::runtime_error("KITTI dataset directories not found!");
+        }
 
-    cv::Mat R = T(cv::Rect(0,0,3,3)).clone();
-    cv::Mat T_vec = (cv::Mat_<double>(3,1) << T.at<double>(0,3),
-                                             T.at<double>(1,3),
-                                             T.at<double>(2,3));
-    cv::stereoRectify(K1, D1, K2, D2, image_size, R, T_vec,
-                     R1, R2, P1, P2, Q,
-                     cv::CALIB_ZERO_DISPARITY, 0, image_size);
-    cv::initUndistortRectifyMap(K1, D1, R1, P1, image_size, CV_16SC2, map11, map12);
-    cv::initUndistortRectifyMap(K2, D2, R2, P2, image_size, CV_16SC2, map21, map22);
-}
+        for (const auto& entry : fs::directory_iterator(left_dir_)) {
+            left_images_.push_back(entry.path().string());
+        }
+        for (const auto& entry : fs::directory_iterator(right_dir_)) {
+            right_images_.push_back(entry.path().string());
+        }
+        std::sort(left_images_.begin(), left_images_.end());
+        std::sort(right_images_.begin(), right_images_.end());
 
-void rectifyStereoPair(const cv::Mat& left_img, const cv::Mat& right_img,
-                      cv::Mat& left_rect, cv::Mat& right_rect,
-                      const cv::Mat& map11, const cv::Mat& map12,
-                      const cv::Mat& map21, const cv::Mat& map22) {
-    cv::remap(left_img, left_rect, map11, map12, cv::INTER_LINEAR);
-    cv::remap(right_img, right_rect, map21, map22, cv::INTER_LINEAR);
-}
+        if (left_images_.size() != right_images_.size()) {
+            RCLCPP_ERROR(this->get_logger(), "Mismatch in number of images between left and right cameras.");
+            throw std::runtime_error("Left and right image counts do not match!");
+        }
 
+        left_pub_ = this->create_publisher<sensor_msgs::msg::Image>("/cam0/image_raw", 10);
+        right_pub_ = this->create_publisher<sensor_msgs::msg::Image>("/cam1/image_raw", 10);
+        disparity_pub_ = this->create_publisher<sensor_msgs::msg::Image>("/disparity/image_raw", 10);
 
-// Function to apply histogram matching from source to template image
-cv::Mat matchHistogram(const cv::Mat& src, const cv::Mat& tmpl) {
-    CV_Assert(src.type() == CV_8UC1 && tmpl.type() == CV_8UC1);
+        timer_ = this->create_wall_timer(
+            std::chrono::milliseconds(1000 / fps_),
+            std::bind(&KittiImagePublisher::publishImages, this)
+        );
 
-    // Compute histograms and cumulative histograms
-    int histSize = 256;
-    float range[] = { 0, 256 }; 
-    const float* histRange = { range };
-
-    cv::Mat src_hist, tmpl_hist;
-    cv::calcHist(&src, 1, 0, cv::Mat(), src_hist, 1, &histSize, &histRange);
-    cv::calcHist(&tmpl, 1, 0, cv::Mat(), tmpl_hist, 1, &histSize, &histRange);
-
-    // Normalize histograms
-    cv::normalize(src_hist, src_hist, 1, 0, cv::NORM_L1);
-    cv::normalize(tmpl_hist, tmpl_hist, 1, 0, cv::NORM_L1);
-
-    // Compute cumulative distribution functions (CDF)
-    cv::Mat src_cdf, tmpl_cdf;
-    src_cdf = src_hist.clone();
-    tmpl_cdf = tmpl_hist.clone();
-    for (int i = 1; i < histSize; ++i) {
-        src_cdf.at<float>(i) += src_cdf.at<float>(i - 1);
-        tmpl_cdf.at<float>(i) += tmpl_cdf.at<float>(i - 1);
+        if (!initializeTensorRT()) {
+            RCLCPP_ERROR(this->get_logger(), "TensorRT initialization failed!");
+            rclcpp::shutdown();
+        }
     }
 
-    // Create a lookup table (LUT) for pixel value mapping
-    uchar lut[256];
-    for (int i = 0; i < histSize; ++i) {
-        float val = src_cdf.at<float>(i);
-        uchar j = 0;
-        while (j < 255 && tmpl_cdf.at<float>(j) < val) j++;
-        lut[i] = j;
-    }
-
-    // Apply LUT to source image
-    cv::Mat result = src.clone();
-    for (int y = 0; y < src.rows; ++y)
-        for (int x = 0; x < src.cols; ++x)
-            result.at<uchar>(y, x) = lut[src.at<uchar>(y, x)];
-
-    return result;
-}
-
-int main(int argc, char **argv) {
-    rclcpp::init(argc, argv);
-
-    auto node = std::make_shared<rclcpp::Node>("stereo_processor");
-    node->declare_parameter<std::string>("bag_path", "./rosbag2.db3");
-    std::string bag_path = node->get_parameter("bag_path").as_string();
-
-    rosbag2_cpp::Reader reader_;
-    reader_.open(bag_path);
-
-    auto disparity_pub = node->create_publisher<sensor_msgs::msg::Image>("/disparity/image_raw", 10);
-    auto left_rect_pub = node->create_publisher<sensor_msgs::msg::Image>("/cam0/image_raw", 10);
-    auto right_rect_pub = node->create_publisher<sensor_msgs::msg::Image>("/cam1/image_raw", 10);
-    auto imu_pub = node->create_publisher<sensor_msgs::msg::Imu>("/imu0", 10);
-    auto tf_pub = node->create_publisher<geometry_msgs::msg::TransformStamped>("/gt_tf", 10);
-
-    if (!left_rect_pub || !right_rect_pub || !disparity_pub || !imu_pub) {
-        RCLCPP_ERROR(node->get_logger(), "Failed to create publishers!");
-        rclcpp::shutdown();
-        return -1;
-    }
-
-    if (!initializeTensorRT()) {
-        std::cerr << "TensorRT initialization failed!" << std::endl;
-        return 1;
-    }
-
-    cv::Size image_size(752, 480);
-    cv::Mat R1, R2, P1, P2, Q;
-    cv::Mat map11, map12, map21, map22;
-    setupStereoRectification(image_size, R1, R2, P1, P2, Q,
-                           map11, map12, map21, map22);
-
-    rclcpp::Serialization<sensor_msgs::msg::Image> image_serialization;
-    rclcpp::Serialization<sensor_msgs::msg::Imu> imu_serialization;
-    rclcpp::Serialization<geometry_msgs::msg::TransformStamped> tf_serialization;
-
-    std::shared_ptr<sensor_msgs::msg::Imu> imu_msg = std::make_shared<sensor_msgs::msg::Imu>();
-    std::shared_ptr<sensor_msgs::msg::Image> left = std::make_shared<sensor_msgs::msg::Image>();
-    std::shared_ptr<sensor_msgs::msg::Image> right = std::make_shared<sensor_msgs::msg::Image>();
-    std::shared_ptr<sensor_msgs::msg::Image> left_msg_rect = std::make_shared<sensor_msgs::msg::Image>();
-    std::shared_ptr<sensor_msgs::msg::Image> right_msg_rect = std::make_shared<sensor_msgs::msg::Image>();
-    std::shared_ptr<sensor_msgs::msg::Image> disp_msg = std::make_shared<sensor_msgs::msg::Image>();
-    std::shared_ptr<geometry_msgs::msg::TransformStamped> tf_msg = std::make_shared<geometry_msgs::msg::TransformStamped>();
-
-    auto left_msg = std::make_shared<sensor_msgs::msg::Image>();
-    auto right_msg = std::make_shared<sensor_msgs::msg::Image>();
-
-    cv::Mat disp_filtered_16;
-    cv::Mat left_img, right_img;
-    cv::Mat left_raw, right_raw;
-
-    std_msgs::msg::Header header_l;
-    std_msgs::msg::Header header_r;
-
-    bool stop_requested = false;
-
-    rclcpp::Time last_msg_time;
-    bool first_msg = true;
-
-    while (reader_.has_next() && !stop_requested && rclcpp::ok()) {
+private:
+    void publishImages() {
 
         auto start = high_resolution_clock::now();
-        auto bag_msg = reader_.read_next();
 
-        rclcpp::Time current_msg_time(bag_msg->time_stamp, RCL_ROS_TIME);
-
-        if (!first_msg) {
-            auto dt = current_msg_time - last_msg_time;
-            if (dt.nanoseconds() > 0) {
-                rclcpp::sleep_for(std::chrono::nanoseconds(dt.nanoseconds()));
-            }
-        } else {
-            first_msg = false;
+        if (current_index_ >= left_images_.size()) {
+            current_index_ = 0;
         }
 
-        last_msg_time = current_msg_time;
+        cv::Mat left_img = cv::imread(left_images_[current_index_], cv::IMREAD_GRAYSCALE);
+        cv::Mat right_img = cv::imread(right_images_[current_index_], cv::IMREAD_GRAYSCALE);
 
-        rclcpp::SerializedMessage serialized_msg(*bag_msg->serialized_data);
+        int original_height = left_img.rows;
+        int original_width = left_img.cols;
 
-        if (bag_msg->topic_name == "/vicon/firefly_sbx/firefly_sbx") {
-            tf_serialization.deserialize_message(&serialized_msg, tf_msg.get());
-            tf_pub->publish(*tf_msg);
-        }
-        if (bag_msg->topic_name == "/cam0/image_raw") {
-            image_serialization.deserialize_message(&serialized_msg, left_msg.get());
-            left_rect_pub->publish(*left_msg);
-            left = left_msg;
-        }
-        else if (bag_msg->topic_name == "/cam1/image_raw") {
-            image_serialization.deserialize_message(&serialized_msg, right_msg.get());
-            right_rect_pub->publish(*right_msg);
-            right = right_msg;
-        }
-        else if (bag_msg->topic_name == "/imu0") {
-            imu_serialization.deserialize_message(&serialized_msg, imu_msg.get());
-            imu_pub->publish(*imu_msg);
+        if (left_img.empty() || right_img.empty()) {
+            RCLCPP_WARN(this->get_logger(), "Failed to read images at index %d", current_index_);
+            return;
         }
 
-        if (left->data.empty() || right->data.empty()) continue;
+        rclcpp::Time current_time = this->get_clock()->now();
 
-        left_raw = cv_bridge::toCvCopy(left, "mono8")->image;
-        right_raw = cv_bridge::toCvCopy(right, "mono8")->image;
+        // Convert to ROS Image messages
+        auto left_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "mono8", left_img).toImageMsg();
+        auto right_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "mono8", right_img).toImageMsg();
 
-        int original_height = left_raw.rows;
-        int original_width = left_raw.cols;
+        left_msg->header.stamp = current_time;
+        right_msg->header.stamp = current_time;
 
-        rectifyStereoPair(left_raw, right_raw, left_img, right_img, map11, map12, map21, map22);
+        left_msg->header.frame_id = "left_camera";
+        right_msg->header.frame_id = "right_camera";
 
-        header_l.stamp = left->header.stamp;
-        header_l.frame_id = "euroc_stereo_frame";
-
-        header_r.stamp = right->header.stamp;
-        header_r.frame_id = "euroc_stereo_frame";
-
-        //left_msg_rect = cv_bridge::CvImage(header_l, "mono8", left_img).toImageMsg();
-        //right_msg_rect = cv_bridge::CvImage(header_r, "mono8", right_img).toImageMsg();
-        //left_rect_pub->publish(*left_msg_rect);
-        //right_rect_pub->publish(*right_msg_rect);
-
-        right_img = matchHistogram(right_img, left_img);
+        left_pub_->publish(*left_msg);
+        right_pub_->publish(*right_msg);
 
         // Run stereo inference
         float* outputData = new float[1 * net_input_height_ * net_input_width_];
@@ -483,7 +360,7 @@ int main(int argc, char **argv) {
 
         cv::Mat combined;
 
-        cv::hconcat(left_color, disp_color, combined);
+        cv::vconcat(left_color, disp_color, combined);
         cv::imshow("Left + Disparity", combined);
         cv::waitKey(1);
         if (record_video && !video_writer.isOpened()) {
@@ -506,32 +383,50 @@ int main(int argc, char **argv) {
         delete[] outputData;
 
 
-        disp_msg = cv_bridge::CvImage(header_l, "16UC1", disp_filtered_16).toImageMsg();
-        disparity_pub->publish(*disp_msg);
+        auto disp_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "16UC1", disp_filtered_16).toImageMsg();
+
+        disp_msg->header.stamp = current_time;
+        disp_msg->header.frame_id = "left_camera";
+
+        disparity_pub_->publish(*disp_msg);
 
 
         auto end = high_resolution_clock::now();
         double elapsed_ms = duration<double, std::milli>(end - start).count();
         std::cout << "Elapsed time: " << elapsed_ms << " ms" << std::endl;
-        left = std::make_shared<sensor_msgs::msg::Image>();
-        right = std::make_shared<sensor_msgs::msg::Image>();
+
+        current_index_++;
     }
 
-    reader_.close();
+
+    std::string kitti_path;
+    std::string left_dir_;
+    std::string right_dir_;
+    std::vector<std::string> left_images_;
+    std::vector<std::string> right_images_;
+    cv::Mat disp_filtered;
+    cv::Mat disp_filtered_16;
+    size_t current_index_;
+    int fps_;
+
+    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr left_pub_;
+    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr right_pub_;
+    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr disparity_pub_;
+    rclcpp::TimerBase::SharedPtr timer_;
+};
+
+int main(int argc, char* argv[]) {
+    rclcpp::init(argc, argv);
+
+    auto node = std::make_shared<KittiImagePublisher>();
+    rclcpp::spin(node);
+
     if (context_) delete context_;
     if (engine_) delete engine_;
     for (int i = 0; i < 3; ++i) if (buffers_[i]) cudaFree(buffers_[i]);
-    node.reset();
-    rcutils_reset_error();
-    left_rect_pub.reset();
-    right_rect_pub.reset();
-    disparity_pub.reset();
-    imu_pub.reset();
-    stop_requested = true;
-
-    rclcpp::executors::MultiThreadedExecutor executor;
-    executor.add_node(node);
-    executor.spin();
     rclcpp::shutdown();
     return 0;
 }
+
+
+

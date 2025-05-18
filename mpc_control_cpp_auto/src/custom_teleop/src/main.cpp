@@ -39,7 +39,7 @@ public:
         path_updated = false;
         path_initialized = false;
         localization_odom_updated = false;
-        mpcWindow = 10;
+        mpcWindow = 4;
 
         // Publishers
         cmd_vel_pub = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
@@ -70,6 +70,9 @@ public:
         localization_odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(
             "/odometry/filtered", 10, std::bind(&MPCNode::localizationOdomCallback, this, std::placeholders::_1));
 
+        //localization_odom_v_sub = this->create_subscription<nav_msgs::msg::Odometry>(
+        //    "/ov_msckf/loop_pose", 10, std::bind(&MPCNode::localizationOdomCallbackOpen, this, std::placeholders::_1));
+
         amcl_sub = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
             "/amcl_pose", 10, std::bind(&MPCNode::amclCallback, this, std::placeholders::_1));
 
@@ -98,7 +101,7 @@ public:
             xRef(3, t) = x0(3);
         }
 
-        yaw_comp = 0;
+        yaw_comp = 0.0;
         dl = 0.02;
 
         // set MPC problem quantities for direct linearized model
@@ -152,7 +155,7 @@ private:
     rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub;
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr custom_pose_pub, goal_pub;
 
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub, localization_odom_sub;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub, localization_odom_sub, localization_odom_v_sub;
     rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr amcl_sub;
     rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr global_path_sub;
 
@@ -180,7 +183,7 @@ private:
     Eigen::VectorXd lowerBound, upperBound;
     OsqpEigen::Solver solver;
     Eigen::VectorXd QPSolution;
-    bool odom_updated, path_updated, path_initialized, localization_odom_updated;
+    bool odom_updated, path_updated, path_initialized, localization_odom_updated, localization_odom_updated_v;
 
     // Reference Trajectory
     std::vector<double> ccx, ccy, ccyaw, ccx_s, ccy_s, ccyaw_s, ccdir, sp, ck;
@@ -191,11 +194,12 @@ private:
     int target_ind;
     int mpcWindow;
     double yaw_comp;
-    double x_odo, x_amcl, x_localization_odo;
-    double y_odo, y_amcl, y_localization_odo;
-    double v_odo, v_amcl, v_localization_odo;
+    double x_odo, x_amcl, x_localization_odo, x_localization_odo_v;
+    double y_odo, y_amcl, y_localization_odo, y_localization_odo_v;
+    double v_odo, v_amcl, v_localization_odo, v_localization_odo_v;
     double roll_odo, pitch_odo, yaw_odo;
     double roll_localization_odo, pitch_localization_odo, yaw_localization_odo;
+    double roll_localization_odo_v, pitch_localization_odo_v, yaw_localization_odo_v;
     double roll_amcl, pitch_amcl, yaw_amcl;
 
 
@@ -284,6 +288,25 @@ private:
         yaw_localization_odo = yaw_localization_odo + yaw_comp;
         localization_odom_updated = true;
     }
+
+    void localizationOdomCallbackOpen(const nav_msgs::msg::Odometry::SharedPtr msg) {
+
+        x_localization_odo_v = msg->pose.pose.position.x;
+        y_localization_odo_v = msg->pose.pose.position.y;
+        v_localization_odo_v = msg->twist.twist.linear.x;
+
+        tf2::Quaternion q(
+            msg->pose.pose.orientation.x,
+            msg->pose.pose.orientation.y,
+            msg->pose.pose.orientation.z,
+            msg->pose.pose.orientation.w
+        );
+        tf2::Matrix3x3 m(q);
+        m.getRPY(roll_localization_odo_v, pitch_localization_odo_v, yaw_localization_odo_v);
+        yaw_localization_odo_v = yaw_localization_odo_v + yaw_comp;
+        localization_odom_updated_v = true;
+    }
+
 
     void amclCallback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
     {

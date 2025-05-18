@@ -137,7 +137,7 @@ private:
     double max_disp = 192;
     cv::Mat disp_filtered;
     float alpha = 0.5;  // Adjust for responsiveness vs. smoothness
-    bool record_video = false;  // Set to false to disable recording
+    bool record_video = true;  // Set to false to disable recording
     cv::VideoWriter video_writer;
     int frame_counter = 0;
 
@@ -249,28 +249,29 @@ private:
         cv::medianBlur(disp_mat, disp_filtered, 5);
 
         // 2. Temporal smoothing (IIR)
-        static cv::Mat prev_disp;
-        if (prev_disp.empty()) prev_disp = disp_filtered.clone();
-        cv::addWeighted(disp_filtered, alpha, prev_disp, 1.0 - alpha, 0, disp_filtered);
-        prev_disp = disp_filtered.clone();
+        //static cv::Mat prev_disp;
+        //if (prev_disp.empty()) prev_disp = disp_filtered.clone();
+        //cv::addWeighted(disp_filtered, alpha, prev_disp, 1.0 - alpha, 0, disp_filtered);
+        //prev_disp = disp_filtered.clone();
 
         // 3. Mask invalid pixels
         cv::Mat valid_mask = (disp_filtered > 0) & (disp_filtered < max_disp);
         disp_filtered.setTo(0, ~valid_mask);
         cv::Mat disp_norm, disp_color;
 
-        disp_filtered.convertTo(disp_norm, CV_8UC1, 255.0 / max_disp);
-
-        double min_val = 0.1, max_val = max_disp;
+        double max_val, min_val;
         cv::minMaxLoc(disp_filtered, &min_val, &max_val, nullptr, nullptr, valid_mask);
-
-        // Step 2: Normalize (bright = close)
         disp_filtered.convertTo(disp_norm, CV_8UC1, -255.0 / (max_val - min_val), 255.0 * max_val / (max_val - min_val));
 
         // Step 3: Apply perceptually uniform colormap
         cv::applyColorMap(disp_norm, disp_color, cv::COLORMAP_MAGMA);
 
-        // cv::applyColorMap(disp_norm, disp_color, cv::COLORMAP_JET);
+        cv::Mat disp_float;
+        disp_color.convertTo(disp_float, CV_32FC3, 1.0/255.0);
+
+        cv::pow(disp_float, 2.5, disp_float);
+        disp_float.convertTo(disp_color, CV_8UC3, 255.0);
+
 
         cv::Mat left_color;
         if (left.channels() == 1) {
@@ -284,11 +285,53 @@ private:
         cv::resize(left_color, left_color, disp_color.size());
         }
 
+        double fx = 809.4182764202308 / 2;
+        double baseline = 0.07505134045288388;  // from T_cn_cnm1[0][3], absolute value
+
+        // --- Calculate center pixel ---
+        int center_x = disp_color.cols / 2;
+        int center_y = disp_color.rows / 2;
+
+        // --- Disparity value (assuming CV_16UC1 and scaled by 256) ---
+        float disp_val = disp_filtered.at<float>(center_y, center_x);
+
+        std::string depth_text;
+        if (disp_val > 0.0) {
+            double depth = (fx * baseline) / disp_val;
+            std::ostringstream oss;
+            oss << std::fixed << std::setprecision(2) << depth << " m";
+            depth_text = oss.str();
+        } else {
+            depth_text = "N/A";
+        }
+
+
+        // Concatenate images horizontally
+        cv::circle(disp_color, cv::Point(center_x, center_y), 5, cv::Scalar(0, 0, 255), -1);
+        cv::putText(disp_color, depth_text, cv::Point(center_x + 10, center_y - 10), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 0, 255), 2);
+
         cv::Mat combined;
 
-        // Show disparity image
-        cv::hconcat(left_color, disp_color, combined);
-        // Show side-by-side result
+        // Elapsed time annotation (FPS)
+        std::ostringstream oss;
+        oss << std::fixed << std::setprecision(2) << 1000.0 / elapsed_ms << " HZ";
+        std::string text = oss.str();
+
+        int font_face = cv::FONT_HERSHEY_SIMPLEX;
+        double font_scale = 1.0;
+        int thickness = 4;
+        cv::Scalar text_color(0, 255, 0);  // Green
+        int baseline_2 = 0;
+        cv::Size text_size = cv::getTextSize(text, font_face, font_scale, thickness, &baseline_2);
+        cv::Point text_org(combined.cols - text_size.width - 10, text_size.height + 10);
+        cv::putText(combined, text, text_org, font_face, font_scale, text_color, thickness);
+
+        cv::vconcat(left_color, disp_color, combined);
+
+        // Show in window
+        cv::imshow("Left + Disparity", combined);
+        cv::waitKey(1);
+
 
         if (record_video && !video_writer.isOpened()) {
             int fps = 30;  // Adjust based on your frame rate
@@ -303,9 +346,7 @@ private:
 
         cv::imshow("Left + Disparity", combined);
         cv::waitKey(1);
-        // Print sizes
 
-        // Write frame to video (if recording is enabled)
         if (record_video && video_writer.isOpened()) {
             video_writer.write(combined);
         }

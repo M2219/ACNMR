@@ -1,0 +1,64 @@
+rosbag2_bagfile_information:
+  compression_format: ''
+  compression_mode: ''
+  custom_data: {}
+  duration:
+    nanoseconds: 113974481165
+  files:
+  - duration:
+      nanoseconds: 113974481165
+    message_count: 41035
+    path: V2_01_easy.db3
+    starting_time:
+      nanoseconds_since_epoch: 1413393211937170803
+  message_count: 41035
+  relative_file_paths:
+  - V2_01_easy.db3
+  ros_distro: rosbags
+  starting_time:
+    nanoseconds_since_epoch: 1413393211937170803
+  storage_identifier: sqlite3
+  topics_with_message_count:
+  - message_count: 22800
+    topic_metadata:
+      name: /imu0
+      offered_qos_profiles: ''
+      serialization_format: cdr
+      type: sensor_msgs/msg/Imu
+      type_description_hash: RIHS01_7d9a00ff131080897a5ec7e26e315954b8eae3353c3f995c55faf71574000b5b
+  - message_count: 2280
+    topic_metadata:
+      name: /cam1/image_raw
+      offered_qos_profiles: ''
+      serialization_format: cdr
+      type: sensor_msgs/msg/Image
+      type_description_hash: RIHS01_d31d41a9a4c4bc8eae9be757b0beed306564f7526c88ea6a4588fb9582527d47
+  - message_count: 11395
+    topic_metadata:
+      name: vicon/firefly_sbx/firefly_sbx
+      offered_qos_profiles: ''
+      serialization_format: cdr
+      type: geometry_msgs/msg/TransformStamped
+      type_description_hash: RIHS01_0a241f87d04668d94099cbb5ba11691d5ad32c2f29682e4eb5653424bd275206
+  - message_count: 2280
+    topic_metadata:
+      name: /cam0/image_raw
+      offered_qos_profiles: ''
+      serialization_format: cdr
+      type: sensor_msgs/msg/Image
+      type_description_hash: RIHS01_d31d41a9a4c4bc8eae9be757b0beed306564f7526c88ea6a4588fb9582527d47
+  - message_count: 1140
+    topic_metadata:
+      name: /fcu/imu
+      offered_qos_profiles: ''
+      serialization_format: cdr
+      type: sensor_msgs/msg/Imu
+      type_description_hash: RIHS01_7d9a00ff131080897a5ec7e26e315954b8eae3353c3f995c55faf71574000b5b
+  - message_count: 1140
+    topic_metadata:
+      name: /fcu/motor_speed
+      offered_qos_profiles: ''
+      serialization_format: cdr
+      type: asctec_hl_comm/msg/MotorSpeed
+      type_description_hash: RIHS01_0727392d9df64384fa1610c2ae3d7ed695634cd123e1bb93d9fdec6d028d2324
+  version: 8

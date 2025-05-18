@@ -37,9 +37,10 @@ int pad_bottom;
 double max_disp = 96;
 cv::Mat disp_filtered;
 float alpha = 0.5;  // Adjust for responsiveness vs. smoothness
-bool record_video = false;  // Set to false to disable recording
+bool record_video = true;  // Set to false to disable recording
 cv::VideoWriter video_writer;
-std::string model_path_ = "/tmp/model_ghustereo8_nce_f32.plan";
+//std::string model_path_ = "/tmp/model_ghustereo8_nce_f32.plan";
+std::string model_path_ = "/tmp/model_stereoacc_oakpro.plan";
 
 nvinfer1::ICudaEngine* engine_{nullptr};
 nvinfer1::IExecutionContext* context_{nullptr};
@@ -565,10 +566,10 @@ int main(int argc, char **argv) {
         cv::medianBlur(disp_mat, disp_filtered, 5);
 
         // 2. Temporal smoothing (IIR)
-        static cv::Mat prev_disp;
-        if (prev_disp.empty()) prev_disp = disp_filtered.clone();
-        cv::addWeighted(disp_filtered, alpha, prev_disp, 1.0 - alpha, 0, disp_filtered);
-        prev_disp = disp_filtered.clone();
+        //static cv::Mat prev_disp;
+        //if (prev_disp.empty()) prev_disp = disp_filtered.clone();
+        //cv::addWeighted(disp_filtered, alpha, prev_disp, 1.0 - alpha, 0, disp_filtered);
+        //prev_disp = disp_filtered.clone();
 
         // 3. Mask invalid pixels
         cv::Mat valid_mask = (disp_filtered > 0) & (disp_filtered < max_disp);

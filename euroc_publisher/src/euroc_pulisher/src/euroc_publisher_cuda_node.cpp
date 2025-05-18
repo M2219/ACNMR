@@ -411,7 +411,7 @@ int main(int argc, char **argv) {
         //left_rect_pub->publish(*left_msg_rect);
         //right_rect_pub->publish(*right_msg_rect);
 
-        right_img = matchHistogram(right_img, left_img);
+        //right_img = matchHistogram(right_img, left_img);
 
         // Run stereo inference
         float* outputData = new float[1 * net_input_height_ * net_input_width_];

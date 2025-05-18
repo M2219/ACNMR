@@ -49,7 +49,7 @@
 #include <fstream>
 #include <memory>
 #include <mutex>
-
+#include "rclcpp/clock.hpp"
 #include <Eigen/Eigen>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/filesystem.hpp>
@@ -173,7 +173,7 @@ protected:
   double summed_nees_ori = 0.0;
   double summed_nees_pos = 0.0;
   size_t summed_number = 0;
-
+  rclcpp::Clock::SharedPtr  system_clock = std::make_shared<rclcpp::Clock>(RCL_ROS_TIME);
   // Start and end timestamps
   bool start_time_set = false;
   boost::posix_time::ptime rT1, rT2;

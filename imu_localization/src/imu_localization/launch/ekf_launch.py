@@ -32,7 +32,7 @@ def generate_launch_description():
             package="tf2_ros",
             executable="static_transform_publisher",
             name="static_transform_publisher",
-            arguments=["0", "0", "0", "0.0", "0.0", str(yaw_correction), "base_link", "id01_base_link"],
+            arguments=["0", "0", "0", "0.0", "0.0", str(yaw_correction), "base_link", "id100_base_link"],
             output="screen"
         ),
 
@@ -40,9 +40,11 @@ def generate_launch_description():
             package="tf2_ros",
             executable="static_transform_publisher",
             name="static_transform_publisher",
-            arguments=["0", "0", "0", "0.0", "0.0", "0.0", "id01_base_link", "id01_sensor_link"],
+            arguments=["0", "0", "0", "0.0", "0.0", "0.0", "id100_base_link", "id100_sensor_link"],
             output="screen"
         )
+
+
         # Static transform from base_link to id01_base_link
         #Node(
         #    package="tf2_ros",

@@ -66,7 +66,8 @@ sensor_msgs::PointCloud2 ROSVisualizerHelper::get_ros_pointcloud(const std::vect
   return cloud;
 }
 
-tf::StampedTransform ROSVisualizerHelper::get_stamped_transform_from_pose(const std::shared_ptr<ov_type::PoseJPL> &pose, bool flip_trans) {
+tf::StampedTransform ROSVisualizerHelper::
+get_stamped_transform_from_pose(const std::shared_ptr<ov_type::PoseJPL> &pose, bool flip_trans) {
 
   // Need to flip the transform to the IMU frame
   Eigen::Vector4d q_ItoC = pose->quat();

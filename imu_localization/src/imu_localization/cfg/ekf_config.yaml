@@ -15,7 +15,8 @@ ekf_filter_node:
     #         x_accel , y_accel  , z_accel]
 
     #robot
-    odom0: "wheel_odom"
+    odom0: "/ov_msckf/loop_pose"
+    #odom0: "/ov_msckf/odomimu"
 
     odom0_config: [true, true, false,
                    false, false, false,
@@ -24,8 +25,8 @@ ekf_filter_node:
                    false, false, false]
 
     odom0_nodelay: false
-    odom0_differential: true
-    odom0_queue_size: 4
+    odom0_differential: false
+    odom0_queue_size: 5
     odom0_relative: false
 
 
@@ -43,13 +44,13 @@ ekf_filter_node:
     #deceleration_gains: [1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
 
     # robot
-    imu_frame: "id01_sensor_link"
-    imu0: "olive/imu/id01/filtered_imu"
+    imu_frame: "id100_sensor_link"
+    imu0: "olive/imu/id100/filtered_imu"
 
     imu0_config: [false, false, false,
                   false, false, true,
                   false, false, false,
-                  false, false, true,
+                  false, false, false,
                   false, false, false]
 
     imu0_nodelay: false
@@ -81,3 +82,4 @@ ekf_filter_node:
                                0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.02,   0.0,    0.0,
                                0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.02,   0.0,
                                0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.02]
+

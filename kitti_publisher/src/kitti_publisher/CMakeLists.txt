@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(euroc_publisher LANGUAGES CXX)
+project(kitti_publisher LANGUAGES CXX)
 
 # Use C++14 standard
 set(CMAKE_CXX_STANDARD 14)
@@ -32,10 +32,9 @@ include_directories(
 )
 
 # Define executable
-add_executable(euroc_publisher_cuda_node src/euroc_publisher_cuda_node.cpp)
-add_executable(sync_sanity_checker src/sync_sanity_checker.cpp)
+add_executable(kitti_publisher_cuda_node src/kitti_publisher_cuda_node.cpp)
 
-target_link_libraries(euroc_publisher_cuda_node
+target_link_libraries(kitti_publisher_cuda_node
   ${OpenCV_LIBS}
   ${TENSORRT_LIBS}
   ${CUDA_LIBRARIES}
@@ -43,7 +42,7 @@ target_link_libraries(euroc_publisher_cuda_node
 
 )
 
-ament_target_dependencies(euroc_publisher_cuda_node
+ament_target_dependencies(kitti_publisher_cuda_node
   rclcpp
   sensor_msgs
   OpenCV
@@ -54,12 +53,10 @@ ament_target_dependencies(euroc_publisher_cuda_node
   cv_bridge
 )
 
-ament_target_dependencies(sync_sanity_checker rclcpp sensor_msgs)
 
 
 # Install the node
-install(TARGETS euroc_publisher_cuda_node  DESTINATION lib/${PROJECT_NAME})
-install(TARGETS sync_sanity_checker DESTINATION lib/${PROJECT_NAME})
+install(TARGETS kitti_publisher_cuda_node  DESTINATION lib/${PROJECT_NAME})
 
 # Install launch files
 install(DIRECTORY launch/

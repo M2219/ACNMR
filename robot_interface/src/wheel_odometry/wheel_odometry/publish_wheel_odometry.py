@@ -120,7 +120,7 @@ class OdometryNode(Node):
     def update_odometry(self):
 
         # Step 1: Calculate delta pulse counts (accounting for rollover)
-        delta_pulse_left = self.calculate_delta_pulse(self.pulse_left, self.prev_pulse_left, self.en_range)
+        delta_pulse_left = se lf.calculate_delta_pulse(self.pulse_left, self.prev_pulse_left, self.en_range)
         delta_pulse_right = - self.calculate_delta_pulse(self.pulse_right, self.prev_pulse_right, self.en_range)
         #delta_pulse_steering = self.calculate_delta_pulse(self.pulse_steering, self.prev_pulse_steering, self.en_range)
         #print("self.pulse_steering", self.pulse_steering)
@@ -234,7 +234,7 @@ class OdometryNode(Node):
     def euler_to_quaternion(self, roll, pitch, yaw):
         """
         Convert Euler angles to a quaternion.
-        """
+"""
         q = Quaternion()
         cy = math.cos(yaw * 0.5)
         sy = math.sin(yaw * 0.5)
